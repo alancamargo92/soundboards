@@ -53,6 +53,18 @@
         <item>Tem medo de sentar na patente</item>
         <item>Viros</item>
         <item>Você nasceu ontem?</item>
+        <item>Luto que nem um leão</item>
+        <item>Uma hora é vírus, outra hora é cocô</item>
+        <item>Como é que a gente fica?</item>
+        <item>2 computadores que não funcionam</item>
+        <item>Não pode abrir a boca aqui dentro</item>
+        <item>É pra acabar, é pra detonar</item>
+        <item>Eu saio cedo</item>
+        <item>Você vem no meu programa defender bandido?</item>
+        <item>Vai cagar</item>
+        <item>Vai ouvir Ana Maria Braga</item>
+        <item>Não me tira pra otário</item>
+        <item>Direitos humanos</item>
     </string-array>
 
     <!-- Sounds -->
@@ -107,6 +119,18 @@
         <item>@raw/aud48</item>
         <item>@raw/aud49</item>
         <item>@raw/aud50</item>
+        <item>@raw/aud51</item>
+        <item>@raw/aud52</item>
+        <item>@raw/aud53</item>
+        <item>@raw/aud54</item>
+        <item>@raw/aud55</item>
+        <item>@raw/aud56</item>
+        <item>@raw/aud57</item>
+        <item>@raw/aud58</item>
+        <item>@raw/aud59</item>
+        <item>@raw/aud60</item>
+        <item>@raw/aud61</item>
+        <item>@raw/aud62</item>
     </array>
 
     <!-- Lengths -->
@@ -161,6 +185,18 @@
         <item>00:19</item>
         <item>00:05</item>
         <item>00:36</item>
+        <item>00:05</item>
+        <item>00:13</item>
+        <item>00:02</item>
+        <item>00:13</item>
+        <item>00:02</item>
+        <item>00:02</item>
+        <item>00:18</item>
+        <item>00:13</item>
+        <item>00:04</item>
+        <item>00:08</item>
+        <item>00:02</item>
+        <item>00:15</item>
     </string-array>
 
 </resources>
