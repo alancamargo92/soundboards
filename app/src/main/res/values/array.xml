@@ -65,6 +65,16 @@
         <item>Vai ouvir Ana Maria Braga</item>
         <item>Não me tira pra otário</item>
         <item>Direitos humanos</item>
+        <item>Vai mexer com a tua família</item>
+        <item>Saia do meu Orkut</item>
+        <item>Eu tenho nojo, asco</item>
+        <item>Um beijo na sua alma</item>
+        <item>Cretinos, canalhas, ordinários</item>
+        <item>To cagando e andando pra esse canalha</item>
+        <item>E não me encha mais o saco</item>
+        <item>Nem na outra encarnação</item>
+        <item>Vai chorar no enterro da tua mãe</item>
+        <item>Fala</item>
     </string-array>
 
     <!-- Sounds -->
@@ -131,6 +141,16 @@
         <item>@raw/aud60</item>
         <item>@raw/aud61</item>
         <item>@raw/aud62</item>
+        <item>@raw/aud63</item>
+        <item>@raw/aud64</item>
+        <item>@raw/aud65</item>
+        <item>@raw/aud66</item>
+        <item>@raw/aud67</item>
+        <item>@raw/aud68</item>
+        <item>@raw/aud69</item>
+        <item>@raw/aud70</item>
+        <item>@raw/aud71</item>
+        <item>@raw/aud72</item>
     </array>
 
     <!-- Lengths -->
@@ -197,6 +217,16 @@
         <item>00:08</item>
         <item>00:02</item>
         <item>00:15</item>
+        <item>00:02</item>
+        <item>00:05</item>
+        <item>00:05</item>
+        <item>00:02</item>
+        <item>00:05</item>
+        <item>00:03</item>
+        <item>00:01</item>
+        <item>00:05</item>
+        <item>00:15</item>
+        <item>00:04</item>
     </string-array>
 
 </resources>
