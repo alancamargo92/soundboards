@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="about">Aplicativo desenvolvido por Alan Camargo\nFev. 2016\nContato: alcam.ukdev@gmail.com</string>
+    <string name="about">Aplicativo desenvolvido por Braincorp Apps\ne-mail: alcam.ukdev@gmail.com</string>
     <string name="aboutButton">Sobre</string>
+    <string name="adMobId">ca-app-pub-3993772572074236/5507774100</string>
     <string name="app_name">Carcadas Alborghetti</string>
-    <string name="back">Voltar</string>
     <string name="doNotShowAgain">Não mostrar outra vez</string>
-    <string name="exit">Sair</string>
-    <string name="launchButton">Carcadas</string>
     <string name="more">Mais carcadas</string>
     <string name="ok">OK</string>
     <string name="pause">Pausa</string>
     <string name="playing">Reproduzindo carcada</string>
-    <string name="share">Compartilhar carcada</string>
-    <string name="shareApp">Compartilhar app</string>
     <string name="tip">Dica</string>
     <string name="tipText">Para compartilhar uma carcada, segure no título da que você quiser</string>
     <string name="volume_0">Aumenta esse volume!</string>
-    <string name="warning">Aviso</string>
-    <string name="warningMessage">Se você quiser compartilhar as carcadas, você precisa dar as permissões</string>
 </resources>

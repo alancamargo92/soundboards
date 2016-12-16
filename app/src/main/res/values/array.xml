@@ -75,6 +75,11 @@
         <item>Nem na outra encarnação</item>
         <item>Vai chorar no enterro da tua mãe</item>
         <item>Fala</item>
+        <item>Pula na minha cara</item>
+        <item>Ladrão vagabundo</item>
+        <item>Não tenho medo de morrer</item>
+        <item>Não gostou dane-se</item>
+        <item>Cadê meu pau</item>
     </string-array>
 
     <!-- Sounds -->
@@ -151,6 +156,11 @@
         <item>@raw/aud70</item>
         <item>@raw/aud71</item>
         <item>@raw/aud72</item>
+        <item>@raw/aud73</item>
+        <item>@raw/aud74</item>
+        <item>@raw/aud75</item>
+        <item>@raw/aud76</item>
+        <item>@raw/aud77</item>
     </array>
 
     <!-- Lengths -->
@@ -227,6 +237,11 @@
         <item>00:05</item>
         <item>00:15</item>
         <item>00:04</item>
+        <item>00:01</item>
+        <item>00:01</item>
+        <item>00:02</item>
+        <item>00:01</item>
+        <item>00:12</item>
     </string-array>
 
 </resources>

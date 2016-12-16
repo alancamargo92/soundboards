@@ -21,6 +21,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.*;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.AdRequest;
 import com.ukdev.classes.Carcada;
 import com.ukdev.classes.CarcadaAdapter;
 import com.ukdev.classes.Database;
@@ -49,10 +51,18 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         setPlayPauseButton();
         setListView();
+        showAds();
         db = new Database(this, null, null, 1);
         if (db.getRowCount() == 0)
             showTip();
         deleteTempFiles();
+    }
+
+    private void showAds()
+    {
+        AdView adView = (AdView)findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest();
+        adView.loadAd(adRequest);
     }
 
     @Override
@@ -194,7 +204,7 @@ public class MainActivity extends AppCompatActivity
      */
     private void setListView()
     {
-        ListView listView = (ListView) findViewById(R.id.listview);
+        ListView listView = (ListView) findViewById(R.id.listView);
         String[] titles = new String[getIntegerArray(R.array.titles).length];
         String[] lengths = getResources().getStringArray(R.array.lengths);
         Carcada[] carcadas = new Carcada[lengths.length];
