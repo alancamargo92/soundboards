@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.media.AudioManager;
@@ -19,6 +20,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 import com.google.android.gms.ads.AdView;
@@ -58,10 +61,67 @@ public class MainActivity extends AppCompatActivity
         deleteTempFiles();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu_action, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.menu_about:
+                showAppInfo();
+                break;
+            case R.id.menu_videos:
+                openYouTube();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void openYouTube()
+    {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(getString(R.string.url)));
+        startActivity(intent);
+    }
+
+    private void showAppInfo()
+    {
+        try
+        {
+            PackageManager manager = getPackageManager();
+            PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
+            String version = info.versionName;
+            String title = String.format("%1$s %2$s", getString(R.string.app_name), version);
+            AlertDialog.Builder dialogue = new AlertDialog.Builder(this);
+            dialogue.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener()
+            {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i)
+                {
+                    // Do nothing
+                }
+            });
+            dialogue.setTitle(title);
+            dialogue.setMessage(R.string.about);
+            dialogue.show();
+        }
+        catch (PackageManager.NameNotFoundException e)
+        {
+            // Damn! Something really wrong happened here
+            e.printStackTrace();
+        }
+    }
+
     private void showAds()
     {
         AdView adView = (AdView)findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest();
+        AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
     }
 

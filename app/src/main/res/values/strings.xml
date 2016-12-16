@@ -5,11 +5,12 @@
     <string name="adMobId">ca-app-pub-3993772572074236/5507774100</string>
     <string name="app_name">Carcadas Alborghetti</string>
     <string name="doNotShowAgain">Não mostrar outra vez</string>
-    <string name="more">Mais carcadas</string>
     <string name="ok">OK</string>
     <string name="pause">Pausa</string>
     <string name="playing">Reproduzindo carcada</string>
     <string name="tip">Dica</string>
     <string name="tipText">Para compartilhar uma carcada, segure no título da que você quiser</string>
+    <string name="url">https://www.youtube.com/results?search_query=alborghetti</string>
+    <string name="videos">Vídeos</string>
     <string name="volume_0">Aumenta esse volume!</string>
 </resources>

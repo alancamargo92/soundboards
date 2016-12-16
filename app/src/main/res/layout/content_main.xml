@@ -11,19 +11,23 @@
         tools:showIn="@layout/main_activity"
         tools:context="com.ukdev.carcadasalborghetti.MainActivity">
 
-        <!-- List -->
-        <ListView
-                android:id="@+id/listView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"/>
+    <!-- List -->
+    <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="50dp"
+            android:background="@android:color/transparent"/>
 
-        <!-- Ad view -->
+    <!-- Ad view -->
     <com.google.android.gms.ads.AdView
             android:id="@+id/adView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             ads:adSize="BANNER"
-            ads:adUnitId="ca-app-pub-123456789/123456789"/>
+            ads:adUnitId="@string/adMobId"/>
 
 </RelativeLayout>

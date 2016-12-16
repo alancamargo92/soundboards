@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- About -->
+    <item
+        android:id="@+id/menu_about"
+        android:title="@string/aboutButton"
+        app:showAsAction="never"/>
+
+    <!-- More -->
+    <item
+        android:id="@+id/menu_videos"
+        android:title="@string/videos"
+        android:icon="@mipmap/ic_movie_white_24dp"
+        app:showAsAction="ifRoom"/>
+
+</menu>
