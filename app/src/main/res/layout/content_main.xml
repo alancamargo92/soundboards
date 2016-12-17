@@ -11,6 +11,12 @@
         tools:showIn="@layout/main_activity"
         tools:context="com.ukdev.carcadasalborghetti.MainActivity">
 
+    <android.support.v7.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/cadeia"
+            android:alpha="0.3"/>
+
     <!-- List -->
     <ListView
             android:id="@+id/listView"
