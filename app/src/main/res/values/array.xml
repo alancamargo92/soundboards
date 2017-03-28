@@ -81,6 +81,10 @@
         <item>Não gostou dane-se</item>
         <item>Cadê meu pau</item>
         <item>Danem-se</item>
+        <item>Bem feito</item>
+        <item>Eu nunca mexi com vocês</item>
+        <item>Que que eu fiz pra vocês?</item>
+        <item>Você com esse cabelo tingido</item>
     </string-array>
 
     <!-- Sounds -->
@@ -163,6 +167,10 @@
         <item>@raw/aud76</item>
         <item>@raw/aud77</item>
         <item>@raw/aud78</item>
+        <item>@raw/aud79</item>
+        <item>@raw/aud80</item>
+        <item>@raw/aud81</item>
+        <item>@raw/aud82</item>
     </array>
 
     <!-- Lengths -->
@@ -245,6 +253,10 @@
         <item>00:01</item>
         <item>00:12</item>
         <item>00:05</item>
+        <item>00:11</item>
+        <item>00:13</item>
+        <item>00:04</item>
+        <item>00:06</item>
     </string-array>
 
 </resources>
