@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti;
+package com.ukdev.carcadasalborghetti.activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -26,9 +26,10 @@ import android.view.View;
 import android.widget.*;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.AdRequest;
-import com.ukdev.classes.Carcada;
-import com.ukdev.classes.CarcadaAdapter;
-import com.ukdev.classes.Database;
+import com.ukdev.carcadasalborghetti.R;
+import com.ukdev.carcadasalborghetti.model.Carcada;
+import com.ukdev.carcadasalborghetti.adapters.CarcadaAdapter;
+import com.ukdev.carcadasalborghetti.database.Database;
 
 import java.io.*;
 
@@ -40,13 +41,12 @@ public class MainActivity extends AppCompatActivity
     private int[] sounds;
     private File exportedFile;
     private File tmpDir = new File(Environment.getExternalStorageDirectory() +
-            "/tmp_carcadas/");
+                                           "/tmp_carcadas/");
     private Database db;
     private int selectedItem;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -62,17 +62,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_action, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.menu_about:
                 showAppInfo();
                 break;
@@ -83,43 +80,35 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void openYouTube()
-    {
+    private void openYouTube() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(getString(R.string.url)));
         startActivity(intent);
     }
 
-    private void showAppInfo()
-    {
-        try
-        {
+    private void showAppInfo() {
+        try {
             PackageManager manager = getPackageManager();
             PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
             String version = info.versionName;
             String title = String.format("%1$s %2$s", getString(R.string.app_name), version);
             AlertDialog.Builder dialogue = new AlertDialog.Builder(this);
-            dialogue.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener()
-            {
+            dialogue.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialogInterface, int i)
-                {
+                public void onClick(DialogInterface dialogInterface, int i) {
                     // Do nothing
                 }
             });
             dialogue.setTitle(title);
             dialogue.setMessage(R.string.about);
             dialogue.show();
-        }
-        catch (PackageManager.NameNotFoundException e)
-        {
+        } catch (PackageManager.NameNotFoundException e) {
             // Damn! Something really wrong happened here
             e.printStackTrace();
         }
     }
 
-    private void showAds()
-    {
+    private void showAds() {
         AdView adView = (AdView)findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
@@ -128,15 +117,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
-                                           @NonNull int[] grantResults)
-    {
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case REQUEST_CODE:
                 if (grantResults.length > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     copyToExternalStorage(getIntegerArray(R.array.sounds)[selectedItem]);
                     share(getExportedFile(), "Alborghetti - " +
                             getResources().getStringArray(R.array.titles)[selectedItem]);
@@ -146,8 +132,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         deleteTempFiles();
         if (player != null && player.isPlaying())
             player.stop();
@@ -157,26 +142,20 @@ public class MainActivity extends AppCompatActivity
     /**
      * Sets actions to playPauseButton
      */
-    private void setPlayPauseButton()
-    {
+    private void setPlayPauseButton() {
         FloatingActionButton playPauseButton =
                 (FloatingActionButton) findViewById(R.id.playPauseButton);
         assert playPauseButton != null;
-        playPauseButton.setOnClickListener(new View.OnClickListener()
-        {
+        playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                if (player != null && player.isPlaying())
-                {
+            public void onClick(View view) {
+                if (player != null && player.isPlaying()) {
                     Toast.makeText(getBaseContext(), R.string.pause,
-                            Toast.LENGTH_SHORT).show();
+                                   Toast.LENGTH_SHORT).show();
                     player.pause();
-                }
-                else if (player != null && !player.isPlaying())
-                {
+                } else if (player != null && !player.isPlaying()) {
                     Toast.makeText(getBaseContext(), R.string.playing,
-                            Toast.LENGTH_SHORT).show();
+                                   Toast.LENGTH_SHORT).show();
                     player.start();
                 }
             }
@@ -186,61 +165,49 @@ public class MainActivity extends AppCompatActivity
     /**
      * Shows a tip
      */
-    private void showTip()
-    {
+    private void showTip() {
         AlertDialog.Builder popup = new AlertDialog.Builder(this);
         popup.setTitle(R.string.tip);
         popup.setMessage(R.string.tipText);
-        popup.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener()
-        {
+        popup.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i)
-            {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 // Do nothing
             }
         });
         popup.setNegativeButton(R.string.doNotShowAgain,
-                new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i)
-                    {
-                        try
-                        {
-                            db.add();
-                        }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }
-                });
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        try {
+                                            db.add();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                });
         popup.show();
     }
 
     /**
      * Deletes all temporary files
      */
-    private void deleteTempFiles()
-    {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-        {
+    private void deleteTempFiles() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                    PackageManager.PERMISSION_GRANTED)
+                                                  Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
                 delete();
-        }
-        else
+            }
+        } else
             delete();
     }
 
     /**
      * Deletes the shared file
      */
-    private void delete()
-    {
-        if (tmpDir.isDirectory())
-        {
+    private void delete() {
+        if (tmpDir.isDirectory()) {
             String[] children = tmpDir.list();
             for (String child : children)
                 new File(tmpDir, child).delete();
@@ -251,8 +218,7 @@ public class MainActivity extends AppCompatActivity
      * When the back button is pressed
      */
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         if (player != null && player.isPlaying())
             player.stop();
         deleteTempFiles();
@@ -262,29 +228,24 @@ public class MainActivity extends AppCompatActivity
     /**
      * Sets the list view contents
      */
-    private void setListView()
-    {
+    private void setListView() {
         ListView listView = (ListView) findViewById(R.id.listView);
         String[] titles = new String[getIntegerArray(R.array.titles).length];
         String[] lengths = getResources().getStringArray(R.array.lengths);
         Carcada[] carcadas = new Carcada[lengths.length];
-        for (int i = 0;
-             i < getResources().getStringArray(R.array.titles).length; i++)
-        {
+        for (int i = 0; i < getResources().getStringArray(R.array.titles).length; i++) {
             titles[i] = (i + 1) + ". " +
                     getResources().getStringArray(R.array.titles)[i];
             carcadas[i] = new Carcada(titles[i], sounds[i], lengths[i]);
         }
         CarcadaAdapter adapter = new CarcadaAdapter(this,
-                R.layout.listview_item, carcadas);
+                                                    R.layout.listview_item, carcadas);
         assert listView != null;
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView,
-                                    View view, int i, long l)
-            {
+                                    View view, int i, long l) {
                 if (player != null)
                     player.release();
                 AudioManager manager = (AudioManager)
@@ -292,41 +253,33 @@ public class MainActivity extends AppCompatActivity
                 int volume = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
                 if (volume == 0)
                     Toast.makeText(getBaseContext(), R.string.volume_0,
-                            Toast.LENGTH_SHORT).show();
+                                   Toast.LENGTH_SHORT).show();
                 else
                     Toast.makeText(getBaseContext(),
-                            R.string.playing, Toast.LENGTH_SHORT).show();
-                MainActivity.this.playSound(i);
+                                   R.string.playing, Toast.LENGTH_SHORT).show();
+                playSound(i);
             }
         });
         listView.setOnItemLongClickListener(
-                new AdapterView.OnItemLongClickListener()
-                {
+                new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapterView,
-                                                   View view, int i, long l)
-                    {
+                                                   View view, int i, long l) {
                         selectedItem = i;
-                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                        {
+                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             if (ContextCompat.checkSelfPermission(MainActivity.this,
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                                    PackageManager.PERMISSION_GRANTED)
-                            {
+                                                                  Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                                    PackageManager.PERMISSION_GRANTED) {
                                 ActivityCompat.requestPermissions(MainActivity.this,
-                                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                        REQUEST_CODE
-                                );
-                            }
-                            else
-                            {
+                                                                  new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                                                  REQUEST_CODE
+                                                                 );
+                            } else {
                                 copyToExternalStorage(getIntegerArray(R.array.sounds)[i]);
                                 share(getExportedFile(), "Alborghetti - " +
                                         getResources().getStringArray(R.array.titles)[i]);
                             }
-                        }
-                        else
-                        {
+                        } else {
                             copyToExternalStorage(getIntegerArray(R.array.sounds)[i]);
                             share(getExportedFile(), "Alborghetti - " +
                                     getResources().getStringArray(R.array.titles)[i]);
@@ -341,8 +294,7 @@ public class MainActivity extends AppCompatActivity
      * @param id - int
      * @return values
      */
-    private int[] getIntegerArray(int id)
-    {
+    private int[] getIntegerArray(int id) {
         TypedArray typedArray = getResources().obtainTypedArray(id);
         int[] values = new int[typedArray.length()];
         for (int i = 0; i < values.length; i++)
@@ -355,8 +307,7 @@ public class MainActivity extends AppCompatActivity
      * Plays a given audio track
      * @param position - int
      */
-    private void playSound(int position)
-    {
+    private void playSound(int position) {
         player = MediaPlayer.create(this, sounds[position]);
         player.start();
     }
@@ -366,8 +317,7 @@ public class MainActivity extends AppCompatActivity
      * @param file - File
      * @param text - String
      */
-    private void share(File file, String text)
-    {
+    private void share(File file, String text) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("audio/*");
         shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
@@ -380,8 +330,7 @@ public class MainActivity extends AppCompatActivity
      * Gets the exported file
      * @return exported file
      */
-    private File getExportedFile()
-    {
+    private File getExportedFile() {
         return exportedFile;
     }
 
@@ -389,8 +338,7 @@ public class MainActivity extends AppCompatActivity
      * Copies a file from app storage to external storage
      * @param id - int
      */
-    private void copyToExternalStorage(int id)
-    {
+    private void copyToExternalStorage(int id) {
         String baseDir =
                 Environment.getExternalStorageDirectory().getAbsolutePath() +
                         "/tmp_carcadas/";
@@ -399,21 +347,18 @@ public class MainActivity extends AppCompatActivity
             dir.mkdir();
         File soundFile = new File(baseDir, id + ".mp3");
         exportedFile = soundFile;
-        try
-        {
+        try {
             byte[] readData = new byte[1024 * 500];
             InputStream in = getResources().openRawResource(id);
             FileOutputStream out = new FileOutputStream(soundFile);
             int j = in.read(readData);
-            while (j != -1)
-            {
+            while (j != -1) {
                 out.write(readData, 0, j);
                 j = in.read(readData);
             }
             out.flush();
             out.close();
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

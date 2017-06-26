@@ -1,4 +1,4 @@
-package com.ukdev.classes;
+package com.ukdev.carcadasalborghetti.database;
 
 import android.content.ContentValues;
 import android.content.Context;

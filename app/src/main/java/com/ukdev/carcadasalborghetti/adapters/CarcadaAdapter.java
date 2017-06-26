@@ -1,4 +1,4 @@
-package com.ukdev.classes;
+package com.ukdev.carcadasalborghetti.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.ukdev.carcadasalborghetti.R;
+import com.ukdev.carcadasalborghetti.model.Carcada;
 
 /**
  * Carcada adapter

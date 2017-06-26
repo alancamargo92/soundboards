@@ -9,7 +9,7 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/main_activity"
-        tools:context="com.ukdev.carcadasalborghetti.MainActivity">
+        tools:context="com.ukdev.carcadasalborghetti.activities.MainActivity">
 
     <android.support.v7.widget.AppCompatImageView
             android:layout_width="match_parent"

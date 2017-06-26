@@ -1,4 +1,4 @@
-package com.ukdev.classes;
+package com.ukdev.carcadasalborghetti.model;
 
 /**
  * Carcada
@@ -16,7 +16,7 @@ public class Carcada
      * @param audioFile - int
      * @param length - String
      */
-    public Carcada (String title, int audioFile, String length)
+    public Carcada(String title, int audioFile, String length)
     {
         this.title = title;
         this.audioFile = audioFile;
@@ -45,7 +45,7 @@ public class Carcada
      * Gets the length
      * @return length
      */
-    String getLength()
+    public String getLength()
     {
         return length;
     }

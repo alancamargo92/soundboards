@@ -85,6 +85,10 @@
         <item>Eu nunca mexi com vocês</item>
         <item>Que que eu fiz pra vocês?</item>
         <item>Você com esse cabelo tingido</item>
+        <item>Calem a boca</item>
+        <item>Veja bem se não tem que mandar matar</item>
+        <item>Isso pra mim é uma vadia</item>
+        <item>Vai pro inferno satanás</item>
     </string-array>
 
     <!-- Sounds -->
@@ -171,6 +175,10 @@
         <item>@raw/aud80</item>
         <item>@raw/aud81</item>
         <item>@raw/aud82</item>
+        <item>@raw/aud83</item>
+        <item>@raw/aud84</item>
+        <item>@raw/aud85</item>
+        <item>@raw/aud86</item>
     </array>
 
     <!-- Lengths -->
@@ -257,6 +265,10 @@
         <item>00:13</item>
         <item>00:04</item>
         <item>00:06</item>
+        <item>00:02</item>
+        <item>00:04</item>
+        <item>00:03</item>
+        <item>00:10</item>
     </string-array>
 
 </resources>
