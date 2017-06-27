@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.0'
+    buildToolsVersion '25.0.3'
 
     defaultConfig {
         applicationId "com.ukdev.carcadasalborghetti"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 23
-        versionName "2.3"
+        versionCode 24
+        versionName "2.4"
     }
     buildTypes {
         release {

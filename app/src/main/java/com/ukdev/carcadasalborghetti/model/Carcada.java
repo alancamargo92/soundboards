@@ -4,22 +4,17 @@ package com.ukdev.carcadasalborghetti.model;
  * Carcada
  * Created by Alan Camargo - May 2016
  */
-public class Carcada
-{
+public class Carcada {
 
     private String title, length;
-    private int audioFile;
 
     /**
      * Instantiates the class
      * @param title - String
-     * @param audioFile - int
      * @param length - String
      */
-    public Carcada(String title, int audioFile, String length)
-    {
+    public Carcada(String title, String length) {
         this.title = title;
-        this.audioFile = audioFile;
         this.length = length;
     }
 
@@ -27,26 +22,15 @@ public class Carcada
      * Gets the title
      * @return title
      */
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
-    }
-
-    /**
-     * Gets the audio file (reference)
-     * @return audio file
-     */
-    public int getAudioFile()
-    {
-        return audioFile;
     }
 
     /**
      * Gets the length
      * @return length
      */
-    public String getLength()
-    {
+    public String getLength() {
         return length;
     }
 

@@ -15,16 +15,14 @@ import com.ukdev.carcadasalborghetti.model.Carcada;
  * Adapts a ListView to hold Carcadas
  * Created by Alan Camargo - May 2016
  */
-public class CarcadaAdapter extends ArrayAdapter<Carcada>
-{
+public class CarcadaAdapter extends ArrayAdapter<Carcada> {
 
     private Context context;
     private int layoutResourceId;
     private Carcada[] data;
 
     public CarcadaAdapter(Context context, int layoutResourceId,
-                          Carcada[] data)
-    {
+                          Carcada[] data) {
         super(context, layoutResourceId, data);
         this.context = context;
         this.layoutResourceId = layoutResourceId;
@@ -32,12 +30,10 @@ public class CarcadaAdapter extends ArrayAdapter<Carcada>
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
+    public View getView(int position, View convertView, ViewGroup parent) {
         CarcadaHolder holder = new CarcadaHolder();
         View row = convertView;
-        if (row == null)
-        {
+        if (row == null) {
             LayoutInflater inflater = ((Activity)context).getLayoutInflater();
             row = inflater.inflate(layoutResourceId, parent, false);
             holder.title = (TextView)row.findViewById(R.id.titleRow);
@@ -55,8 +51,7 @@ public class CarcadaAdapter extends ArrayAdapter<Carcada>
     /**
      * Holds all fields for the custom ListView item
      */
-    private static class CarcadaHolder
-    {
+    private static class CarcadaHolder {
         TextView title;
         TextView length;
     }

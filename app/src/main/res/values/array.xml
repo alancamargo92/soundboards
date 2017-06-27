@@ -89,6 +89,8 @@
         <item>Veja bem se não tem que mandar matar</item>
         <item>Isso pra mim é uma vadia</item>
         <item>Vai pro inferno satanás</item>
+        <item>Brasil</item>
+        <item>Que diabo rapaz</item>
     </string-array>
 
     <!-- Sounds -->
@@ -179,6 +181,8 @@
         <item>@raw/aud84</item>
         <item>@raw/aud85</item>
         <item>@raw/aud86</item>
+        <item>@raw/aud87</item>
+        <item>@raw/aud88</item>
     </array>
 
     <!-- Lengths -->
@@ -269,6 +273,8 @@
         <item>00:04</item>
         <item>00:03</item>
         <item>00:10</item>
+        <item>00:26</item>
+        <item>00:03</item>
     </string-array>
 
 </resources>

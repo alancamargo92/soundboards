@@ -33,8 +33,8 @@ import com.ukdev.carcadasalborghetti.database.Database;
 
 import java.io.*;
 
-public class MainActivity extends AppCompatActivity
-{
+@SuppressWarnings("ResultOfMethodCallIgnored")
+public class MainActivity extends AppCompatActivity {
 
     private final int REQUEST_CODE = 123;
     private MediaPlayer player;
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity
         setPlayPauseButton();
         setListView();
         showAds();
-        db = new Database(this, null, null, 1);
+        db = new Database(this, null);
         if (db.getRowCount() == 0)
             showTip();
         deleteTempFiles();
@@ -78,6 +78,31 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_CODE:
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    copyToExternalStorage(getIntegerArray(R.array.sounds)[selectedItem]);
+                    share(getExportedFile(), "Alborghetti - " +
+                            getResources().getStringArray(R.array.titles)[selectedItem]);
+                }
+                break;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        deleteTempFiles();
+        if (player != null && player.isPlaying())
+            player.stop();
     }
 
     private void openYouTube() {
@@ -112,31 +137,6 @@ public class MainActivity extends AppCompatActivity
         AdView adView = (AdView)findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_CODE:
-                if (grantResults.length > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    copyToExternalStorage(getIntegerArray(R.array.sounds)[selectedItem]);
-                    share(getExportedFile(), "Alborghetti - " +
-                            getResources().getStringArray(R.array.titles)[selectedItem]);
-                }
-                break;
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        deleteTempFiles();
-        if (player != null && player.isPlaying())
-            player.stop();
-        super.onDestroy();
     }
 
     /**
@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity
         for (int i = 0; i < getResources().getStringArray(R.array.titles).length; i++) {
             titles[i] = (i + 1) + ". " +
                     getResources().getStringArray(R.array.titles)[i];
-            carcadas[i] = new Carcada(titles[i], sounds[i], lengths[i]);
+            carcadas[i] = new Carcada(titles[i], lengths[i]);
         }
         CarcadaAdapter adapter = new CarcadaAdapter(this,
                                                     R.layout.listview_item, carcadas);
