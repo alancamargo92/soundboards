@@ -100,9 +100,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        deleteTempFiles();
         if (player != null && player.isPlaying())
             player.stop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        deleteTempFiles();
     }
 
     private void openYouTube() {
