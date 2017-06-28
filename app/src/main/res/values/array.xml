@@ -91,6 +91,7 @@
         <item>Vai pro inferno satanás</item>
         <item>Brasil</item>
         <item>Que diabo rapaz</item>
+        <item>O pinto do cara explodiu</item>
     </string-array>
 
     <!-- Sounds -->
@@ -183,6 +184,7 @@
         <item>@raw/aud86</item>
         <item>@raw/aud87</item>
         <item>@raw/aud88</item>
+        <item>@raw/aud89</item>
     </array>
 
     <!-- Lengths -->
@@ -275,6 +277,7 @@
         <item>00:10</item>
         <item>00:26</item>
         <item>00:03</item>
+        <item>00:12</item>
     </string-array>
 
 </resources>
