@@ -92,6 +92,11 @@
         <item>Brasil</item>
         <item>Que diabo rapaz</item>
         <item>O pinto do cara explodiu</item>
+        <item>Dalborgha</item>
+        <item>Fleury</item>
+        <item>Cadeia nele</item>
+        <item>Va-ga-bun-do</item>
+        <item>Eu volto amanhã</item>
     </string-array>
 
     <!-- Sounds -->
@@ -185,6 +190,11 @@
         <item>@raw/aud87</item>
         <item>@raw/aud88</item>
         <item>@raw/aud89</item>
+        <item>@raw/aud90</item>
+        <item>@raw/aud91</item>
+        <item>@raw/aud92</item>
+        <item>@raw/aud93</item>
+        <item>@raw/aud94</item>
     </array>
 
     <!-- Lengths -->
@@ -278,6 +288,11 @@
         <item>00:26</item>
         <item>00:03</item>
         <item>00:12</item>
+        <item>00:11</item>
+        <item>00:05</item>
+        <item>00:07</item>
+        <item>00:14</item>
+        <item>00:04</item>
     </string-array>
 
 </resources>
