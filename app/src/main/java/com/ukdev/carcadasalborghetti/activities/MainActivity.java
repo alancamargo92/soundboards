@@ -19,6 +19,8 @@ import android.app.AlertDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,7 +36,7 @@ import com.ukdev.carcadasalborghetti.database.Database;
 import java.io.*;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CarcadaAdapter.OnItemClickListener {
 
     private final int REQUEST_CODE = 123;
     private MediaPlayer player;
@@ -44,16 +46,18 @@ public class MainActivity extends AppCompatActivity {
                                            "/tmp_carcadas/");
     private Database db;
     private int selectedItem;
+    private CarcadaAdapter.OnItemClickListener onItemClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        onItemClickListener = this;
         sounds = getIntegerArray(R.array.sounds);
         setSupportActionBar(toolbar);
         setPlayPauseButton();
-        setListView();
+        setRecyclerView();
         showAds();
         db = new Database(this, null);
         if (db.getRowCount() == 0)
@@ -139,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showAds() {
-        AdView adView = (AdView)findViewById(R.id.adView);
+        AdView adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
     }
@@ -149,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setPlayPauseButton() {
         FloatingActionButton playPauseButton =
-                (FloatingActionButton) findViewById(R.id.playPauseButton);
+                findViewById(R.id.playPauseButton);
         assert playPauseButton != null;
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,10 +235,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Sets the list view contents
+     * Sets the recycler view contents
      */
-    private void setListView() {
-        ListView listView = (ListView) findViewById(R.id.listView);
+    private void setRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
         String[] titles = new String[getIntegerArray(R.array.titles).length];
         String[] lengths = getResources().getStringArray(R.array.lengths);
         Carcada[] carcadas = new Carcada[lengths.length];
@@ -243,55 +249,8 @@ public class MainActivity extends AppCompatActivity {
                     getResources().getStringArray(R.array.titles)[i];
             carcadas[i] = new Carcada(titles[i], lengths[i]);
         }
-        CarcadaAdapter adapter = new CarcadaAdapter(this,
-                                                    R.layout.listview_item, carcadas);
-        assert listView != null;
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView,
-                                    View view, int i, long l) {
-                if (player != null)
-                    player.release();
-                AudioManager manager = (AudioManager)
-                        getSystemService(Context.AUDIO_SERVICE);
-                int volume = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
-                if (volume == 0)
-                    Toast.makeText(getBaseContext(), R.string.volume_0,
-                                   Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(getBaseContext(),
-                                   R.string.playing, Toast.LENGTH_SHORT).show();
-                playSound(i);
-            }
-        });
-        listView.setOnItemLongClickListener(
-                new AdapterView.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> adapterView,
-                                                   View view, int i, long l) {
-                        selectedItem = i;
-                        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (ContextCompat.checkSelfPermission(MainActivity.this,
-                                                                  Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                                    PackageManager.PERMISSION_GRANTED) {
-                                ActivityCompat.requestPermissions(MainActivity.this,
-                                                                  new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                                                  REQUEST_CODE
-                                                                 );
-                            } else {
-                                copyToExternalStorage(getIntegerArray(R.array.sounds)[i]);
-                                share(getExportedFile(), "Alborghetti - " +
-                                        getResources().getStringArray(R.array.titles)[i]);
-                            }
-                        } else {
-                            copyToExternalStorage(getIntegerArray(R.array.sounds)[i]);
-                            share(getExportedFile(), "Alborghetti - " +
-                                    getResources().getStringArray(R.array.titles)[i]);
-                        }
-                        return true;
-                    }
-                });
+        CarcadaAdapter adapter = new CarcadaAdapter(this, carcadas, onItemClickListener);
+        recyclerView.setAdapter(adapter);
     }
 
     /**
@@ -365,6 +324,45 @@ public class MainActivity extends AppCompatActivity {
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        if (player != null)
+            player.release();
+        AudioManager manager = (AudioManager)
+                getSystemService(Context.AUDIO_SERVICE);
+        int volume = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        if (volume == 0)
+            Toast.makeText(getBaseContext(), R.string.volume_0,
+                           Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(getBaseContext(),
+                           R.string.playing, Toast.LENGTH_SHORT).show();
+        playSound(position);
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+        selectedItem = position;
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(MainActivity.this,
+                                                  Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                    PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(MainActivity.this,
+                                                  new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                                  REQUEST_CODE
+                );
+            } else {
+                copyToExternalStorage(getIntegerArray(R.array.sounds)[position]);
+                share(getExportedFile(), "Alborghetti - " +
+                        getResources().getStringArray(R.array.titles)[position]);
+            }
+        } else {
+            copyToExternalStorage(getIntegerArray(R.array.sounds)[position]);
+            share(getExportedFile(), "Alborghetti - " +
+                    getResources().getStringArray(R.array.titles)[position]);
         }
     }
 
