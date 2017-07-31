@@ -48,8 +48,8 @@ public class CarcadaAdapter extends RecyclerView.Adapter<CarcadaAdapter.CarcadaH
     }
 
     public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-        void onItemLongClick(View view, int position);
+        void onItemClick(int position);
+        void onItemLongClick(int position);
     }
 
     /**
@@ -61,25 +61,28 @@ public class CarcadaAdapter extends RecyclerView.Adapter<CarcadaAdapter.CarcadaH
         TextView titleTextView;
         TextView lengthTextView;
         View.OnClickListener onClickListener;
+        View.OnLongClickListener onLongClickListener;
         OnItemClickListener onItemClickListener;
 
         CarcadaHolder(View itemView, OnItemClickListener onItemClickListener) {
             super(itemView);
             this.onItemClickListener = onItemClickListener;
             onClickListener = this;
+            onLongClickListener = this;
             itemView.setOnClickListener(onClickListener);
+            itemView.setOnLongClickListener(onLongClickListener);
             titleTextView = itemView.findViewById(R.id.titleRow);
             lengthTextView = itemView.findViewById(R.id.lengthRow);
         }
 
         @Override
         public void onClick(View view) {
-            onItemClickListener.onItemClick(view, getLayoutPosition());
+            onItemClickListener.onItemClick(getLayoutPosition());
         }
 
         @Override
-        public boolean onLongClick(View view) { // FIXME: not working
-            onItemClickListener.onItemLongClick(view, getLayoutPosition());
+        public boolean onLongClick(View view) {
+            onItemClickListener.onItemLongClick(getLayoutPosition());
             return true;
         }
 
