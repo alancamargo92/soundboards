@@ -18,7 +18,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.app.AlertDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +32,7 @@ import com.ukdev.carcadasalborghetti.R;
 import com.ukdev.carcadasalborghetti.model.Carcada;
 import com.ukdev.carcadasalborghetti.adapters.CarcadaAdapter;
 import com.ukdev.carcadasalborghetti.database.Database;
+import com.ukdev.carcadasalborghetti.provider.CustomFileProvider;
 
 import java.io.*;
 
@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
         shareIntent.setType("audio/*");
         Uri uri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            uri = FileProvider.getUriForFile(this, getPackageName(), file);
+            uri = CustomFileProvider.getUriForFile(this, getPackageName(), file);
         else
             uri = Uri.fromFile(file);
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
