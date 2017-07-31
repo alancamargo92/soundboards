@@ -18,6 +18,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.app.AlertDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -284,7 +285,12 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
     private void share(File file, String text) {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("audio/*");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            uri = FileProvider.getUriForFile(this, getPackageName(), file);
+        else
+            uri = Uri.fromFile(file);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Carcada - Alborghetti");
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
         startActivity(Intent.createChooser(shareIntent, "Compartilhar carcada"));
@@ -328,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
     }
 
     @Override
-    public void onItemClick(View view, int position) {
+    public void onItemClick(int position) {
         if (player != null)
             player.release();
         AudioManager manager = (AudioManager)
@@ -344,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
     }
 
     @Override
-    public void onItemLongClick(View view, int position) {
+    public void onItemLongClick(int position) {
         selectedItem = position;
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(MainActivity.this,

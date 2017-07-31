@@ -8,6 +8,7 @@
     <string name="ok">OK</string>
     <string name="pause">Pausa</string>
     <string name="playing">Reproduzindo carcada</string>
+    <string name="search">Buscar</string>
     <string name="tip">Dica</string>
     <string name="tipText">Para compartilhar uma carcada, segure no título da que você quiser</string>
     <string name="url">https://www.youtube.com/results?search_query=alborghetti</string>
