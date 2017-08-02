@@ -179,12 +179,7 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
         AlertDialog.Builder popup = new AlertDialog.Builder(this);
         popup.setTitle(R.string.tip);
         popup.setMessage(R.string.tipText);
-        popup.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // Do nothing
-            }
-        });
+        popup.setNeutralButton(R.string.ok, null);
         popup.setNegativeButton(R.string.doNotShowAgain,
                                 new DialogInterface.OnClickListener() {
                                     @Override
