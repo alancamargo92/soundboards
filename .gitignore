@@ -2,7 +2,6 @@
 ### Android template
 # Built application files
 *.apk
-play store files/
 
 # Files for the ART/Dalvik VM
 *.dex
@@ -37,3 +36,9 @@ captures/
 # Intellij
 .idea/
 *.iml
+
+# Play Store files
+play store files/
+
+# Release properties
+app/release.properties
