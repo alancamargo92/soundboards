@@ -334,6 +334,8 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
             player.release();
         AudioManager manager = (AudioManager)
                 getSystemService(Context.AUDIO_SERVICE);
+        if (manager == null)
+            return;
         int volume = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
         if (volume == 0)
             Toast.makeText(getBaseContext(), R.string.volume_0,

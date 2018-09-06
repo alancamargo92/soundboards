@@ -1,6 +1,7 @@
 package com.ukdev.carcadasalborghetti.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +28,9 @@ public class CarcadaAdapter extends RecyclerView.Adapter<CarcadaAdapter.CarcadaH
         this.onItemClickListener = onItemClickListener;
     }
 
+    @NonNull
     @Override
-    public CarcadaHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CarcadaHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         final boolean attachToRoot = false;
         View view = inflater.inflate(R.layout.card_carcada, parent, attachToRoot);
@@ -36,7 +38,7 @@ public class CarcadaAdapter extends RecyclerView.Adapter<CarcadaAdapter.CarcadaH
     }
 
     @Override
-    public void onBindViewHolder(CarcadaHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CarcadaHolder holder, int position) {
         Carcada carcada = data[position];
         holder.titleTextView.setText(carcada.getTitle());
         holder.lengthTextView.setText(carcada.getLength());
