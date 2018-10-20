@@ -96,6 +96,10 @@
         <item>Cadeia nele</item>
         <item>Va-ga-bun-do</item>
         <item>Eu volto amanhã</item>
+        <item>Chega</item>
+        <item>Responda</item>
+        <item>Desculpe o palavrão</item>
+        <item>Silêncio</item>
     </string-array>
 
     <!-- Sounds -->
@@ -193,6 +197,10 @@
         <item>@raw/aud91</item>
         <item>@raw/aud92</item>
         <item>@raw/aud93</item>
+        <item>@raw/aud94</item>
+        <item>@raw/aud95</item>
+        <item>@raw/aud96</item>
+        <item>@raw/aud97</item>
     </array>
 
     <!-- Lengths -->
@@ -290,6 +298,10 @@
         <item>00:07</item>
         <item>00:14</item>
         <item>00:04</item>
+        <item>00:01</item>
+        <item>00:02</item>
+        <item>00:01</item>
+        <item>00:03</item>
     </string-array>
 
 </resources>
