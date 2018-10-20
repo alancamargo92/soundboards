@@ -100,6 +100,7 @@
         <item>Responda</item>
         <item>Desculpe o palavrão</item>
         <item>Silêncio</item>
+        <item>Oh Rio de Janeiro do meu saco</item>
     </string-array>
 
     <!-- Sounds -->
@@ -201,6 +202,7 @@
         <item>@raw/aud95</item>
         <item>@raw/aud96</item>
         <item>@raw/aud97</item>
+        <item>@raw/aud98</item>
     </array>
 
     <!-- Lengths -->
@@ -302,6 +304,7 @@
         <item>00:02</item>
         <item>00:01</item>
         <item>00:03</item>
+        <item>00:07</item>
     </string-array>
 
 </resources>
