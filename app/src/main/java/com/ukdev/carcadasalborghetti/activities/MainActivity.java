@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         onItemClickListener = this;
         sounds = getIntegerArray(R.array.sounds);
