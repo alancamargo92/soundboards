@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // FIXME: playing wrong audio
                 adapter.filter(carcadas, newText);
                 return false;
             }
@@ -287,7 +286,8 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
      * @param position - int
      */
     private void playSound(int position) {
-        player = MediaPlayer.create(this, carcadas.get(position).getSound());
+        Carcada carcada = adapter.getData().get(position);
+        player = MediaPlayer.create(this, carcada.getSound());
         player.start();
         player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override

@@ -71,6 +71,10 @@ public class CarcadaAdapter extends RecyclerView.Adapter<CarcadaAdapter.CarcadaH
         notifyDataSetChanged();
     }
 
+    public List<Carcada> getData() {
+        return data;
+    }
+
     public interface OnItemClickListener {
         void onItemClick(int position);
         void onItemLongClick(int position);
