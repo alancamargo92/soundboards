@@ -11,6 +11,10 @@ import android.widget.TextView;
 import com.ukdev.carcadasalborghetti.R;
 import com.ukdev.carcadasalborghetti.model.Carcada;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 /**
  * Carcada adapter
  * Adapts a ListView to hold Carcadas
@@ -19,10 +23,10 @@ import com.ukdev.carcadasalborghetti.model.Carcada;
 public class CarcadaAdapter extends RecyclerView.Adapter<CarcadaAdapter.CarcadaHolder> {
 
     private Context context;
-    private Carcada[] data;
+    private List<Carcada> data;
     private OnItemClickListener onItemClickListener;
 
-    public CarcadaAdapter(Context context, Carcada[] data, OnItemClickListener onItemClickListener) {
+    public CarcadaAdapter(Context context, List<Carcada> data, OnItemClickListener onItemClickListener) {
         this.context = context;
         this.data = data;
         this.onItemClickListener = onItemClickListener;
@@ -39,14 +43,32 @@ public class CarcadaAdapter extends RecyclerView.Adapter<CarcadaAdapter.CarcadaH
 
     @Override
     public void onBindViewHolder(@NonNull CarcadaHolder holder, int position) {
-        Carcada carcada = data[position];
-        holder.titleTextView.setText(carcada.getTitle());
+        Carcada carcada = data.get(position);
+        String title = String.format(Locale.getDefault(),
+                "%1$d. %2$s",
+                position + 1,
+                carcada.getTitle());
+        holder.titleTextView.setText(title);
         holder.lengthTextView.setText(carcada.getLength());
     }
 
     @Override
     public int getItemCount() {
-        return data.length;
+        return data.size();
+    }
+
+    public void filter(List<Carcada> carcadas, String query) {
+        final String lowerCaseQuery = query.toLowerCase();
+
+        final List<Carcada> filteredList = new ArrayList<>();
+        for (Carcada carcada : carcadas) {
+            final String text = carcada.getTitle().toLowerCase();
+            if (text.contains(lowerCaseQuery))
+                filteredList.add(carcada);
+        }
+
+        data = filteredList;
+        notifyDataSetChanged();
     }
 
     public interface OnItemClickListener {
@@ -60,6 +82,7 @@ public class CarcadaAdapter extends RecyclerView.Adapter<CarcadaAdapter.CarcadaH
     static class CarcadaHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener, View.OnLongClickListener {
 
+        TextView positionTextView;
         TextView titleTextView;
         TextView lengthTextView;
         View.OnClickListener onClickListener;
@@ -73,6 +96,7 @@ public class CarcadaAdapter extends RecyclerView.Adapter<CarcadaAdapter.CarcadaH
             onLongClickListener = this;
             itemView.setOnClickListener(onClickListener);
             itemView.setOnLongClickListener(onLongClickListener);
+            positionTextView = itemView.findViewById(R.id.positionRow);
             titleTextView = itemView.findViewById(R.id.titleRow);
             lengthTextView = itemView.findViewById(R.id.lengthRow);
         }

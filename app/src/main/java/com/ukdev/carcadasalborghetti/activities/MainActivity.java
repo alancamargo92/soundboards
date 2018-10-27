@@ -1,6 +1,7 @@
 package com.ukdev.carcadasalborghetti.activities;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +16,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.app.AlertDialog;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -25,16 +25,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.*;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.AdRequest;
+import android.widget.SearchView;
+import android.widget.Toast;
+
 import com.ukdev.carcadasalborghetti.R;
-import com.ukdev.carcadasalborghetti.model.Carcada;
 import com.ukdev.carcadasalborghetti.adapters.CarcadaAdapter;
 import com.ukdev.carcadasalborghetti.database.Database;
+import com.ukdev.carcadasalborghetti.model.Carcada;
 import com.ukdev.carcadasalborghetti.provider.CustomFileProvider;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class MainActivity extends AppCompatActivity implements CarcadaAdapter.OnItemClickListener {
@@ -47,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
                                            "/tmp_carcadas/");
     private Database db;
     private int selectedItem;
+    private CarcadaAdapter adapter;
+    private List<Carcada> carcadas;
     private CarcadaAdapter.OnItemClickListener onItemClickListener;
 
     @Override
@@ -55,11 +64,11 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         onItemClickListener = this;
-        sounds = getIntegerArray(R.array.sounds);
+        sounds = getSoundsArray();
         setSupportActionBar(toolbar);
         setPlayPauseButton();
         setRecyclerView();
-        showAds();
+        //showAds(); // TODO
         db = new Database(this, null);
         if (db.getRowCount() == 0)
             showTip();
@@ -69,6 +78,20 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_action, menu);
+        MenuItem searchItem = menu.findItem(R.id.item_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.filter(carcadas, newText);
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -94,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
             case REQUEST_CODE:
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    copyToExternalStorage(getIntegerArray(R.array.sounds)[selectedItem]);
+                    copyToExternalStorage(getSoundsArray()[selectedItem]);
                     share(getExportedFile(), "Alborghetti - " +
                             getResources().getStringArray(R.array.titles)[selectedItem]);
                 }
@@ -143,11 +166,11 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
         }
     }
 
-    private void showAds() {
+    /*private void showAds() { // TODO
         AdView adView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
-    }
+    }*/
 
     /**
      * Sets actions to playPauseButton
@@ -237,25 +260,24 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        String[] titles = new String[getIntegerArray(R.array.titles).length];
+        String[] titles = getResources().getStringArray(R.array.titles);
         String[] lengths = getResources().getStringArray(R.array.lengths);
-        Carcada[] carcadas = new Carcada[lengths.length];
-        for (int i = 0; i < getResources().getStringArray(R.array.titles).length; i++) {
-            titles[i] = (i + 1) + ". " +
-                    getResources().getStringArray(R.array.titles)[i];
-            carcadas[i] = new Carcada(titles[i], lengths[i]);
+        carcadas = new ArrayList<>();
+        for (int i = 0; i < titles.length; i++) {
+            carcadas.add(new Carcada(titles[i], lengths[i], sounds[i]));
         }
-        CarcadaAdapter adapter = new CarcadaAdapter(this, carcadas, onItemClickListener);
+        Collections.sort(carcadas, new Comparator<Carcada>() {
+            @Override
+            public int compare(Carcada a, Carcada b) {
+                return a.getTitle().compareTo(b.getTitle());
+            }
+        });
+        adapter = new CarcadaAdapter(this, carcadas, onItemClickListener);
         recyclerView.setAdapter(adapter);
     }
 
-    /**
-     * Gets resources as an integer array
-     * @param id - int
-     * @return values
-     */
-    private int[] getIntegerArray(int id) {
-        TypedArray typedArray = getResources().obtainTypedArray(id);
+    private int[] getSoundsArray() {
+        TypedArray typedArray = getResources().obtainTypedArray(R.array.sounds);
         int[] values = new int[typedArray.length()];
         for (int i = 0; i < values.length; i++)
             values[i] = typedArray.getResourceId(i, 0);
@@ -268,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
      * @param position - int
      */
     private void playSound(int position) {
-        player = MediaPlayer.create(this, sounds[position]);
+        player = MediaPlayer.create(this, carcadas.get(position).getSound());
         player.start();
     }
 
@@ -358,12 +380,12 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
                                                   REQUEST_CODE
                 );
             } else {
-                copyToExternalStorage(getIntegerArray(R.array.sounds)[position]);
+                copyToExternalStorage(getSoundsArray()[position]);
                 share(getExportedFile(), "Alborghetti - " +
                         getResources().getStringArray(R.array.titles)[position]);
             }
         } else {
-            copyToExternalStorage(getIntegerArray(R.array.sounds)[position]);
+            copyToExternalStorage(getSoundsArray()[position]);
             share(getExportedFile(), "Alborghetti - " +
                     getResources().getStringArray(R.array.titles)[position]);
         }

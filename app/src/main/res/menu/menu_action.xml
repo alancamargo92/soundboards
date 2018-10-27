@@ -16,11 +16,11 @@
         app:showAsAction="ifRoom"/>
 
     <!-- Search -->
-    <!-- TODO: implement search
     <item
-        android:id="@+id/menu_search"
+        android:id="@+id/item_search"
         android:title="@string/search"
         android:icon="@drawable/ic_search"
-        app:showAsAction="collapseActionView|ifRoom"/> -->
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always"/>
 
 </menu>

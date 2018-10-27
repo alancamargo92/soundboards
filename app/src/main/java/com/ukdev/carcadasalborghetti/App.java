@@ -10,6 +10,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        //MobileAds.initialize(this, getString(R.string.adMobId)); TODO
         overrideFont();
     }
 
