@@ -30,9 +30,6 @@
             </intent-filter>
         </activity>
 
-        <!--<meta-data TODO
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/adMobId"/>-->
     </application>
 
 </manifest>

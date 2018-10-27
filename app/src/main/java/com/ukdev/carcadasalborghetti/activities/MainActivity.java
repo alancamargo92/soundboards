@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
         setSupportActionBar(toolbar);
         setPlayPauseButton();
         setRecyclerView();
-        //showAds(); // TODO
         db = new Database(this, null);
         if (db.getRowCount() == 0)
             showTip();
@@ -168,12 +167,6 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
             e.printStackTrace();
         }
     }
-
-    /*private void showAds() { // TODO
-        AdView adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-    }*/
 
     /**
      * Sets actions to playPauseButton
