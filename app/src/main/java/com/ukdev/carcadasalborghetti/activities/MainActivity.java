@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -51,12 +52,13 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
     private int[] sounds;
     private File exportedFile;
     private File tmpDir = new File(Environment.getExternalStorageDirectory() +
-                                           "/tmp_carcadas/");
+            "/tmp_carcadas/");
     private Database db;
     private int selectedItem;
     private CarcadaAdapter adapter;
     private List<Carcada> carcadas;
     private CarcadaAdapter.OnItemClickListener onItemClickListener;
+    private FloatingActionButton playPauseButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                // FIXME: playing wrong audio
                 adapter.filter(carcadas, newText);
                 return false;
             }
@@ -176,19 +179,20 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
      * Sets actions to playPauseButton
      */
     private void setPlayPauseButton() {
-        FloatingActionButton playPauseButton =
-                findViewById(R.id.playPauseButton);
+        playPauseButton = findViewById(R.id.playPauseButton);
         assert playPauseButton != null;
         playPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (player != null && player.isPlaying()) {
-                    Toast.makeText(getBaseContext(), R.string.pause,
-                                   Toast.LENGTH_SHORT).show();
+                    Drawable icon = ContextCompat.getDrawable(MainActivity.this,
+                            R.drawable.ic_play);
+                    playPauseButton.setImageDrawable(icon);
                     player.pause();
                 } else if (player != null && !player.isPlaying()) {
-                    Toast.makeText(getBaseContext(), R.string.playing,
-                                   Toast.LENGTH_SHORT).show();
+                    Drawable icon = ContextCompat.getDrawable(MainActivity.this,
+                            R.drawable.ic_pause);
+                    playPauseButton.setImageDrawable(icon);
                     player.start();
                 }
             }
@@ -204,16 +208,16 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
         popup.setMessage(R.string.tipText);
         popup.setNeutralButton(R.string.ok, null);
         popup.setNegativeButton(R.string.doNotShowAgain,
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        try {
-                                            db.add();
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            db.add();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
         popup.show();
     }
 
@@ -223,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
     private void deleteTempFiles() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
-                                                  Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     == PackageManager.PERMISSION_GRANTED) {
                 delete();
             }
@@ -292,6 +296,14 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
     private void playSound(int position) {
         player = MediaPlayer.create(this, carcadas.get(position).getSound());
         player.start();
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                Drawable icon = ContextCompat.getDrawable(MainActivity.this,
+                        R.drawable.ic_play);
+                playPauseButton.setImageDrawable(icon);
+            }
+        });
     }
 
     /**
@@ -359,12 +371,13 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
         if (manager == null)
             return;
         int volume = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        if (volume == 0)
-            Toast.makeText(getBaseContext(), R.string.volume_0,
-                           Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(getBaseContext(),
-                           R.string.playing, Toast.LENGTH_SHORT).show();
+        if (volume == 0) {
+            Toast.makeText(getBaseContext(), R.string.volume_0, Toast.LENGTH_SHORT).show();
+        } else {
+            Drawable icon = ContextCompat.getDrawable(MainActivity.this,
+                    R.drawable.ic_pause);
+            playPauseButton.setImageDrawable(icon);
+        }
         playSound(position);
     }
 
@@ -373,11 +386,11 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
         selectedItem = position;
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(MainActivity.this,
-                                                  Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                     PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this,
-                                                  new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                                  REQUEST_CODE
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_CODE
                 );
             } else {
                 copyToExternalStorage(getSoundsArray()[position]);
