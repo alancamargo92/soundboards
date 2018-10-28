@@ -118,9 +118,10 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
             case REQUEST_CODE:
                 if (grantResults.length > 0 &&
                         grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    copyToExternalStorage(getSoundsArray()[selectedItem]);
+                    Carcada carcada = carcadas.get(selectedItem);
+                    copyToExternalStorage(carcada.getSound());
                     share(getExportedFile(), "Alborghetti - " +
-                            getResources().getStringArray(R.array.titles)[selectedItem]);
+                            carcada.getTitle());
                 }
                 break;
         }
@@ -377,23 +378,22 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
     @Override
     public void onItemLongClick(int position) {
         selectedItem = position;
+        Carcada carcada = adapter.getData().get(position);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(MainActivity.this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                     PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
                         REQUEST_CODE
                 );
             } else {
-                copyToExternalStorage(getSoundsArray()[position]);
-                share(getExportedFile(), "Alborghetti - " +
-                        getResources().getStringArray(R.array.titles)[position]);
+                copyToExternalStorage(carcada.getSound());
+                share(getExportedFile(), "Alborghetti - " + carcada.getTitle());
             }
         } else {
-            copyToExternalStorage(getSoundsArray()[position]);
-            share(getExportedFile(), "Alborghetti - " +
-                    getResources().getStringArray(R.array.titles)[position]);
+            copyToExternalStorage(carcada.getSound());
+            share(getExportedFile(), "Alborghetti - " + carcada.getTitle());
         }
     }
 
