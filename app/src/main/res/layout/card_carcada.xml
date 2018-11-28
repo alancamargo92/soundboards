@@ -5,16 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    app:cardUseCompatPadding="true"
     app:cardCornerRadius="5dp">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:padding="16dp">
         <!-- Position -->
         <TextView
             android:id="@+id/positionRow"
+            style="@style/TextAppearance.AppCompat.Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
@@ -22,19 +23,22 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/titleRow"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/titleRow"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
             tools:text="1."/>
 
         <!-- Title -->
         <TextView
             android:id="@+id/titleRow"
+            style="@style/TextAppearance.AppCompat.Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
             android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/positionRow"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
             tools:text="Carcada"/>
 
         <!-- Length -->
@@ -42,11 +46,15 @@
             android:id="@+id/lengthRow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:textSize="12sp"
             android:textColor="@color/grey"
             app:layout_constraintTop_toBottomOf="@id/titleRow"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/titleRow"
+            app:layout_constraintEnd_toEndOf="@id/titleRow"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintHorizontal_bias="0"
             tools:text="00:00"/>
     </android.support.constraint.ConstraintLayout>
 
