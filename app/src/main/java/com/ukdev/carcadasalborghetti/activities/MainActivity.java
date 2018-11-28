@@ -1,12 +1,9 @@
 package com.ukdev.carcadasalborghetti.activities;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -19,9 +16,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -30,11 +27,11 @@ import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.ukdev.carcadasalborghetti.BuildConfig;
 import com.ukdev.carcadasalborghetti.R;
-import com.ukdev.carcadasalborghetti.adapters.CarcadaAdapter;
-import com.ukdev.carcadasalborghetti.database.Database;
+import com.ukdev.carcadasalborghetti.adapter.CarcadaAdapter;
 import com.ukdev.carcadasalborghetti.model.Carcada;
-import com.ukdev.carcadasalborghetti.provider.CustomFileProvider;
+import com.ukdev.carcadasalborghetti.preferences.PreferenceHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -45,6 +42,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class MainActivity extends AppCompatActivity implements CarcadaAdapter.OnItemClickListener {
 
@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
     private int[] sounds;
     private File exportedFile;
     private File tmpDir = new File(Environment.getExternalStorageDirectory() +
-            "/tmp_carcadas/");
-    private Database db;
+                                   "/tmp_carcadas/");
+    private PreferenceHelper preferenceHelper;
     private int selectedItem;
     private CarcadaAdapter adapter;
     private List<Carcada> carcadas;
@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
         setSupportActionBar(toolbar);
         setPlayPauseButton();
         setRecyclerView();
-        db = new Database(this, null);
-        if (db.getRowCount() == 0)
+        preferenceHelper = new PreferenceHelper(this);
+        if (!preferenceHelper.hasDismissedTip())
             showTip();
         deleteTempFiles();
     }
@@ -118,11 +118,11 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
         switch (requestCode) {
             case REQUEST_CODE:
                 if (grantResults.length > 0 &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    grantResults[0] == PERMISSION_GRANTED) {
                     Carcada carcada = carcadas.get(selectedItem);
                     copyToExternalStorage(carcada.getSound());
                     share(getExportedFile(), "Alborghetti - " +
-                            carcada.getTitle());
+                                             carcada.getTitle());
                 }
                 break;
         }
@@ -148,25 +148,13 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
     }
 
     private void showAppInfo() {
-        try {
-            PackageManager manager = getPackageManager();
-            PackageInfo info = manager.getPackageInfo(getPackageName(), 0);
-            String version = info.versionName;
-            String title = String.format("%1$s %2$s", getString(R.string.app_name), version);
-            AlertDialog.Builder dialogue = new AlertDialog.Builder(this);
-            dialogue.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    // Do nothing
-                }
-            });
-            dialogue.setTitle(title);
-            dialogue.setMessage(R.string.about);
-            dialogue.show();
-        } catch (PackageManager.NameNotFoundException e) {
-            // Damn! Something really wrong happened here
-            e.printStackTrace();
-        }
+        String version = BuildConfig.VERSION_NAME;
+        String title = String.format("%1$s %2$s", getString(R.string.app_name), version);
+        new AlertDialog.Builder(this)
+                .setNeutralButton(R.string.ok, null)
+                .setTitle(title)
+                .setMessage(R.string.about)
+                .show();
     }
 
     /**
@@ -180,12 +168,12 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
             public void onClick(View view) {
                 if (player != null && player.isPlaying()) {
                     Drawable icon = ContextCompat.getDrawable(MainActivity.this,
-                            R.drawable.ic_play);
+                                                              R.drawable.ic_play);
                     playPauseButton.setImageDrawable(icon);
                     player.pause();
                 } else if (player != null && !player.isPlaying()) {
                     Drawable icon = ContextCompat.getDrawable(MainActivity.this,
-                            R.drawable.ic_pause);
+                                                              R.drawable.ic_pause);
                     playPauseButton.setImageDrawable(icon);
                     player.start();
                 }
@@ -197,22 +185,18 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
      * Shows a tip
      */
     private void showTip() {
-        AlertDialog.Builder popup = new AlertDialog.Builder(this);
-        popup.setTitle(R.string.tip);
-        popup.setMessage(R.string.tipText);
-        popup.setNeutralButton(R.string.ok, null);
-        popup.setNegativeButton(R.string.doNotShowAgain,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        try {
-                            db.add();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-        popup.show();
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.tip)
+                .setMessage(R.string.tipText)
+                .setNeutralButton(R.string.ok, null)
+                .setNegativeButton(R.string.doNotShowAgain,
+                                   new DialogInterface.OnClickListener() {
+                                       @Override
+                                       public void onClick(DialogInterface dialogInterface, int i) {
+                                           preferenceHelper.setHasDismissedTip();
+                                       }
+                                   })
+                .show();
     }
 
     /**
@@ -220,13 +204,12 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
      */
     private void deleteTempFiles() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    == PackageManager.PERMISSION_GRANTED) {
+            boolean hasExternalStoragePermission = checkSelfPermission(WRITE_EXTERNAL_STORAGE) == PERMISSION_GRANTED;
+            if (hasExternalStoragePermission)
                 delete();
-            }
-        } else
+        } else {
             delete();
+        }
     }
 
     /**
@@ -295,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 Drawable icon = ContextCompat.getDrawable(MainActivity.this,
-                        R.drawable.ic_play);
+                                                          R.drawable.ic_play);
                 playPauseButton.setImageDrawable(icon);
             }
         });
@@ -310,10 +293,12 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("audio/*");
         Uri uri;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            uri = CustomFileProvider.getUriForFile(this, getPackageName(), file);
-        else
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            String authority = String.format("%s.provider", getPackageName());
+            uri = FileProvider.getUriForFile(this, authority, file);
+        } else {
             uri = Uri.fromFile(file);
+        }
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Carcada - Alborghetti");
         shareIntent.putExtra(Intent.EXTRA_TEXT, text);
@@ -335,7 +320,7 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
     private void copyToExternalStorage(int id) {
         String baseDir =
                 Environment.getExternalStorageDirectory().getAbsolutePath() +
-                        "/tmp_carcadas/";
+                "/tmp_carcadas/";
         File dir = new File(baseDir);
         if (!dir.exists())
             dir.mkdir();
@@ -370,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
             Toast.makeText(getBaseContext(), R.string.volume_0, Toast.LENGTH_SHORT).show();
         } else {
             Drawable icon = ContextCompat.getDrawable(MainActivity.this,
-                    R.drawable.ic_pause);
+                                                      R.drawable.ic_pause);
             playPauseButton.setImageDrawable(icon);
         }
         playSound(position);
@@ -382,12 +367,12 @@ public class MainActivity extends AppCompatActivity implements CarcadaAdapter.On
         Carcada carcada = adapter.getData().get(position);
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(MainActivity.this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
-                    PackageManager.PERMISSION_GRANTED) {
+                                                  WRITE_EXTERNAL_STORAGE) !=
+                PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                        REQUEST_CODE
-                );
+                                                  new String[] { WRITE_EXTERNAL_STORAGE },
+                                                  REQUEST_CODE
+                                                 );
             } else {
                 copyToExternalStorage(carcada.getSound());
                 share(getExportedFile(), "Alborghetti - " + carcada.getTitle());
