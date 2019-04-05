@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener {
         })
     }
 
-    fun openYouTube(): Boolean {
+    private fun openYouTube(): Boolean {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.youtube_url)))
         startActivity(intent)
         return true
