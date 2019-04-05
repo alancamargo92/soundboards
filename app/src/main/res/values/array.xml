@@ -103,8 +103,8 @@
         <item>Oh Rio de Janeiro do meu saco</item>
     </string-array>
 
-    <!-- Sounds -->
-    <array name="sounds">
+    <!-- Audios -->
+    <array name="audios">
         <item>@raw/aud01</item>
         <item>@raw/aud02</item>
         <item>@raw/aud03</item>
