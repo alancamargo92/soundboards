@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="admob_app_id">ca-app-pub-3993772572074236~1470914103</string>
-    <string name="ad_unit_id">ca-app-pub-3993772572074236/7237115241</string>
+    <string name="ad_unit_id">ca-app-pub-3993772572074236/3749790869</string>
     <string name="app_name">Carcadas Alborghetti</string>
     <string name="youtube_url">https://www.youtube.com/results?search_query=alborghetti</string>
     <string name="title_format">%1$d. %2$s</string>
