@@ -20,6 +20,13 @@ class CarcadaAdapter : RecyclerView.Adapter<CarcadaViewHolder>() {
         this.listener = listener
     }
 
+    fun filter(carcadas: List<Carcada>, searchTerm: String?) {
+        searchTerm?.toLowerCase()?.let { query ->
+            data = carcadas.filter { it.title.toLowerCase().contains(query) }
+            notifyDataSetChanged()
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarcadaViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val containerView = inflater.inflate(R.layout.item_carcada, parent, false)
