@@ -13,6 +13,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.ads.AdRequest
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.CarcadaAdapter
 import com.ukdev.carcadasalborghetti.listeners.AudioCallback
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
             this.carcadas = carcadas
             adapter.setData(carcadas)
         })
+        ad_view.loadAd(AdRequest.Builder().build())
     }
 
     override fun onBackPressed() {
