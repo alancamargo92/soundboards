@@ -23,6 +23,8 @@ class AudioHandler(private val context: Context) {
                 start()
                 callback.onStartPlayback()
             }
+
+            setOnCompletionListener { callback.onStopPlayback() }
         }
     }
 
