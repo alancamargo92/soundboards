@@ -1,5 +1,7 @@
 package com.ukdev.carcadasalborghetti.activities
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -50,7 +52,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.item_search -> TODO("search")
-            R.id.item_youtube -> TODO("open youtube")
+            R.id.item_youtube -> openYouTube()
             R.id.item_about -> showAppInfo()
             else -> false
         }
@@ -73,6 +75,12 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener {
                 topPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
             }
         })
+    }
+
+    fun openYouTube(): Boolean {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.youtube_url)))
+        startActivity(intent)
+        return true
     }
 
     private fun showAppInfo(): Boolean {
