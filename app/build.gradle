@@ -3,27 +3,21 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
 
-    lintOptions {
-        abortOnError false
-    }
-
-    signingConfigs {
-        config {
-            def properties = new Properties()
-            file("release.properties").withInputStream { properties.load(it) }
-            keyAlias = properties.getProperty("key.alias")
-            keyPassword = properties.getProperty("key.password")
-            storeFile file(properties.getProperty("store.file"))
-            storePassword = properties.getProperty("store.password")
-        }
-    }
-
     defaultConfig {
         applicationId "com.ukdev.carcadasalborghetti"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 36
         versionName "4.0"
+    }
+
+    signingConfigs {
+        config {
+            keyAlias System.getenv("KEY_ALIAS_CARCADAS")
+            keyPassword System.getenv("KEY_PASSWORD_CARCADAS")
+            storeFile file(System.getenv("STORE_FILE_CARCADAS"))
+            storePassword System.getenv("STORE_PASSWORD_CARCADAS")
+        }
     }
 
     buildTypes {
@@ -46,6 +40,12 @@ android {
             dimension "mode"
             applicationIdSuffix ".paid"
             versionNameSuffix " (Pago)"
+        }
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/kotlin']
         }
     }
 
