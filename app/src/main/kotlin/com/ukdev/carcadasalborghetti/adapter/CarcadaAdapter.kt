@@ -9,15 +9,15 @@ import com.ukdev.carcadasalborghetti.model.Carcada
 class CarcadaAdapter : RecyclerView.Adapter<CarcadaViewHolder>() {
 
     private var data: List<Carcada>? = null
-    private var onItemClickListener: ((carcada: Carcada) -> Unit)? = null
+    private var listener: RecyclerViewInteractionListener? = null
 
     fun setData(data: List<Carcada>) {
         this.data = data
         notifyDataSetChanged()
     }
 
-    fun setOnItemClickListener(onItemClickListener: (carcada: Carcada) -> Unit) {
-        this.onItemClickListener = onItemClickListener
+    fun setListener(listener: RecyclerViewInteractionListener) {
+        this.listener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarcadaViewHolder {
@@ -29,8 +29,17 @@ class CarcadaAdapter : RecyclerView.Adapter<CarcadaViewHolder>() {
     override fun onBindViewHolder(holder: CarcadaViewHolder, position: Int) {
         data?.get(position).let {
             it?.let { carcada ->
-                holder.bindTo(carcada)
-                holder.containerView.setOnClickListener { onItemClickListener?.invoke(carcada) }
+                holder.run {
+                    bindTo(carcada)
+                    containerView.setOnClickListener { listener?.onItemClick(carcada) }
+                    containerView.setOnLongClickListener {
+                        listener?.run {
+                            onItemLongClick(carcada)
+                            true
+                        }
+                        false
+                    }
+                }
             }
         }
     }
