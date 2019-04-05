@@ -35,7 +35,7 @@ class CarcadaAdapter : RecyclerView.Adapter<CarcadaViewHolder>() {
                     containerView.setOnLongClickListener {
                         listener?.run {
                             onItemLongClick(carcada)
-                            true
+                            return@setOnLongClickListener true
                         }
                         false
                     }

@@ -13,11 +13,18 @@ class CarcadaRepository(private val context: Context) {
             val lengths = getStringArray(R.array.lengths)
             val audios = getAudios(this)
 
-            return arrayListOf<Carcada>().apply {
+            val rawList = arrayListOf<Carcada>().apply {
                 titles.forEachIndexed { index, title ->
                     add(Carcada(title, lengths[index], index + 1, audios[index]))
                 }
             }
+
+            return rawList.sortedBy { it.title.split(".").last().trim() }
+                    .apply {
+                        forEachIndexed { index, carcada ->
+                            carcada.position = index + 1
+                        }
+                    }
         }
     }
 
