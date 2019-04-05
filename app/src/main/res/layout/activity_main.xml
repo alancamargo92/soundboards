@@ -43,7 +43,7 @@
         android:layout_marginRight="@dimen/margin_fab"
         android:visibility="gone"
         android:src="@drawable/ic_stop"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/recycler_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:fabSize="normal"
         tools:visibility="visible"/>
