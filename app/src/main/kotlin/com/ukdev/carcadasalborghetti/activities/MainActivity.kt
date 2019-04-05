@@ -1,6 +1,9 @@
 package com.ukdev.carcadasalborghetti.activities
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -9,6 +12,8 @@ import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.CarcadaAdapter
 import com.ukdev.carcadasalborghetti.adapter.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Carcada
+import com.ukdev.carcadasalborghetti.utils.getAppName
+import com.ukdev.carcadasalborghetti.utils.getAppVersion
 import com.ukdev.carcadasalborghetti.utils.provideViewModel
 import com.ukdev.carcadasalborghetti.viewmodel.CarcadaViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -37,6 +42,20 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener {
             recycler_view.smoothScrollToPosition(0)
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.item_search -> TODO("search")
+            R.id.item_youtube -> TODO("open youtube")
+            R.id.item_about -> showAppInfo()
+            else -> false
+        }
+    }
+
     override fun onItemClick(carcada: Carcada) {
         // TODO: play audio
     }
@@ -54,6 +73,16 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener {
                 topPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
             }
         })
+    }
+
+    private fun showAppInfo(): Boolean {
+        val title = getString(R.string.app_info, getAppName(), getAppVersion())
+        AlertDialog.Builder(this).setTitle(title)
+                .setMessage(R.string.developer_info)
+                .setNeutralButton(R.string.ok, null)
+                .setIcon(R.mipmap.ic_launcher)
+                .show()
+        return true
     }
 
 }

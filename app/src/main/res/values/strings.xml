@@ -4,4 +4,10 @@
     <string name="app_name">Carcadas Alborghetti</string>
     <string name="youtube_url">https://www.youtube.com/results?search_query=alborghetti</string>
     <string name="title_format">%1$d. %2$s</string>
+    <string name="youtube">Buscar no YouTube</string>
+    <string name="search">Buscar</string>
+    <string name="about">Sobre</string>
+    <string name="app_info">%1$s %2$s</string>
+    <string name="developer_info">Desenvolvido por Alan Camargo.</string>
+    <string name="ok">OK</string>
 </resources>
