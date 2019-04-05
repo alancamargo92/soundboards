@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.CarcadaAdapter
-import com.ukdev.carcadasalborghetti.adapter.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.listeners.QueryListener
+import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Carcada
 import com.ukdev.carcadasalborghetti.utils.getAppName
 import com.ukdev.carcadasalborghetti.utils.getAppVersion

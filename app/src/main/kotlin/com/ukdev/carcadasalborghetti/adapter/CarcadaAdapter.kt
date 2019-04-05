@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
+import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Carcada
 
 class CarcadaAdapter : RecyclerView.Adapter<CarcadaViewHolder>() {

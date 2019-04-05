@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.adapter
+package com.ukdev.carcadasalborghetti.listeners
 
 import com.ukdev.carcadasalborghetti.model.Carcada
 
