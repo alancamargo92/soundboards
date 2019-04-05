@@ -32,28 +32,10 @@ android {
         }
     }
 
-    flavorDimensions "mode"
-    productFlavors {
-        free {
-            dimension "mode"
-            versionNameSuffix " (Grátis)"
-        }
-
-        paid {
-            dimension "mode"
-            applicationIdSuffix ".paid"
-            versionNameSuffix " (Pago)"
-        }
-    }
-
     sourceSets {
         main {
             java.srcDirs = ['src/main/kotlin']
         }
-    }
-
-    dataBinding {
-        enabled true
     }
 
 }

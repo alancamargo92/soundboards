@@ -3,4 +3,5 @@
     <string name="ad_unit_id">ca-app-pub-3993772572074236/7237115241</string>
     <string name="app_name">Carcadas Alborghetti</string>
     <string name="youtube_url">https://www.youtube.com/results?search_query=alborghetti</string>
+    <string name="title_format">%1$d. %2$s</string>
 </resources>
