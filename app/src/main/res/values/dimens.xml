@@ -6,6 +6,10 @@
     <dimen name="height_card_view">150dp</dimen>
     <!-- endregion -->
 
+    <!-- region Margin -->
+    <dimen name="margin_fab">16dp</dimen>
+    <!-- endregion -->
+
     <!-- region Padding -->
     <dimen name="padding_small">8dp</dimen>
     <!-- endregion -->

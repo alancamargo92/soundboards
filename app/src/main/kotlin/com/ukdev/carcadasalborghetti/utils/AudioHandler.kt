@@ -6,15 +6,8 @@ import com.ukdev.carcadasalborghetti.listeners.AudioCallback
 
 class AudioHandler(private val context: Context) {
 
-    private var isPlaying = false
     private var mediaPlayer: MediaPlayer? = null
     private var audioFileRes: Int? = null
-
-    fun play(callback: AudioCallback) {
-        audioFileRes?.let { audio ->
-            play(audio, callback)
-        }
-    }
 
     fun play(audioFileRes: Int, callback: AudioCallback) {
         mediaPlayer?.release()
@@ -33,8 +26,9 @@ class AudioHandler(private val context: Context) {
         }
     }
 
-    fun stop() {
+    fun stop(callback: AudioCallback) {
         mediaPlayer?.stop()
+        callback.onStopPlayback()
     }
 
 }

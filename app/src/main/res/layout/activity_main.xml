@@ -1,13 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/recycler_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-    tools:orientation="horizontal"
-    tools:listitem="@layout/item_carcada"
-    tools:itemCount="100"
-    tools:spanCount="3"
-    tools:context=".activities.MainActivity"/>
+    tools:context=".activities.MainActivity">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:orientation="horizontal"
+        tools:listitem="@layout/item_carcada"
+        tools:itemCount="100"
+        tools:spanCount="3"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_fab"
+        android:layout_marginEnd="@dimen/margin_fab"
+        android:layout_marginRight="@dimen/margin_fab"
+        android:layout_gravity="bottom|end"
+        android:visibility="gone"
+        android:src="@drawable/ic_stop"
+        app:fabSize="normal"
+        tools:visibility="visible"/>
+</FrameLayout>

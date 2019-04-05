@@ -5,6 +5,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         configureRecyclerView()
+        fab.setOnClickListener { audioHandler.stop(callback = this) }
         viewModel.getCarcadas().observe(this, Observer { carcadas ->
             this.carcadas = carcadas
             adapter.setData(carcadas)
@@ -53,7 +56,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
 
     override fun onPause() {
         super.onPause()
-        audioHandler.stop()
+        audioHandler.stop(callback = this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -83,11 +86,11 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
     }
 
     override fun onStartPlayback() {
-
+        fab.visibility = VISIBLE
     }
 
     override fun onStopPlayback() {
-
+        fab.visibility = GONE
     }
 
     private fun configureRecyclerView() {
