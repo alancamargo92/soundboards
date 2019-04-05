@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- region CardView -->
+    <dimen name="radius_card_view">4dp</dimen>
+    <dimen name="width_card_view">120dp</dimen>
+    <dimen name="height_card_view">150dp</dimen>
+    <!-- endregion -->
+
+    <!-- region Padding -->
+    <dimen name="padding_small">8dp</dimen>
+    <!-- endregion -->
+</resources>
