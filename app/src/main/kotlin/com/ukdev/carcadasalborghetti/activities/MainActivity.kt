@@ -13,20 +13,23 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.CarcadaAdapter
+import com.ukdev.carcadasalborghetti.listeners.AudioCallback
 import com.ukdev.carcadasalborghetti.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Carcada
+import com.ukdev.carcadasalborghetti.utils.AudioHandler
 import com.ukdev.carcadasalborghetti.utils.getAppName
 import com.ukdev.carcadasalborghetti.utils.getAppVersion
 import com.ukdev.carcadasalborghetti.utils.provideViewModel
 import com.ukdev.carcadasalborghetti.viewmodel.CarcadaViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener {
+class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, AudioCallback {
 
     private val viewModel by provideViewModel(CarcadaViewModel::class)
     private val adapter = CarcadaAdapter()
     private val layoutManager = GridLayoutManager(this, 3)
+    private val audioHandler = AudioHandler(this)
 
     private var topPosition = 0
     private var carcadas = listOf<Carcada>()
@@ -48,6 +51,11 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener {
             recycler_view.smoothScrollToPosition(0)
     }
 
+    override fun onPause() {
+        super.onPause()
+        audioHandler.stop()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         menu?.run {
@@ -67,11 +75,19 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener {
     }
 
     override fun onItemClick(carcada: Carcada) {
-        // TODO: play audio
+        audioHandler.play(carcada.audioFileRes, callback = this)
     }
 
     override fun onItemLongClick(carcada: Carcada) {
         // TODO: share audio
+    }
+
+    override fun onStartPlayback() {
+
+    }
+
+    override fun onStopPlayback() {
+
     }
 
     private fun configureRecyclerView() {
