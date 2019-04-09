@@ -1,6 +1,7 @@
 package com.ukdev.carcadasalborghetti.activities
 
 import android.content.Intent
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -20,10 +21,7 @@ import com.ukdev.carcadasalborghetti.listeners.AudioCallback
 import com.ukdev.carcadasalborghetti.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Carcada
-import com.ukdev.carcadasalborghetti.utils.AudioHandler
-import com.ukdev.carcadasalborghetti.utils.getAppName
-import com.ukdev.carcadasalborghetti.utils.getAppVersion
-import com.ukdev.carcadasalborghetti.utils.provideViewModel
+import com.ukdev.carcadasalborghetti.utils.*
 import com.ukdev.carcadasalborghetti.viewmodel.CarcadaViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -36,6 +34,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
 
     private var topPosition = 0
     private var carcadas = listOf<Carcada>()
+    private var carcadaToShare: Carcada? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,12 +78,27 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<out String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        val permissionsGranted = grantResults.all { it == PERMISSION_GRANTED }
+
+        if (requestCode == REQUEST_CODE_STORAGE_PERMISSIONS == permissionsGranted)
+            carcadaToShare?.let(audioHandler::share)
+    }
+
     override fun onItemClick(carcada: Carcada) {
         audioHandler.play(carcada.audioFileRes, callback = this)
     }
 
     override fun onItemLongClick(carcada: Carcada) {
-        // TODO: share audio
+        if (!hasStoragePermissions()) {
+            carcadaToShare = carcada
+            requestStoragePermissions(REQUEST_CODE_STORAGE_PERMISSIONS)
+        } else {
+            audioHandler.share(carcada)
+        }
     }
 
     override fun onStartPlayback() {
@@ -120,6 +134,10 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
                 .setIcon(R.mipmap.ic_launcher)
                 .show()
         return true
+    }
+
+    companion object {
+        private const val REQUEST_CODE_STORAGE_PERMISSIONS = 123
     }
 
 }

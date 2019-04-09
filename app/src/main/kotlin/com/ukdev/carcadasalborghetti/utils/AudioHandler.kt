@@ -1,15 +1,28 @@
 package com.ukdev.carcadasalborghetti.utils
 
 import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
+import android.net.Uri
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES.N
+import android.os.Environment
+import androidx.annotation.RawRes
+import androidx.core.content.FileProvider
+import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.listeners.AudioCallback
+import com.ukdev.carcadasalborghetti.model.Carcada
+import java.io.File
+import java.io.FileOutputStream
 
 class AudioHandler(private val context: Context) {
 
     private var mediaPlayer: MediaPlayer? = null
+
+    @RawRes
     private var audioFileRes: Int? = null
 
-    fun play(audioFileRes: Int, callback: AudioCallback) {
+    fun play(@RawRes audioFileRes: Int, callback: AudioCallback) {
         mediaPlayer?.release()
         this.audioFileRes = audioFileRes
 
@@ -31,6 +44,51 @@ class AudioHandler(private val context: Context) {
     fun stop(callback: AudioCallback) {
         mediaPlayer?.stop()
         callback.onStopPlayback()
+    }
+
+    fun share(carcada: Carcada) {
+        val file = getFileFromRes(carcada.audioFileRes)
+
+        val uri = if (SDK_INT >= N) {
+            val authority = "${context.packageName}.provider"
+            FileProvider.getUriForFile(context, authority, file)
+        } else {
+            Uri.fromFile(file)
+        }
+
+        val shareIntent = Intent(Intent.ACTION_SEND).setType("audio/*")
+                .putExtra(Intent.EXTRA_STREAM, uri)
+                .putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.subject_share))
+                .putExtra(Intent.EXTRA_TEXT, carcada.title)
+
+        val chooser = Intent.createChooser(shareIntent,
+                context.getString(R.string.chooser_title_share))
+        context.startActivity(chooser)
+    }
+
+    private fun getFileFromRes(@RawRes audioFileRes: Int): File {
+        val baseDir = "${Environment.getExternalStorageDirectory().absolutePath}/tmp_carcadas/"
+        val dir = File(baseDir)
+        if (!dir.exists())
+            dir.mkdir()
+        val audioFile = File(baseDir, "$audioFileRes.mp3")
+
+        val buffer = ByteArray(1024 * 500)
+        val inputStream = context.resources.openRawResource(audioFileRes)
+        val out = FileOutputStream(audioFile)
+        var content = inputStream.read(buffer)
+
+        while (content != -1) {
+            out.write(buffer, 0, content)
+            content = inputStream.read(buffer)
+        }
+
+        out.run {
+            flush()
+            close()
+        }
+
+        return audioFile
     }
 
 }
