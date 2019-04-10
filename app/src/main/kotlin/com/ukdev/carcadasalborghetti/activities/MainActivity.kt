@@ -3,6 +3,8 @@ package com.ukdev.carcadasalborghetti.activities
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.net.Uri
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES.M
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -93,7 +95,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
     }
 
     override fun onItemLongClick(carcada: Carcada) {
-        if (!hasStoragePermissions()) {
+        if (SDK_INT >= M && !hasStoragePermissions()) {
             carcadaToShare = carcada
             requestStoragePermissions(REQUEST_CODE_STORAGE_PERMISSIONS)
         } else {
