@@ -23,6 +23,7 @@ import com.ukdev.carcadasalborghetti.listeners.AudioCallback
 import com.ukdev.carcadasalborghetti.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Carcada
+import com.ukdev.carcadasalborghetti.privacy.PrivacyTermsDialogue
 import com.ukdev.carcadasalborghetti.utils.*
 import com.ukdev.carcadasalborghetti.viewmodel.CarcadaViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -75,6 +76,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.item_youtube -> openYouTube()
+            R.id.item_privacy -> showPrivacyPolicy()
             R.id.item_about -> showAppInfo()
             else -> false
         }
@@ -125,6 +127,11 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
     private fun openYouTube(): Boolean {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.youtube_url)))
         startActivity(intent)
+        return true
+    }
+
+    private fun showPrivacyPolicy(): Boolean {
+        PrivacyTermsDialogue().show(supportFragmentManager, PrivacyTermsDialogue.TAG)
         return true
     }
 

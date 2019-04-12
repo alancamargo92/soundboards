@@ -11,6 +11,9 @@
         android:title="@string/youtube"
         android:icon="@drawable/ic_youtube"
         app:showAsAction="ifRoom"/>
+    <item android:id="@+id/item_privacy"
+        android:title="@string/privacy_terms_title"
+        app:showAsAction="never"/>
     <item android:id="@+id/item_about"
         android:title="@string/about"
         app:showAsAction="never"/>
