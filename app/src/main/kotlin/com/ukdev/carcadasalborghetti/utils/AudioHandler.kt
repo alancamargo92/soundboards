@@ -47,7 +47,7 @@ class AudioHandler(private val context: Context) {
     }
 
     fun share(carcada: Carcada) {
-        val file = getFileFromRes(carcada.audioFileRes)
+        val file = getFile(carcada)
 
         val uri = if (SDK_INT >= N) {
             val authority = "${context.packageName}.provider"
@@ -66,15 +66,15 @@ class AudioHandler(private val context: Context) {
         context.startActivity(chooser)
     }
 
-    private fun getFileFromRes(@RawRes audioFileRes: Int): File {
+    private fun getFile(carcada: Carcada): File {
         val baseDir = "${Environment.getExternalStorageDirectory().absolutePath}/tmp_carcadas/"
         val dir = File(baseDir)
         if (!dir.exists())
             dir.mkdir()
-        val audioFile = File(baseDir, "$audioFileRes.mp3")
+        val audioFile = File(baseDir, "${carcada.title}.mp3")
 
         val buffer = ByteArray(1024 * 500)
-        val inputStream = context.resources.openRawResource(audioFileRes)
+        val inputStream = context.resources.openRawResource(carcada.audioFileRes)
         val out = FileOutputStream(audioFile)
         var content = inputStream.read(buffer)
 
