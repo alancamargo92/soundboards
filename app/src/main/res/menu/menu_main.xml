@@ -7,10 +7,6 @@
         android:icon="@drawable/ic_search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom"/>
-    <item android:id="@+id/item_youtube"
-        android:title="@string/youtube"
-        android:icon="@drawable/ic_youtube"
-        app:showAsAction="ifRoom"/>
     <item android:id="@+id/item_privacy"
         android:title="@string/privacy_terms_title"
         app:showAsAction="never"/>

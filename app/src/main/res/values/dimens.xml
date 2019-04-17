@@ -8,7 +8,7 @@
 
     <!-- region Margin -->
     <dimen name="margin_default">8dp</dimen>
-    <dimen name="margin_large">16dp</dimen>
+    <dimen name="margin_large">32dp</dimen>
     <dimen name="margin_fab">16dp</dimen>
     <!-- endregion -->
 

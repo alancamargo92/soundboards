@@ -1,8 +1,8 @@
 package com.ukdev.carcadasalborghetti.activities
 
-import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.net.Uri
+import android.content.res.Configuration
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.M
 import android.os.Bundle
@@ -75,7 +75,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.item_youtube -> openYouTube()
             R.id.item_privacy -> showPrivacyPolicy()
             R.id.item_about -> showAppInfo()
             else -> false
@@ -90,6 +89,15 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
 
         if (requestCode == REQUEST_CODE_STORAGE_PERMISSIONS == permissionsGranted)
             carcadaToShare?.let(audioHandler::share)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        layoutManager.spanCount = when (newConfig.orientation) {
+            ORIENTATION_PORTRAIT -> 3
+            else -> 4
+        }
     }
 
     override fun onItemClick(carcada: Carcada) {
@@ -122,12 +130,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
                 topPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
             }
         })
-    }
-
-    private fun openYouTube(): Boolean {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.youtube_url)))
-        startActivity(intent)
-        return true
     }
 
     private fun showPrivacyPolicy(): Boolean {
