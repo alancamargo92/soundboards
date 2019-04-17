@@ -11,17 +11,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/privacy_terms"/>
+        android:text="@string/privacy_terms_title"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_default">
+        android:layout_marginTop="@dimen/margin_large">
         <TextView
             android:id="@+id/txt_privacy"
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/privacy_terms"
             tools:text="asdkljal;skdj;alskhdkajsghdhdsgka"/>
     </ScrollView>
 </LinearLayout>

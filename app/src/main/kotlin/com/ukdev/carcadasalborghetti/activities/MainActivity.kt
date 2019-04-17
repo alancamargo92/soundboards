@@ -23,7 +23,6 @@ import com.ukdev.carcadasalborghetti.listeners.AudioCallback
 import com.ukdev.carcadasalborghetti.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Carcada
-import com.ukdev.carcadasalborghetti.privacy.PrivacyTermsDialogue
 import com.ukdev.carcadasalborghetti.utils.*
 import com.ukdev.carcadasalborghetti.viewmodel.CarcadaViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -133,7 +132,9 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
     }
 
     private fun showPrivacyPolicy(): Boolean {
-        PrivacyTermsDialogue().show(supportFragmentManager, PrivacyTermsDialogue.TAG)
+        AlertDialog.Builder(this).setView(R.layout.dialogue_privacy_terms)
+                .setNeutralButton(R.string.ok, null)
+                .show()
         return true
     }
 
