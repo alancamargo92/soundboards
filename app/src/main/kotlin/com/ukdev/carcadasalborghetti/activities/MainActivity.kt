@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
     private val adapter = CarcadaAdapter()
     private val layoutManager = GridLayoutManager(this, 3)
     private val audioHandler = AudioHandler(this)
+    private val preferenceUtils by lazy { PreferenceUtils(this) }
 
     private var topPosition = 0
     private var carcadas = listOf<Carcada>()
@@ -48,6 +49,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
             adapter.setData(carcadas)
         })
         ad_view.loadAd(AdRequest.Builder().build())
+        if (preferenceUtils.shouldShowTip())
+            showTip()
     }
 
     override fun onBackPressed() {
@@ -146,6 +149,16 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
                 .setIcon(R.mipmap.ic_launcher)
                 .show()
         return true
+    }
+
+    private fun showTip() {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.tip_title)
+                .setMessage(R.string.tip)
+                .setNeutralButton(R.string.ok, null)
+                .setPositiveButton(R.string.do_not_show_again) { _, _ ->
+                    preferenceUtils.disableTip()
+                }.show()
     }
 
     companion object {

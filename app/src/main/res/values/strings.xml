@@ -11,6 +11,9 @@
     <string name="ok">OK</string>
     <string name="subject_share">Carcada - Alborghetti</string>
     <string name="chooser_title_share">Compartilhar carcada</string>
+    <string name="tip_title">Dica</string>
+    <string name="tip">Para compartilhar uma carcada, clique e segure na que você quiser</string>
+    <string name="do_not_show_again">Não mostrar de novo</string>
     <string name="privacy_terms_title">Termos de privacidade</string>
     <string name="privacy_terms">
         Privacy Policy
