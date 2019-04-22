@@ -9,11 +9,13 @@ import android.os.Build.VERSION_CODES.N
 import android.os.Environment
 import androidx.annotation.RawRes
 import androidx.core.content.FileProvider
+import com.crashlytics.android.Crashlytics
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.listeners.AudioCallback
 import com.ukdev.carcadasalborghetti.model.Carcada
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
 
 class AudioHandler(private val context: Context) {
 
@@ -47,7 +49,13 @@ class AudioHandler(private val context: Context) {
     }
 
     fun share(carcada: Carcada) {
-        val file = getFile(carcada)
+        val file = try {
+            getFile(carcada)
+        } catch (ex: IOException) {
+            Crashlytics.log("Error creating file for ${carcada.title}")
+            Crashlytics.logException(ex)
+            return
+        }
 
         val uri = if (SDK_INT >= N) {
             val authority = "${context.packageName}.provider"
