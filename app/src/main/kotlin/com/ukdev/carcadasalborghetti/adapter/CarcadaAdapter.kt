@@ -39,8 +39,8 @@ class CarcadaAdapter : RecyclerView.Adapter<CarcadaViewHolder>() {
             it?.let { carcada ->
                 holder.run {
                     bindTo(carcada)
-                    containerView.setOnClickListener { listener?.onItemClick(carcada) }
-                    containerView.setOnLongClickListener {
+                    holder.itemView.setOnClickListener { listener?.onItemClick(carcada) }
+                    holder.itemView.setOnLongClickListener {
                         listener?.run {
                             onItemLongClick(carcada)
                             return@setOnLongClickListener true
