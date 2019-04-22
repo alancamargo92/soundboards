@@ -48,8 +48,9 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
             this.carcadas = carcadas
             adapter.setData(carcadas)
         })
+
         ad_view.loadAd(AdRequest.Builder().build())
-        if (preferenceUtils.shouldShowTip())
+        if (preferenceUtils.shouldShowTip() == true)
             showTip()
     }
 
