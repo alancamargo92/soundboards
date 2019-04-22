@@ -1,20 +1,21 @@
 package com.ukdev.carcadasalborghetti.adapter
 
 import android.view.View
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.model.Carcada
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_carcada.*
 
-class CarcadaViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView),
-        LayoutContainer {
+class CarcadaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    private val txtTitle = itemView.findViewById<TextView>(R.id.txt_title)
+    private val txtLength = itemView.findViewById<TextView>(R.id.txt_length)
 
     fun bindTo(carcada: Carcada) {
-        txt_title.text = containerView.context.getString(
+        txtTitle.text = itemView.context.getString(
                 R.string.title_format, carcada.position, carcada.title
         )
-        txt_length.text = carcada.length
+        txtLength.text = carcada.length
     }
 
 }
