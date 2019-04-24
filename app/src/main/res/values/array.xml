@@ -35,7 +35,7 @@
         <item>Apanhar na bunda de remo</item>
         <item>Arrebente a bunda</item>
         <item>Cobra 20%</item>
-        <item>Começa a coçar</item>
+        <item>Veja a história desta vagabunda</item>
         <item>Comendador ambulante</item>
         <item>Em menos</item>
         <item>Eu é que vou te arrebentar no meio</item>
@@ -101,6 +101,8 @@
         <item>Desculpe o palavrão</item>
         <item>Silêncio</item>
         <item>Oh Rio de Janeiro do meu saco</item>
+        <item>Sua vagabunda capivara</item>
+        <item>A senhora ta transformando seu filho num marginal</item>
     </string-array>
 
     <!-- Audios -->
@@ -203,6 +205,8 @@
         <item>@raw/aud96</item>
         <item>@raw/aud97</item>
         <item>@raw/aud98</item>
+        <item>@raw/aud99</item>
+        <item>@raw/aud100</item>
     </array>
 
     <!-- Lengths -->
@@ -239,7 +243,7 @@
         <item>00:05</item>
         <item>00:16</item>
         <item>00:22</item>
-        <item>00:12</item>
+        <item>00:03</item>
         <item>00:04</item>
         <item>00:16</item>
         <item>00:02</item>
@@ -305,6 +309,8 @@
         <item>00:01</item>
         <item>00:03</item>
         <item>00:07</item>
+        <item>00:02</item>
+        <item>00:03</item>
     </string-array>
 
 </resources>
