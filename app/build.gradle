@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 
 android {
@@ -36,6 +35,19 @@ android {
         }
     }
 
+    flavorDimensions "version"
+
+    productFlavors {
+        free {
+            dimension "version"
+        }
+
+        paid {
+            dimension "version"
+            applicationIdSuffix ".paid"
+        }
+    }
+
     sourceSets {
         main {
             java.srcDirs = ['src/main/kotlin']
@@ -62,3 +74,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 }
+
+apply plugin: 'com.google.gms.google-services'
