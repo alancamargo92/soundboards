@@ -52,6 +52,12 @@ android {
         main {
             java.srcDirs = ['src/main/kotlin']
         }
+        free {
+            java.srcDirs = ['src/free/kotlin']
+        }
+        paid {
+            java.srcDirs = ['src/paid/kotlin']
+        }
     }
 
     compileOptions {
