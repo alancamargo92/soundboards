@@ -6,7 +6,8 @@ import com.ukdev.carcadasalborghetti.model.Carcada
 class CarcadaRepositoryImpl(context: Context) : CarcadaRepository(context) {
 
     override fun getCarcadas(): List<Carcada> {
-        TODO()
+        // TODO
+        return emptyList()
     }
 
 }

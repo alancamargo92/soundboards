@@ -16,7 +16,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.ads.AdRequest
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.CarcadaAdapter
 import com.ukdev.carcadasalborghetti.listeners.AudioCallback
@@ -27,12 +26,12 @@ import com.ukdev.carcadasalborghetti.utils.*
 import com.ukdev.carcadasalborghetti.viewmodel.CarcadaViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, AudioCallback {
+open class BaseActivity : AppCompatActivity(), RecyclerViewInteractionListener, AudioCallback {
 
     private val viewModel by provideViewModel(CarcadaViewModel::class)
     private val adapter = CarcadaAdapter()
-    private val layoutManager = GridLayoutManager(this, 3)
-    private val audioHandler = AudioHandler(this)
+    private val layoutManager by lazy { GridLayoutManager(this, 3) }
+    private val audioHandler by lazy { AudioHandler(this) }
     private val preferenceUtils by lazy { PreferenceUtils(this) }
 
     private var topPosition = 0
@@ -49,7 +48,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
             adapter.setData(carcadas)
         })
 
-        ad_view.loadAd(AdRequest.Builder().build())
         if (preferenceUtils.shouldShowTip() == true)
             showTip()
     }
@@ -126,7 +124,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewInteractionListener, Audio
 
     private fun configureRecyclerView() {
         recycler_view.layoutManager = layoutManager
-        recycler_view.adapter = adapter.apply { setListener(this@MainActivity) }
+        recycler_view.adapter = adapter.apply { setListener(this@BaseActivity) }
         recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
