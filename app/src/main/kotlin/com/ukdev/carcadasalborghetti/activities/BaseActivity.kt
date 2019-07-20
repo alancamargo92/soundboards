@@ -24,7 +24,9 @@ import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Carcada
 import com.ukdev.carcadasalborghetti.utils.*
 import com.ukdev.carcadasalborghetti.viewmodel.CarcadaViewModel
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_base.*
+
+// TODO: move logic into fragment
 
 open class BaseActivity : AppCompatActivity(), RecyclerViewInteractionListener, AudioCallback {
 

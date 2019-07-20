@@ -2,7 +2,7 @@ package com.ukdev.carcadasalborghetti.activities
 
 import android.os.Bundle
 import com.google.android.gms.ads.AdRequest
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.free.activity_main.*
 
 class MainActivity : BaseActivity() {
 
