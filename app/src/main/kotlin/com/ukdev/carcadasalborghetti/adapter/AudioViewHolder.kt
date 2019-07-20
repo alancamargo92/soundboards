@@ -4,18 +4,18 @@ import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.model.Carcada
+import com.ukdev.carcadasalborghetti.model.Audio
 
-class CarcadaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class AudioViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val txtTitle = itemView.findViewById<TextView>(R.id.txt_title)
     private val txtLength = itemView.findViewById<TextView>(R.id.txt_length)
 
-    fun bindTo(carcada: Carcada) {
+    fun bindTo(audio: Audio) {
         txtTitle.text = itemView.context.getString(
-                R.string.title_format, carcada.position, carcada.title
+                R.string.title_format, audio.position, audio.title
         )
-        txtLength.text = carcada.length
+        txtLength.text = audio.length
     }
 
 }

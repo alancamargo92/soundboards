@@ -3,26 +3,26 @@ package com.ukdev.carcadasalborghetti.repository
 import android.content.Context
 import android.content.res.Resources
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.model.Carcada
+import com.ukdev.carcadasalborghetti.model.Audio
 
-class CarcadaRepositoryImpl(context: Context) : CarcadaRepository(context) {
+class AudioRepositoryImpl(context: Context) : AudioRepository(context) {
 
-    override fun getCarcadas(): List<Carcada> {
+    override fun getAudios(): List<Audio> {
         with(context.resources) {
             val titles = getStringArray(R.array.titles)
             val lengths = getStringArray(R.array.lengths)
             val audios = getAudios(this)
 
-            val rawList = arrayListOf<Carcada>().apply {
+            val rawList = arrayListOf<Audio>().apply {
                 titles.forEachIndexed { index, title ->
-                    add(Carcada(title, lengths[index], index + 1, audios[index]))
+                    add(Audio(title, lengths[index], index + 1, audios[index]))
                 }
             }
 
             return rawList.sortedBy { it.title.split(".").last().trim() }
                     .apply {
-                        forEachIndexed { index, carcada ->
-                            carcada.position = index + 1
+                        forEachIndexed { index, audio ->
+                            audio.position = index + 1
                         }
                     }
         }

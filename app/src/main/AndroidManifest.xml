@@ -21,8 +21,7 @@
 
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
-        <activity android:name=".activities.BaseActivity"
-            android:configChanges="orientation"/>
+        <activity android:name=".activities.BaseActivity"/>
 
         <activity android:name=".activities.MainActivity">
             <intent-filter>

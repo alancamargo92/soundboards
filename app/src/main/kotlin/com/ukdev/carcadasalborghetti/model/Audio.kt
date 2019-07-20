@@ -2,9 +2,9 @@ package com.ukdev.carcadasalborghetti.model
 
 import androidx.annotation.RawRes
 
-data class Carcada(
+data class Audio(
         val title: String,
         val length: String,
         var position: Int,
-        @RawRes val audioFileRes: Int
+        @RawRes val fileRes: Int
 )

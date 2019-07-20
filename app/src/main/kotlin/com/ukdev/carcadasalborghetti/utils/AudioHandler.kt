@@ -12,7 +12,7 @@ import androidx.core.content.FileProvider
 import com.crashlytics.android.Crashlytics
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.listeners.AudioCallback
-import com.ukdev.carcadasalborghetti.model.Carcada
+import com.ukdev.carcadasalborghetti.model.Audio
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -48,11 +48,11 @@ class AudioHandler(private val context: Context) {
         callback.onStopPlayback()
     }
 
-    fun share(carcada: Carcada) {
+    fun share(audio: Audio) {
         val file = try {
-            getFile(carcada)
+            getFile(audio)
         } catch (ex: IOException) {
-            Crashlytics.log("Error creating file for ${carcada.title}")
+            Crashlytics.log("Error creating file for ${audio.title}")
             Crashlytics.logException(ex)
             return
         }
@@ -67,22 +67,22 @@ class AudioHandler(private val context: Context) {
         val shareIntent = Intent(Intent.ACTION_SEND).setType("audio/*")
                 .putExtra(Intent.EXTRA_STREAM, uri)
                 .putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.subject_share))
-                .putExtra(Intent.EXTRA_TEXT, carcada.title)
+                .putExtra(Intent.EXTRA_TEXT, audio.title)
 
         val chooser = Intent.createChooser(shareIntent,
                 context.getString(R.string.chooser_title_share))
         context.startActivity(chooser)
     }
 
-    private fun getFile(carcada: Carcada): File {
+    private fun getFile(audio: Audio): File {
         val baseDir = "${Environment.getExternalStorageDirectory().absolutePath}/tmp_carcadas/"
         val dir = File(baseDir)
         if (!dir.exists())
             dir.mkdir()
-        val audioFile = File(baseDir, "${carcada.title}.mp3")
+        val audioFile = File(baseDir, "${audio.title}.mp3")
 
         val buffer = ByteArray(1024 * 500)
-        val inputStream = context.resources.openRawResource(carcada.audioFileRes)
+        val inputStream = context.resources.openRawResource(audio.fileRes)
         val out = FileOutputStream(audioFile)
         var content = inputStream.read(buffer)
 

@@ -5,14 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
-import com.ukdev.carcadasalborghetti.model.Carcada
+import com.ukdev.carcadasalborghetti.model.Audio
 
-class CarcadaAdapter : RecyclerView.Adapter<CarcadaViewHolder>() {
+class AudioAdapter : RecyclerView.Adapter<AudioViewHolder>() {
 
-    private var data: List<Carcada>? = null
+    private var data: List<Audio>? = null
     private var listener: RecyclerViewInteractionListener? = null
 
-    fun setData(data: List<Carcada>) {
+    fun setData(data: List<Audio>) {
         this.data = data
         notifyDataSetChanged()
     }
@@ -21,28 +21,28 @@ class CarcadaAdapter : RecyclerView.Adapter<CarcadaViewHolder>() {
         this.listener = listener
     }
 
-    fun filter(carcadas: List<Carcada>, searchTerm: String?) {
+    fun filter(audio: List<Audio>, searchTerm: String?) {
         searchTerm?.toLowerCase()?.let { query ->
-            data = carcadas.filter { it.title.toLowerCase().contains(query) }
+            data = audio.filter { it.title.toLowerCase().contains(query) }
             notifyDataSetChanged()
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarcadaViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AudioViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val containerView = inflater.inflate(R.layout.item_carcada, parent, false)
-        return CarcadaViewHolder(containerView)
+        val containerView = inflater.inflate(R.layout.item_audio, parent, false)
+        return AudioViewHolder(containerView)
     }
 
-    override fun onBindViewHolder(holder: CarcadaViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AudioViewHolder, position: Int) {
         data?.get(position).let {
-            it?.let { carcada ->
+            it?.let { audio ->
                 holder.run {
-                    bindTo(carcada)
-                    holder.itemView.setOnClickListener { listener?.onItemClick(carcada) }
+                    bindTo(audio)
+                    holder.itemView.setOnClickListener { listener?.onItemClick(audio) }
                     holder.itemView.setOnLongClickListener {
                         listener?.run {
-                            onItemLongClick(carcada)
+                            onItemLongClick(audio)
                             return@setOnLongClickListener true
                         }
                         false

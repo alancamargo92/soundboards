@@ -1,8 +1,8 @@
 package com.ukdev.carcadasalborghetti.listeners
 
-import com.ukdev.carcadasalborghetti.model.Carcada
+import com.ukdev.carcadasalborghetti.model.Audio
 
 interface RecyclerViewInteractionListener {
-    fun onItemClick(carcada: Carcada)
-    fun onItemLongClick(carcada: Carcada)
+    fun onItemClick(audio: Audio)
+    fun onItemLongClick(audio: Audio)
 }

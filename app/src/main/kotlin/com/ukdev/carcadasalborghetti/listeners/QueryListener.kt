@@ -1,15 +1,15 @@
 package com.ukdev.carcadasalborghetti.listeners
 
 import androidx.appcompat.widget.SearchView
-import com.ukdev.carcadasalborghetti.adapter.CarcadaAdapter
-import com.ukdev.carcadasalborghetti.model.Carcada
+import com.ukdev.carcadasalborghetti.adapter.AudioAdapter
+import com.ukdev.carcadasalborghetti.model.Audio
 
-class QueryListener(private val adapter: CarcadaAdapter,
-                    private val carcadas: List<Carcada>) : SearchView.OnQueryTextListener {
+class QueryListener(private val adapter: AudioAdapter,
+                    private val audio: List<Audio>) : SearchView.OnQueryTextListener {
     override fun onQueryTextSubmit(query: String?) = false
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        adapter.filter(carcadas, newText)
+        adapter.filter(audio, newText)
         return false
     }
 }
