@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.AudioAdapter
-import com.ukdev.carcadasalborghetti.listeners.AudioCallback
 import com.ukdev.carcadasalborghetti.listeners.DeviceInteractionListener
+import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Audio
 import com.ukdev.carcadasalborghetti.utils.AudioHandler
@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.layout_list.*
 
 class AudioFragment(
         private val audioHandler: AudioHandler
-) : Fragment(), RecyclerViewInteractionListener, AudioCallback, DeviceInteractionListener {
+) : Fragment(), RecyclerViewInteractionListener, MediaCallback, DeviceInteractionListener {
 
     private val viewModel by provideViewModel(AudioViewModel::class)
     private val layoutManager by lazy { GridLayoutManager(requireContext(), SPAN_COUNT_PORTRAIT) }
@@ -50,13 +50,13 @@ class AudioFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureRecyclerView()
-        fab.setOnClickListener { audioHandler.stop(callback = this) }
+        fab.setOnClickListener { audioHandler.stop() }
         fetchAudios()
     }
 
     override fun onPause() {
         super.onPause()
-        audioHandler.stop(callback = this)
+        audioHandler.stop()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -70,7 +70,7 @@ class AudioFragment(
     }
 
     override fun onItemClick(audio: Audio) {
-        audioHandler.play(audio.fileRes, callback = this)
+        audioHandler.play(audio)
     }
 
     override fun onItemLongClick(audio: Audio) {

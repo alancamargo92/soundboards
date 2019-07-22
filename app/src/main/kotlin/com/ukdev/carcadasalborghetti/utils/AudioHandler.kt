@@ -7,28 +7,26 @@ import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.N
 import android.os.Environment
-import androidx.annotation.RawRes
 import androidx.core.content.FileProvider
 import com.crashlytics.android.Crashlytics
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.listeners.AudioCallback
+import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.Audio
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class AudioHandler(private val context: Context) {
+class AudioHandler(
+        context: Context,
+        callback: MediaCallback
+) : MediaHandler<Audio>(context, callback) {
 
     private var mediaPlayer: MediaPlayer? = null
 
-    @RawRes
-    private var audioFileRes: Int? = null
-
-    fun play(@RawRes audioFileRes: Int, callback: AudioCallback) {
+    override fun play(media: Audio) {
         mediaPlayer?.release()
-        this.audioFileRes = audioFileRes
 
-        mediaPlayer = MediaPlayer.create(context, audioFileRes).apply {
+        mediaPlayer = MediaPlayer.create(context, media.fileRes).apply {
             if (isPlaying) {
                 stop()
                 callback.onStopPlayback()
@@ -43,16 +41,16 @@ class AudioHandler(private val context: Context) {
         }
     }
 
-    fun stop(callback: AudioCallback) {
+    override fun stop() {
         mediaPlayer?.stop()
         callback.onStopPlayback()
     }
 
-    fun share(audio: Audio) {
+    override fun share(media: Audio) {
         val file = try {
-            getFile(audio)
+            getFile(media)
         } catch (ex: IOException) {
-            Crashlytics.log("Error creating file for ${audio.title}")
+            Crashlytics.log("Error creating file for ${media.title}")
             Crashlytics.logException(ex)
             return
         }
@@ -67,7 +65,7 @@ class AudioHandler(private val context: Context) {
         val shareIntent = Intent(Intent.ACTION_SEND).setType("audio/*")
                 .putExtra(Intent.EXTRA_STREAM, uri)
                 .putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.subject_share))
-                .putExtra(Intent.EXTRA_TEXT, audio.title)
+                .putExtra(Intent.EXTRA_TEXT, media.title)
 
         val chooser = Intent.createChooser(shareIntent,
                 context.getString(R.string.chooser_title_share))

@@ -1,6 +1,6 @@
 package com.ukdev.carcadasalborghetti.listeners
 
-interface AudioCallback {
+interface MediaCallback {
     fun onStartPlayback()
     fun onStopPlayback()
 }

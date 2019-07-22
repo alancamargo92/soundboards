@@ -1,6 +1,6 @@
 package com.ukdev.carcadasalborghetti.model
 
-data class Video(
+data class Audio(
         override val title: String,
         override val length: String,
         override var position: Int,

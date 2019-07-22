@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SearchView
 import com.google.android.material.tabs.TabLayout
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.PagerAdapter
+import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.utils.AudioHandler
 import com.ukdev.carcadasalborghetti.utils.PreferenceUtils
 import com.ukdev.carcadasalborghetti.utils.getAppName
@@ -18,7 +19,11 @@ import kotlinx.android.synthetic.main.activity_base.*
 
 open class BaseActivity : AppCompatActivity() {
 
-    private val audioHandler by lazy { AudioHandler(this) }
+    private val audioHandler by lazy { AudioHandler(this, object : MediaCallback {
+        override fun onStartPlayback() { }
+
+        override fun onStopPlayback() { }
+    }) } // TODO
     private val preferenceUtils by lazy { PreferenceUtils(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
