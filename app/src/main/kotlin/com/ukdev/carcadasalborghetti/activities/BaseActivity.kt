@@ -2,21 +2,18 @@ package com.ukdev.carcadasalborghetti.activities
 
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.PagerAdapter
-import com.ukdev.carcadasalborghetti.listeners.AudioCallback
 import com.ukdev.carcadasalborghetti.utils.AudioHandler
 import com.ukdev.carcadasalborghetti.utils.PreferenceUtils
 import com.ukdev.carcadasalborghetti.utils.getAppName
 import com.ukdev.carcadasalborghetti.utils.getAppVersion
 import kotlinx.android.synthetic.main.activity_base.*
 
-open class BaseActivity : AppCompatActivity(), AudioCallback {
+open class BaseActivity : AppCompatActivity() {
 
     private val audioHandler by lazy { AudioHandler(this) }
     private val preferenceUtils by lazy { PreferenceUtils(this) }
@@ -27,11 +24,6 @@ open class BaseActivity : AppCompatActivity(), AudioCallback {
         setSupportActionBar(toolbar)
         configureTabLayout()
         configureViewPager()
-
-        /*configureRecyclerView()
-
-        fab.setOnClickListener { audioHandler.stop(callback = this) }
-        */
 
         if (preferenceUtils.shouldShowTip() == true)
             showTip()
@@ -62,25 +54,12 @@ open class BaseActivity : AppCompatActivity(), AudioCallback {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        audioHandler.stop(callback = this)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
             R.id.item_privacy -> showPrivacyPolicy()
             R.id.item_about -> showAppInfo()
             else -> false
         }
-    }
-
-    override fun onStartPlayback() {
-        fab.visibility = VISIBLE
-    }
-
-    override fun onStopPlayback() {
-        fab.visibility = GONE
     }
 
     private fun showPrivacyPolicy(): Boolean {

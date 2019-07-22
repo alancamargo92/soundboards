@@ -5,14 +5,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".activities.BaseActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/grey"
-        android:minHeight="?attr/actionBarSize"/>
+        android:minHeight="?attr/actionBarSize"
+        app:titleTextColor="@color/white"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
@@ -20,24 +22,11 @@
         android:layout_height="wrap_content"
         android:background="@color/grey"
         app:tabTextColor="@color/white"
-        app:tabSelectedTextColor="@color/grey"/>
+        app:tabSelectedTextColor="@color/white"/>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/margin_fab"
-        android:layout_marginEnd="@dimen/margin_fab"
-        android:layout_marginRight="@dimen/margin_fab"
-        android:visibility="gone"
-        android:src="@drawable/ic_stop"
-        app:fabSize="normal"
-        tools:visibility="visible"/>
 
 </LinearLayout>
