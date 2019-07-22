@@ -12,10 +12,13 @@ class PagerAdapter(
         private val audioHandler: AudioHandler
 ) : FragmentStatePagerAdapter(fragmentManager, tabCount) {
 
+    private val audioFragment by lazy { AudioFragment(audioHandler) }
+    private val videoFragment by lazy { VideoFragment() }
+
     override fun getItem(position: Int) = when(position) {
-        POSITION_AUDIOS -> AudioFragment(audioHandler)
-        POSITION_VIDEOS -> VideoFragment()
-        else -> AudioFragment(audioHandler)
+        POSITION_AUDIOS -> audioFragment
+        POSITION_VIDEOS -> videoFragment
+        else -> audioFragment
     }
 
     override fun getCount() = tabCount

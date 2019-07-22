@@ -1,9 +1,12 @@
 package com.ukdev.carcadasalborghetti.activities
 
+import android.content.res.Configuration
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import com.google.android.material.tabs.TabLayout
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.PagerAdapter
@@ -29,6 +32,40 @@ open class BaseActivity : AppCompatActivity() {
             showTip()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        // TODO: notify fragments
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        /*when (newConfig.orientation) { TODO: notify fragments
+            ORIENTATION_PORTRAIT ->
+            ORIENTATION_LANDSCAPE ->
+            else ->
+        }*/
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        menu.run {
+            (findItem(R.id.item_search)?.actionView as SearchView).run {
+                //setOnQueryTextListener(QueryListener(adapter, audios)) TODO
+            }
+        }
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            R.id.item_privacy -> showPrivacyPolicy()
+            R.id.item_about -> showAppInfo()
+            else -> false
+        }
+    }
+
     private fun configureTabLayout() {
         tab_layout.run {
             addTab(newTab().setText(R.string.audios))
@@ -51,14 +88,6 @@ open class BaseActivity : AppCompatActivity() {
 
                 override fun onTabReselected(tab: TabLayout.Tab) { }
             })
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
-            R.id.item_privacy -> showPrivacyPolicy()
-            R.id.item_about -> showAppInfo()
-            else -> false
         }
     }
 

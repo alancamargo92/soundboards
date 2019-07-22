@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Carcadas Alborghetti</string>
-    <string name="youtube_url">https://www.youtube.com/results?search_query=alborghetti</string>
     <string name="title_format">%1$d. %2$s</string>
     <string name="search">Buscar</string>
     <string name="about">Sobre</string>
@@ -9,9 +8,9 @@
     <string name="developer_info">Desenvolvido por Alan Camargo.</string>
     <string name="ok">OK</string>
     <string name="subject_share">Carcada - Alborghetti</string>
-    <string name="chooser_title_share">Compartilhar audio</string>
+    <string name="chooser_title_share">Compartilhar carcada</string>
     <string name="tip_title">Dica</string>
-    <string name="tip">Para compartilhar uma audio, clique e segure na que você quiser</string>
+    <string name="tip">Para compartilhar uma carcada, clique e segure na que você quiser</string>
     <string name="do_not_show_again">Não mostrar de novo</string>
     <string name="audios">Áudios</string>
     <string name="videos">Vídeos</string>

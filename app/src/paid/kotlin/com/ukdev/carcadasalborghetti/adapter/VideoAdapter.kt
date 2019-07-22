@@ -5,14 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
-import com.ukdev.carcadasalborghetti.model.Audio
+import com.ukdev.carcadasalborghetti.model.Video
 
-class AudioAdapter : RecyclerView.Adapter<AudioViewHolder>() {
+class VideoAdapter : RecyclerView.Adapter<VideoViewHolder>() {
 
-    private var data: List<Audio>? = null
+    private var data: List<Video>? = null
     private var listener: RecyclerViewInteractionListener? = null
 
-    fun setData(data: List<Audio>) {
+    fun setData(data: List<Video>) {
         this.data = data
         notifyDataSetChanged()
     }
@@ -21,28 +21,28 @@ class AudioAdapter : RecyclerView.Adapter<AudioViewHolder>() {
         this.listener = listener
     }
 
-    fun filter(audios: List<Audio>, searchTerm: String?) {
+    fun filter(videos: List<Video>, searchTerm: String?) {
         searchTerm?.toLowerCase()?.let { query ->
-            data = audios.filter { it.title.toLowerCase().contains(query) }
+            data = videos.filter { it.title.toLowerCase().contains(query) }
             notifyDataSetChanged()
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AudioViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val itemView = inflater.inflate(R.layout.item_audio, parent, false)
-        return AudioViewHolder(itemView)
+        val itemView = inflater.inflate(R.layout.item_video, parent, false)
+        return VideoViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: AudioViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
         data?.get(position).let {
-            it?.let { audio ->
+            it?.let { video ->
                 holder.run {
-                    bindTo(audio)
-                    holder.itemView.setOnClickListener { listener?.onItemClick(audio) }
+                    bindTo(video)
+                    //holder.itemView.setOnClickListener { listener?.onItemClick(video) }
                     holder.itemView.setOnLongClickListener {
                         listener?.run {
-                            onItemLongClick(audio)
+                            //onItemLongClick(video) TODO: uncomment once it's ready for videos
                             return@setOnLongClickListener true
                         }
                         false

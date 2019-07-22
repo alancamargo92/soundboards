@@ -4,10 +4,11 @@ import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.M
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.appcompat.widget.SearchView
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.AudioAdapter
 import com.ukdev.carcadasalborghetti.listeners.AudioCallback
-import com.ukdev.carcadasalborghetti.listeners.QueryListener
+import com.ukdev.carcadasalborghetti.listeners.DeviceInteractionListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Audio
 import com.ukdev.carcadasalborghetti.utils.AudioHandler
@@ -28,14 +29,14 @@ import kotlinx.android.synthetic.main.layout_list.*
 
 class AudioFragment(
         private val audioHandler: AudioHandler
-) : Fragment(), RecyclerViewInteractionListener, AudioCallback {
+) : Fragment(), RecyclerViewInteractionListener, AudioCallback, DeviceInteractionListener {
 
     private val viewModel by provideViewModel(AudioViewModel::class)
-    private var audios = listOf<Audio>()
+    private val layoutManager by lazy { GridLayoutManager(requireContext(), SPAN_COUNT_PORTRAIT) }
     private val adapter = AudioAdapter()
-    private val layoutManager by lazy { GridLayoutManager(requireContext(), 3) }
 
-    private var topPosition = 0
+    private var audios = listOf<Audio>()
+    private var topPosition = RECYCLER_VIEW_TOP_POSITION
     private var audioToShare: Audio? = null
 
     override fun onCreateView(
@@ -56,15 +57,6 @@ class AudioFragment(
     override fun onPause() {
         super.onPause()
         audioHandler.stop(callback = this)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        menu.run {
-            (findItem(R.id.item_search)?.actionView as SearchView).run {
-                setOnQueryTextListener(QueryListener(adapter, audios))
-            }
-        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -98,6 +90,23 @@ class AudioFragment(
         fab.visibility = GONE
     }
 
+    override fun onBackPressed(): Boolean {
+        return if (topPosition == RECYCLER_VIEW_TOP_POSITION) {
+            true
+        } else {
+            recycler_view.smoothScrollToPosition(RECYCLER_VIEW_TOP_POSITION)
+            false
+        }
+    }
+
+    override fun onScreenOrientationChangedToPortrait() {
+        layoutManager.spanCount = SPAN_COUNT_PORTRAIT
+    }
+
+    override fun onScreenOrientationChangedToLandscape() {
+        layoutManager.spanCount = SPAN_COUNT_LANDSCAPE
+    }
+
     private fun configureRecyclerView() {
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter.apply { setListener(this@AudioFragment) }
@@ -117,7 +126,10 @@ class AudioFragment(
     }
 
     companion object {
+        private const val RECYCLER_VIEW_TOP_POSITION = 0
         private const val REQUEST_CODE_STORAGE_PERMISSIONS = 123
+        private const val SPAN_COUNT_PORTRAIT = 3
+        private const val SPAN_COUNT_LANDSCAPE = 4
     }
 
 }
