@@ -1,6 +1,8 @@
 package com.ukdev.carcadasalborghetti.activities
 
 import android.content.res.Configuration
+import android.content.res.Configuration.ORIENTATION_LANDSCAPE
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,8 +12,7 @@ import androidx.appcompat.widget.SearchView
 import com.google.android.material.tabs.TabLayout
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.PagerAdapter
-import com.ukdev.carcadasalborghetti.listeners.MediaCallback
-import com.ukdev.carcadasalborghetti.utils.AudioHandler
+import com.ukdev.carcadasalborghetti.listeners.DeviceInteractionListener
 import com.ukdev.carcadasalborghetti.utils.PreferenceUtils
 import com.ukdev.carcadasalborghetti.utils.getAppName
 import com.ukdev.carcadasalborghetti.utils.getAppVersion
@@ -19,12 +20,9 @@ import kotlinx.android.synthetic.main.activity_base.*
 
 open class BaseActivity : AppCompatActivity() {
 
-    private val audioHandler by lazy { AudioHandler(this, object : MediaCallback {
-        override fun onStartPlayback() { }
-
-        override fun onStopPlayback() { }
-    }) } // TODO
     private val preferenceUtils by lazy { PreferenceUtils(this) }
+
+    private lateinit var deviceInteractionListener: DeviceInteractionListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,18 +36,18 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        // TODO: notify fragments
+        if (deviceInteractionListener.onBackPressed())
+            super.onBackPressed()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
 
-        /*when (newConfig.orientation) { TODO: notify fragments
-            ORIENTATION_PORTRAIT ->
-            ORIENTATION_LANDSCAPE ->
-            else ->
-        }*/
+        when (newConfig.orientation) {
+            ORIENTATION_PORTRAIT -> deviceInteractionListener.onScreenOrientationChangedToPortrait()
+            ORIENTATION_LANDSCAPE -> deviceInteractionListener.onScreenOrientationChangedToLandscape()
+            else -> deviceInteractionListener.onScreenOrientationChangedToPortrait()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -80,13 +78,15 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     private fun configureViewPager() {
-        val pagerAdapter = PagerAdapter(supportFragmentManager, tab_layout.tabCount, audioHandler)
+        val pagerAdapter = PagerAdapter(supportFragmentManager, tab_layout.tabCount)
+        deviceInteractionListener = pagerAdapter.getItem(0) as DeviceInteractionListener
         view_pager.run {
             adapter = pagerAdapter
             addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tab_layout))
             tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     view_pager.currentItem = tab.position
+                    deviceInteractionListener = pagerAdapter.getItem(tab.position) as DeviceInteractionListener
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab) { }

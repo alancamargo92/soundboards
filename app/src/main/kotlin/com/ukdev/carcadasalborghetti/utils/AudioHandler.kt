@@ -12,14 +12,15 @@ import com.crashlytics.android.Crashlytics
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.Audio
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class AudioHandler(
-        context: Context,
-        callback: MediaCallback
-) : MediaHandler<Audio>(context, callback) {
+class AudioHandler(private val callback: MediaCallback) : MediaHandler<Audio>, KoinComponent {
+
+    private val context by inject<Context>()
 
     private var mediaPlayer: MediaPlayer? = null
 

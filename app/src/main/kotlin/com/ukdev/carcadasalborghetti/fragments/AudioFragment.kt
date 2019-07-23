@@ -26,11 +26,15 @@ import com.ukdev.carcadasalborghetti.utils.requestStoragePermissions
 import com.ukdev.carcadasalborghetti.viewmodel.AudioViewModel
 import kotlinx.android.synthetic.main.fragment_audio.*
 import kotlinx.android.synthetic.main.layout_list.*
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
-class AudioFragment(
-        private val audioHandler: AudioHandler
-) : Fragment(), RecyclerViewInteractionListener<Audio>, MediaCallback, DeviceInteractionListener {
+class AudioFragment : Fragment(),
+        RecyclerViewInteractionListener<Audio>,
+        MediaCallback,
+        DeviceInteractionListener {
 
+    private val audioHandler by inject<AudioHandler> { parametersOf(this) }
     private val viewModel by provideViewModel(AudioViewModel::class)
     private val layoutManager by lazy { GridLayoutManager(requireContext(), SPAN_COUNT_PORTRAIT) }
     private val adapter = AudioAdapter()

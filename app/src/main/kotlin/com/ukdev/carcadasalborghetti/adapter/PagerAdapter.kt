@@ -1,21 +1,20 @@
 package com.ukdev.carcadasalborghetti.adapter
 
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.ukdev.carcadasalborghetti.fragments.AudioFragment
 import com.ukdev.carcadasalborghetti.fragments.VideoFragment
-import com.ukdev.carcadasalborghetti.utils.AudioHandler
 
 class PagerAdapter(
         fragmentManager: FragmentManager,
-        private val tabCount: Int,
-        private val audioHandler: AudioHandler
+        private val tabCount: Int
 ) : FragmentStatePagerAdapter(fragmentManager, tabCount) {
 
-    private val audioFragment by lazy { AudioFragment(audioHandler) }
+    private val audioFragment by lazy { AudioFragment() }
     private val videoFragment by lazy { VideoFragment() }
 
-    override fun getItem(position: Int) = when(position) {
+    override fun getItem(position: Int): Fragment = when(position) {
         POSITION_AUDIOS -> audioFragment
         POSITION_VIDEOS -> videoFragment
         else -> audioFragment
