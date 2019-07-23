@@ -10,14 +10,14 @@ import com.ukdev.carcadasalborghetti.model.Video
 class VideoAdapter : RecyclerView.Adapter<VideoViewHolder>() {
 
     private var data: List<Video>? = null
-    private var listener: RecyclerViewInteractionListener? = null
+    private var listener: RecyclerViewInteractionListener<Video>? = null
 
     fun setData(data: List<Video>) {
         this.data = data
         notifyDataSetChanged()
     }
 
-    fun setListener(listener: RecyclerViewInteractionListener) {
+    fun setListener(listener: RecyclerViewInteractionListener<Video>) {
         this.listener = listener
     }
 

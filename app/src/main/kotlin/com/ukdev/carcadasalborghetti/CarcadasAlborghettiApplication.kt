@@ -3,8 +3,9 @@ package com.ukdev.carcadasalborghetti
 import android.app.Application
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
+import com.ukdev.carcadasalborghetti.handlers.AudioHandler
+import com.ukdev.carcadasalborghetti.handlers.VideoHandler
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
-import com.ukdev.carcadasalborghetti.utils.AudioHandler
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -24,6 +25,7 @@ class CarcadasAlborghettiApplication : Application() {
 
     private fun buildModule() = module {
         factory { (callback: MediaCallback) -> AudioHandler(callback) }
+        factory { (callback: MediaCallback) -> VideoHandler(callback) }
     }
 
 }

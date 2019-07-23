@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.utils
+package com.ukdev.carcadasalborghetti.handlers
 
 import android.content.Context
 import android.content.Intent
@@ -19,7 +19,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class AudioHandler(private val callback: MediaCallback) : MediaHandler<Audio>, KoinComponent {
+class AudioHandler(callback: MediaCallback) : MediaHandler<Audio>(callback), KoinComponent {
 
     private val context by inject<Context>()
 

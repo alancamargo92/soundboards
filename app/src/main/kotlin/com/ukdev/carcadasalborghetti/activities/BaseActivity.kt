@@ -12,6 +12,8 @@ import androidx.appcompat.widget.SearchView
 import com.google.android.material.tabs.TabLayout
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.PagerAdapter
+import com.ukdev.carcadasalborghetti.fragments.MediaListFragment
+import com.ukdev.carcadasalborghetti.handlers.MediaHandler
 import com.ukdev.carcadasalborghetti.listeners.DeviceInteractionListener
 import com.ukdev.carcadasalborghetti.utils.PreferenceUtils
 import com.ukdev.carcadasalborghetti.utils.getAppName
@@ -23,6 +25,7 @@ open class BaseActivity : AppCompatActivity() {
     private val preferenceUtils by lazy { PreferenceUtils(this) }
 
     private lateinit var deviceInteractionListener: DeviceInteractionListener
+    private lateinit var mediaHandler: MediaHandler<*>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +83,7 @@ open class BaseActivity : AppCompatActivity() {
     private fun configureViewPager() {
         val pagerAdapter = PagerAdapter(supportFragmentManager, tab_layout.tabCount)
         deviceInteractionListener = pagerAdapter.getItem(0) as DeviceInteractionListener
+        mediaHandler = (pagerAdapter.getItem(0) as MediaListFragment<*>).mediaHandler
         view_pager.run {
             adapter = pagerAdapter
             addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tab_layout))
@@ -87,6 +91,8 @@ open class BaseActivity : AppCompatActivity() {
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     view_pager.currentItem = tab.position
                     deviceInteractionListener = pagerAdapter.getItem(tab.position) as DeviceInteractionListener
+                    mediaHandler.stop()
+                    mediaHandler = (pagerAdapter.getItem(tab.position) as MediaListFragment<*>).mediaHandler
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab) { }

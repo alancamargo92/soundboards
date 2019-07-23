@@ -6,24 +6,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.VideoAdapter
+import com.ukdev.carcadasalborghetti.handlers.VideoHandler
 import com.ukdev.carcadasalborghetti.listeners.DeviceInteractionListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
-import com.ukdev.carcadasalborghetti.model.Audio
 import com.ukdev.carcadasalborghetti.model.Video
 import com.ukdev.carcadasalborghetti.utils.hasStoragePermissions
 import com.ukdev.carcadasalborghetti.utils.provideViewModel
 import com.ukdev.carcadasalborghetti.utils.requestStoragePermissions
 import com.ukdev.carcadasalborghetti.viewmodel.VideoViewModel
 import kotlinx.android.synthetic.main.layout_list.*
+import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 
-class VideoFragment : Fragment(), RecyclerViewInteractionListener, DeviceInteractionListener {
+class VideoFragment : MediaListFragment<Video>(),
+        RecyclerViewInteractionListener<Video>,
+        DeviceInteractionListener {
+
+    override val mediaHandler by inject<VideoHandler>{ parametersOf(this) }
 
     private val viewModel by provideViewModel(VideoViewModel::class)
     private val layoutManager by lazy { GridLayoutManager(requireContext(), SPAN_COUNT_PORTRAIT) }
@@ -50,16 +55,16 @@ class VideoFragment : Fragment(), RecyclerViewInteractionListener, DeviceInterac
         })
     }
 
-    override fun onItemClick(audio: Audio) {
-        //videoHandler.play(video)
+    override fun onItemClick(media: Video) {
+        mediaHandler.play(media)
     }
 
-    override fun onItemLongClick(audio: Audio) {
+    override fun onItemLongClick(media: Video) {
         if (SDK_INT >= M && !hasStoragePermissions()) {
-            //videoToShare = video
+            videoToShare = media
             requestStoragePermissions(REQUEST_CODE_STORAGE_PERMISSIONS)
         } else {
-            //videoHandler.share(video)
+            mediaHandler.share(media)
         }
     }
 

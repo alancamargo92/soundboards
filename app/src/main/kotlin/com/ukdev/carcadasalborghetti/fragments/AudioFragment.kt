@@ -9,17 +9,16 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.AudioAdapter
+import com.ukdev.carcadasalborghetti.handlers.AudioHandler
 import com.ukdev.carcadasalborghetti.listeners.DeviceInteractionListener
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Audio
-import com.ukdev.carcadasalborghetti.utils.AudioHandler
 import com.ukdev.carcadasalborghetti.utils.hasStoragePermissions
 import com.ukdev.carcadasalborghetti.utils.provideViewModel
 import com.ukdev.carcadasalborghetti.utils.requestStoragePermissions
@@ -29,12 +28,13 @@ import kotlinx.android.synthetic.main.layout_list.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
-class AudioFragment : Fragment(),
+class AudioFragment : MediaListFragment<Audio>(),
         RecyclerViewInteractionListener<Audio>,
         MediaCallback,
         DeviceInteractionListener {
 
-    private val audioHandler by inject<AudioHandler> { parametersOf(this) }
+    override val mediaHandler by inject<AudioHandler> { parametersOf(this) }
+
     private val viewModel by provideViewModel(AudioViewModel::class)
     private val layoutManager by lazy { GridLayoutManager(requireContext(), SPAN_COUNT_PORTRAIT) }
     private val adapter = AudioAdapter()
@@ -54,13 +54,13 @@ class AudioFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureRecyclerView()
-        fab.setOnClickListener { audioHandler.stop() }
+        fab.setOnClickListener { mediaHandler.stop() }
         fetchAudios()
     }
 
     override fun onPause() {
         super.onPause()
-        audioHandler.stop()
+        mediaHandler.stop()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -70,11 +70,11 @@ class AudioFragment : Fragment(),
         val permissionsGranted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
 
         if (requestCode == REQUEST_CODE_STORAGE_PERMISSIONS == permissionsGranted)
-            audioToShare?.let(audioHandler::share)
+            audioToShare?.let(mediaHandler::share)
     }
 
     override fun onItemClick(media: Audio) {
-        audioHandler.play(media)
+        mediaHandler.play(media)
     }
 
     override fun onItemLongClick(media: Audio) {
@@ -82,7 +82,7 @@ class AudioFragment : Fragment(),
             audioToShare = media
             requestStoragePermissions(REQUEST_CODE_STORAGE_PERMISSIONS)
         } else {
-            audioHandler.share(media)
+            mediaHandler.share(media)
         }
     }
 
