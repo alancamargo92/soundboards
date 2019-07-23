@@ -10,14 +10,14 @@ import com.ukdev.carcadasalborghetti.model.Audio
 class AudioAdapter : RecyclerView.Adapter<AudioViewHolder>() {
 
     private var data: List<Audio>? = null
-    private var listener: RecyclerViewInteractionListener? = null
+    private var listener: RecyclerViewInteractionListener<Audio>? = null
 
     fun setData(data: List<Audio>) {
         this.data = data
         notifyDataSetChanged()
     }
 
-    fun setListener(listener: RecyclerViewInteractionListener) {
+    fun setListener(listener: RecyclerViewInteractionListener<Audio>) {
         this.listener = listener
     }
 

@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.layout_list.*
 
 class AudioFragment(
         private val audioHandler: AudioHandler
-) : Fragment(), RecyclerViewInteractionListener, MediaCallback, DeviceInteractionListener {
+) : Fragment(), RecyclerViewInteractionListener<Audio>, MediaCallback, DeviceInteractionListener {
 
     private val viewModel by provideViewModel(AudioViewModel::class)
     private val layoutManager by lazy { GridLayoutManager(requireContext(), SPAN_COUNT_PORTRAIT) }
@@ -69,16 +69,16 @@ class AudioFragment(
             audioToShare?.let(audioHandler::share)
     }
 
-    override fun onItemClick(audio: Audio) {
-        audioHandler.play(audio)
+    override fun onItemClick(media: Audio) {
+        audioHandler.play(media)
     }
 
-    override fun onItemLongClick(audio: Audio) {
+    override fun onItemLongClick(media: Audio) {
         if (SDK_INT >= M && !hasStoragePermissions()) {
-            audioToShare = audio
+            audioToShare = media
             requestStoragePermissions(REQUEST_CODE_STORAGE_PERMISSIONS)
         } else {
-            audioHandler.share(audio)
+            audioHandler.share(media)
         }
     }
 
