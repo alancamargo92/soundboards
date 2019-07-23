@@ -23,7 +23,7 @@ class CarcadasAlborghettiApplication : Application() {
     }
 
     private fun buildModule() = module {
-        single { (callback: MediaCallback) -> AudioHandler(callback) }
+        factory { (callback: MediaCallback) -> AudioHandler(callback) }
     }
 
 }

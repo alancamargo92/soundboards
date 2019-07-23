@@ -2,6 +2,7 @@ package com.ukdev.carcadasalborghetti.utils
 
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
@@ -70,6 +71,7 @@ class AudioHandler(private val callback: MediaCallback) : MediaHandler<Audio>, K
 
         val chooser = Intent.createChooser(shareIntent,
                 context.getString(R.string.chooser_title_share))
+                .addFlags(FLAG_ACTIVITY_NEW_TASK)
         context.startActivity(chooser)
     }
 
