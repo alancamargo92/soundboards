@@ -2,9 +2,9 @@ package com.ukdev.carcadasalborghetti.repository
 
 import com.ukdev.carcadasalborghetti.model.Audio
 
-class AudioRepository {
+class AudioRepository : MediaRepository<Audio>() {
 
-    fun getAudios(): List<Audio> {
+    override fun getMedia(): List<Audio> {
         // TODO
         return emptyList()
     }

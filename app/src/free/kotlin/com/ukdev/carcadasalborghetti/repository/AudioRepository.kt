@@ -1,17 +1,12 @@
 package com.ukdev.carcadasalborghetti.repository
 
-import android.content.Context
 import android.content.res.Resources
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.model.Audio
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
-class AudioRepository : KoinComponent {
+class AudioRepository : MediaRepository<Audio>() {
 
-    private val context by inject<Context>()
-
-    fun getAudios(): List<Audio> {
+    override fun getMedia(): List<Audio> {
         with(context.resources) {
             val titles = getStringArray(R.array.titles)
             val lengths = getStringArray(R.array.lengths)

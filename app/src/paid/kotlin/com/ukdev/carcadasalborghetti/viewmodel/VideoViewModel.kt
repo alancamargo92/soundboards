@@ -12,7 +12,7 @@ class VideoViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = VideoRepository()
 
     fun getVideos(): LiveData<List<Video>> = MutableLiveData<List<Video>>().apply {
-        postValue(repository.getVideos())
+        postValue(repository.getMedia())
     }
 
 }
