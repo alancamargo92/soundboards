@@ -5,8 +5,6 @@ import com.ukdev.carcadasalborghetti.model.Video
 
 class VideoViewHolder(itemView: View) : MediaViewHolder<Video>(itemView) {
 
-    override fun bindTo(media: Video) {
-        // TODO
-    }
+    override fun bindTo(media: Video) { }
 
 }

@@ -1,47 +1,26 @@
 package com.ukdev.carcadasalborghetti.fragments
 
-import android.content.pm.PackageManager
-import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES.M
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.AudioAdapter
 import com.ukdev.carcadasalborghetti.handlers.AudioHandler
-import com.ukdev.carcadasalborghetti.listeners.DeviceInteractionListener
-import com.ukdev.carcadasalborghetti.listeners.MediaCallback
-import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Audio
-import com.ukdev.carcadasalborghetti.utils.hasStoragePermissions
 import com.ukdev.carcadasalborghetti.utils.provideViewModel
-import com.ukdev.carcadasalborghetti.utils.requestStoragePermissions
 import com.ukdev.carcadasalborghetti.viewmodel.AudioViewModel
 import kotlinx.android.synthetic.main.fragment_audio.*
-import kotlinx.android.synthetic.main.layout_list.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
-class AudioFragment : MediaListFragment<Audio>(),
-        RecyclerViewInteractionListener<Audio>,
-        MediaCallback,
-        DeviceInteractionListener {
+class AudioFragment : MediaListFragment<Audio>(ITEM_SPAN_PORTRAIT, ITEM_SPAN_LANDSCAPE) {
 
     override val mediaHandler by inject<AudioHandler> { parametersOf(this) }
-
-    private val viewModel by provideViewModel(AudioViewModel::class)
-    private val layoutManager by lazy { GridLayoutManager(requireContext(), SPAN_COUNT_PORTRAIT) }
-    private val adapter = AudioAdapter()
-
-    private var audios = listOf<Audio>()
-    private var topPosition = RECYCLER_VIEW_TOP_POSITION
-    private var audioToShare: Audio? = null
+    override val viewModel by provideViewModel(AudioViewModel::class)
+    override val adapter = AudioAdapter()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -53,37 +32,7 @@ class AudioFragment : MediaListFragment<Audio>(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        configureRecyclerView()
         fab.setOnClickListener { mediaHandler.stop() }
-        fetchAudios()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mediaHandler.stop()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<out String>,
-                                            grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        val permissionsGranted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
-
-        if (requestCode == REQUEST_CODE_STORAGE_PERMISSIONS == permissionsGranted)
-            audioToShare?.let(mediaHandler::share)
-    }
-
-    override fun onItemClick(media: Audio) {
-        mediaHandler.play(media)
-    }
-
-    override fun onItemLongClick(media: Audio) {
-        if (SDK_INT >= M && !hasStoragePermissions()) {
-            audioToShare = media
-            requestStoragePermissions(REQUEST_CODE_STORAGE_PERMISSIONS)
-        } else {
-            mediaHandler.share(media)
-        }
     }
 
     override fun onStartPlayback() {
@@ -94,46 +43,9 @@ class AudioFragment : MediaListFragment<Audio>(),
         fab.visibility = GONE
     }
 
-    override fun onBackPressed(): Boolean {
-        return if (topPosition == RECYCLER_VIEW_TOP_POSITION) {
-            true
-        } else {
-            recycler_view.smoothScrollToPosition(RECYCLER_VIEW_TOP_POSITION)
-            false
-        }
-    }
-
-    override fun onScreenOrientationChangedToPortrait() {
-        layoutManager.spanCount = SPAN_COUNT_PORTRAIT
-    }
-
-    override fun onScreenOrientationChangedToLandscape() {
-        layoutManager.spanCount = SPAN_COUNT_LANDSCAPE
-    }
-
-    private fun configureRecyclerView() {
-        recycler_view.layoutManager = layoutManager
-        recycler_view.adapter = adapter.apply { setListener(this@AudioFragment) }
-        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                topPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
-            }
-        })
-    }
-
-    private fun fetchAudios() {
-        viewModel.getMedia().observe(this, Observer { audios ->
-            this.audios = audios
-            adapter.setData(audios)
-        })
-    }
-
     companion object {
-        private const val RECYCLER_VIEW_TOP_POSITION = 0
-        private const val REQUEST_CODE_STORAGE_PERMISSIONS = 123
-        private const val SPAN_COUNT_PORTRAIT = 3
-        private const val SPAN_COUNT_LANDSCAPE = 4
+        private const val ITEM_SPAN_PORTRAIT = 3
+        private const val ITEM_SPAN_LANDSCAPE = 4
     }
 
 }
