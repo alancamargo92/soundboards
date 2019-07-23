@@ -14,7 +14,7 @@ import com.ukdev.carcadasalborghetti.viewmodel.VideoViewModel
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
-class VideoFragment : MediaListFragment<Video>(SPAN_COUNT_PORTRAIT, SPAN_COUNT_LANDSCAPE) {
+class VideoFragment : MediaListFragment<Video>(ITEM_SPAN_PORTRAIT, ITEM_SPAN_LANDSCAPE) {
 
     override val mediaHandler by inject<VideoHandler>{ parametersOf(this) }
     override val viewModel by provideViewModel(VideoViewModel::class)
@@ -37,8 +37,8 @@ class VideoFragment : MediaListFragment<Video>(SPAN_COUNT_PORTRAIT, SPAN_COUNT_L
     }
 
     companion object {
-        private const val SPAN_COUNT_PORTRAIT = 2
-        private const val SPAN_COUNT_LANDSCAPE = 3
+        private const val ITEM_SPAN_PORTRAIT = 2
+        private const val ITEM_SPAN_LANDSCAPE = 3
     }
 
 }

@@ -18,9 +18,9 @@ abstract class MediaAdapter<T: Media> : RecyclerView.Adapter<MediaViewHolder<T>>
         this.listener = listener
     }
 
-    fun filter(medias: List<T>, searchTerm: String?) {
+    fun filter(media: List<T>, searchTerm: String?) {
         searchTerm?.toLowerCase()?.let { query ->
-            data = medias.filter { it.title.toLowerCase().contains(query) }
+            data = media.filter { it.title.toLowerCase().contains(query) }
             notifyDataSetChanged()
         }
     }

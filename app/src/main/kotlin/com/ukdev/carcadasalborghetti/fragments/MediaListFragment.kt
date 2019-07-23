@@ -4,15 +4,20 @@ import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.M
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.handlers.MediaHandler
 import com.ukdev.carcadasalborghetti.listeners.DeviceInteractionListener
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
+import com.ukdev.carcadasalborghetti.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.utils.hasStoragePermissions
@@ -33,6 +38,9 @@ abstract class MediaListFragment<T: Media>(
     protected var media: List<T> = listOf()
 
     private val layoutManager by lazy { GridLayoutManager(requireContext(), itemSpanPortrait) }
+
+    private lateinit var searchView: SearchView
+
     private var mediaToShare: T? = null
     private var topPosition = RECYCLER_VIEW_TOP_POSITION
 
@@ -40,6 +48,15 @@ abstract class MediaListFragment<T: Media>(
         super.onViewCreated(view, savedInstanceState)
         configureRecyclerView()
         fetchMedia()
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+        menu.run {
+            searchView = findItem(R.id.item_search)?.actionView as SearchView
+        }
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,
@@ -97,6 +114,7 @@ abstract class MediaListFragment<T: Media>(
         viewModel.getMedia().observe(this, Observer { media ->
             this.media = media
             adapter.setData(media)
+            searchView.setOnQueryTextListener(QueryListener(adapter, media))
         })
     }
 

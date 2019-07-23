@@ -4,11 +4,9 @@ import android.content.res.Configuration
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import com.google.android.material.tabs.TabLayout
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.PagerAdapter
@@ -51,17 +49,6 @@ open class BaseActivity : AppCompatActivity() {
             ORIENTATION_LANDSCAPE -> deviceInteractionListener.onScreenOrientationChangedToLandscape()
             else -> deviceInteractionListener.onScreenOrientationChangedToPortrait()
         }
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        menu.run {
-            (findItem(R.id.item_search)?.actionView as SearchView).run {
-                //setOnQueryTextListener(QueryListener(adapter, audios)) TODO
-            }
-        }
-
-        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
