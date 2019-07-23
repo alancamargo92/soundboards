@@ -123,7 +123,7 @@ class AudioFragment : MediaListFragment<Audio>(),
     }
 
     private fun fetchAudios() {
-        viewModel.getAudios().observe(this, Observer { audios ->
+        viewModel.getMedia().observe(this, Observer { audios ->
             this.audios = audios
             adapter.setData(audios)
         })

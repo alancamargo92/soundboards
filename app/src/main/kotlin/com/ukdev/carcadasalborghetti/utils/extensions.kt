@@ -8,12 +8,13 @@ import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Build.VERSION_CODES.M
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import com.ukdev.carcadasalborghetti.R
+import com.ukdev.carcadasalborghetti.model.Media
+import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
 import kotlin.reflect.KClass
 
-fun <T: ViewModel> Fragment.provideViewModel(clazz: KClass<T>) = lazy {
+fun <M: Media, T: MediaViewModel<M>> Fragment.provideViewModel(clazz: KClass<T>) = lazy {
     ViewModelProviders.of(this).get(clazz.java)
 }
 

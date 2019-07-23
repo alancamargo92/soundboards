@@ -49,7 +49,7 @@ class VideoFragment : MediaListFragment<Video>(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureRecyclerView()
-        viewModel.getVideos().observe(this, Observer { videos ->
+        viewModel.getMedia().observe(this, Observer { videos ->
             this.videos = videos
             adapter.setData(videos)
         })
