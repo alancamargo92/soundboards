@@ -1,7 +1,11 @@
 package com.ukdev.carcadasalborghetti.fragments
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.VideoAdapter
 import com.ukdev.carcadasalborghetti.handlers.VideoHandler
 import com.ukdev.carcadasalborghetti.model.Video
@@ -17,8 +21,17 @@ class VideoFragment : MediaListFragment<Video>(0, 0) {
     override val viewModel by provideViewModel(VideoViewModel::class)
     override val adapter = VideoAdapter()
 
+    override fun onCreateView(
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_video, container, false)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+        txt_paid_version.text = getString(R.string.get_paid_version_rationale)
         bt_paid_version.setOnClickListener {
             showPaidVersion()
         }
@@ -29,7 +42,7 @@ class VideoFragment : MediaListFragment<Video>(0, 0) {
     override fun onStopPlayback() { }
 
     private fun showPaidVersion() {
-
+        Toast.makeText(requireContext(), "Test", Toast.LENGTH_SHORT).show()
     }
 
 }
