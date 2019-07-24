@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Carcadas Alborghetti</string>
     <string name="title_format">%1$d. %2$s</string>
     <string name="search">Buscar</string>
     <string name="about">Sobre</string>
