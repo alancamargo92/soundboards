@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -111,11 +113,23 @@ abstract class MediaListFragment<T: Media>(
     }
 
     private fun fetchMedia() {
+        showProgressBar()
         viewModel.getMedia().observe(this, Observer { media ->
             this.media = media
             adapter.setData(media)
             searchView.setOnQueryTextListener(QueryListener(adapter, media))
+            hideProgressBar()
         })
+    }
+
+    private fun showProgressBar() {
+        recycler_view.visibility = GONE
+        progress_bar.visibility = VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        progress_bar.visibility = GONE
+        recycler_view.visibility = VISIBLE
     }
 
     companion object {
