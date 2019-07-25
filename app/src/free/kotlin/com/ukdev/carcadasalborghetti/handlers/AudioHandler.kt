@@ -28,7 +28,7 @@ class AudioHandler(callback: MediaCallback) : MediaHandler<Audio>(callback), Koi
     override fun play(media: Audio) {
         mediaPlayer?.release()
 
-        mediaPlayer = MediaPlayer.create(context, media.fileRes).apply {
+        mediaPlayer = MediaPlayer.create(context, media.uri).apply {
             if (isPlaying) {
                 stop()
                 callback.onStopPlayback()
@@ -83,18 +83,19 @@ class AudioHandler(callback: MediaCallback) : MediaHandler<Audio>(callback), Koi
         val audioFile = File(baseDir, "${audio.title}.mp3")
 
         val buffer = ByteArray(1024 * 500)
-        val inputStream = context.resources.openRawResource(audio.fileRes)
-        val out = FileOutputStream(audioFile)
-        var content = inputStream.read(buffer)
+        context.contentResolver.openInputStream(audio.uri)?.let { inputStream ->
+            val out = FileOutputStream(audioFile)
+            var content = inputStream.read(buffer)
 
-        while (content != -1) {
-            out.write(buffer, 0, content)
-            content = inputStream.read(buffer)
-        }
+            while (content != -1) {
+                out.write(buffer, 0, content)
+                content = inputStream.read(buffer)
+            }
 
-        out.run {
-            flush()
-            close()
+            out.run {
+                flush()
+                close()
+            }
         }
 
         return audioFile

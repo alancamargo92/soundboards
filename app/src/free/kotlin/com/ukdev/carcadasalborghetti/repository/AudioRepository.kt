@@ -1,6 +1,7 @@
 package com.ukdev.carcadasalborghetti.repository
 
 import android.content.res.Resources
+import android.net.Uri
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.model.Audio
 
@@ -10,11 +11,11 @@ class AudioRepository : MediaRepository<Audio>() {
         with(context.resources) {
             val titles = getStringArray(R.array.titles)
             val lengths = getStringArray(R.array.lengths)
-            val audios = getAudios(this)
+            val audioUris = getAudioUris(this)
 
             val rawList = arrayListOf<Audio>().apply {
                 titles.forEachIndexed { index, title ->
-                    add(Audio(title, lengths[index], index + 1, audios[index]))
+                    add(Audio(title, lengths[index], index + 1, audioUris[index]))
                 }
             }
 
@@ -27,7 +28,7 @@ class AudioRepository : MediaRepository<Audio>() {
         }
     }
 
-    private fun getAudios(resources: Resources): IntArray {
+    private fun getAudioUris(resources: Resources): Array<Uri> {
         val typedArray = resources.obtainTypedArray(R.array.audios)
         val audios = IntArray(typedArray.length()).also {
             it.forEachIndexed { index, _ ->
@@ -36,7 +37,9 @@ class AudioRepository : MediaRepository<Audio>() {
         }
         typedArray.recycle()
 
-        return audios
+        return audios.map { resId ->
+            Uri.parse("android.resource://${context.packageName}/$resId")
+        }.toTypedArray()
     }
 
 }
