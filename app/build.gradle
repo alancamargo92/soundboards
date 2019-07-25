@@ -83,6 +83,9 @@ dependencies {
     implementation "org.koin:koin-androidx-scope:$koin_version"
     implementation "org.koin:koin-android-ext:$koin_version"
     implementation "org.koin:koin-androidx-ext:$koin_version"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation 'com.google.code.gson:gson:2.8.5'
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 }
 
