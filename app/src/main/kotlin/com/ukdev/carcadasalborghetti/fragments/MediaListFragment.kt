@@ -24,32 +24,33 @@ import com.ukdev.carcadasalborghetti.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.utils.hasStoragePermissions
+import com.ukdev.carcadasalborghetti.utils.provideViewModel
 import com.ukdev.carcadasalborghetti.utils.requestStoragePermissions
 import com.ukdev.carcadasalborghetti.view.ViewLayer
 import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
 import kotlinx.android.synthetic.main.layout_list.*
 
-abstract class MediaListFragment<T: Media>(
+abstract class MediaListFragment(
+        private val mediaType: Media.Type,
         private val itemSpanPortrait: Int,
         private val itemSpanLandscape: Int
 ) : Fragment(),
-        RecyclerViewInteractionListener<T>,
+        RecyclerViewInteractionListener,
         DeviceInteractionListener,
         MediaCallback,
-        ViewLayer<T> {
+        ViewLayer {
 
-    abstract val mediaHandler: MediaHandler<T>
-    abstract val adapter: MediaAdapter<T>
+    abstract val mediaHandler: MediaHandler
+    abstract val adapter: MediaAdapter
 
-    protected abstract val viewModel: MediaViewModel<T>
+    protected var media: List<Media> = listOf()
 
-    protected var media: List<T> = listOf()
-
+    private val viewModel by provideViewModel(MediaViewModel::class)
     private val layoutManager by lazy { GridLayoutManager(requireContext(), itemSpanPortrait) }
 
     private lateinit var searchView: SearchView
 
-    private var mediaToShare: T? = null
+    private var mediaToShare: Media? = null
     private var topPosition = RECYCLER_VIEW_TOP_POSITION
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,11 +78,11 @@ abstract class MediaListFragment<T: Media>(
             mediaToShare?.let(mediaHandler::share)
     }
 
-    override fun onItemClick(media: T) {
+    override fun onItemClick(media: Media) {
         mediaHandler.play(media)
     }
 
-    override fun onItemLongClick(media: T) {
+    override fun onItemLongClick(media: Media) {
         if (SDK_INT >= M && !hasStoragePermissions()) {
             mediaToShare = media
             requestStoragePermissions(REQUEST_CODE_STORAGE_PERMISSIONS)
@@ -107,7 +108,7 @@ abstract class MediaListFragment<T: Media>(
         layoutManager.spanCount = itemSpanLandscape
     }
 
-    override fun displayMedia(media: LiveData<List<T>>) {
+    override fun displayMedia(media: LiveData<List<Media>>) {
         media.observe(this, Observer {
             this.media = it
             adapter.setData(it)
@@ -133,7 +134,7 @@ abstract class MediaListFragment<T: Media>(
 
     private fun fetchMedia() {
         showProgressBar()
-        viewModel.getMedia(view = this)
+        viewModel.getMedia(mediaType, view = this)
     }
 
     private fun showProgressBar() {

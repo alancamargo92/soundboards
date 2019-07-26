@@ -1,11 +1,10 @@
 package com.ukdev.carcadasalborghetti.adapter
 
 import android.view.ViewGroup
-import com.ukdev.carcadasalborghetti.model.Video
 
-class VideoAdapter : MediaAdapter<Video>() {
+class VideoAdapter : MediaAdapter() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder<Video> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
         return VideoViewHolder(parent)
     }
 

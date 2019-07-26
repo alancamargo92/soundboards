@@ -12,20 +12,20 @@ import androidx.core.content.FileProvider
 import com.crashlytics.android.Crashlytics
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
-import com.ukdev.carcadasalborghetti.model.Audio
+import com.ukdev.carcadasalborghetti.model.Media
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
-class AudioHandler(callback: MediaCallback) : MediaHandler<Audio>(callback), KoinComponent {
+class AudioHandler(callback: MediaCallback) : MediaHandler(callback), KoinComponent {
 
     private val context by inject<Context>()
 
     private var mediaPlayer: MediaPlayer? = null
 
-    override fun play(media: Audio) {
+    override fun play(media: Media) {
         mediaPlayer?.release()
 
         mediaPlayer = MediaPlayer.create(context, media.uri).apply {
@@ -48,7 +48,7 @@ class AudioHandler(callback: MediaCallback) : MediaHandler<Audio>(callback), Koi
         callback.onStopPlayback()
     }
 
-    override fun share(media: Audio) {
+    override fun share(media: Media) {
         val file = try {
             getFile(media)
         } catch (ex: IOException) {
@@ -75,15 +75,15 @@ class AudioHandler(callback: MediaCallback) : MediaHandler<Audio>(callback), Koi
         context.startActivity(chooser)
     }
 
-    private fun getFile(audio: Audio): File {
+    private fun getFile(media: Media): File {
         val baseDir = "${Environment.getExternalStorageDirectory().absolutePath}/tmp_carcadas/"
         val dir = File(baseDir)
         if (!dir.exists())
             dir.mkdir()
-        val audioFile = File(baseDir, "${audio.title}.mp3")
+        val audioFile = File(baseDir, "${media.title}.mp3")
 
         val buffer = ByteArray(1024 * 500)
-        context.contentResolver.openInputStream(audio.uri)?.let { inputStream ->
+        context.contentResolver.openInputStream(media.uri)?.let { inputStream ->
             val out = FileOutputStream(audioFile)
             var content = inputStream.read(buffer)
 

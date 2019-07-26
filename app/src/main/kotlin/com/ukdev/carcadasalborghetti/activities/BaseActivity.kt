@@ -23,7 +23,7 @@ open class BaseActivity : AppCompatActivity() {
     private val preferenceUtils by lazy { PreferenceUtils(this) }
 
     private lateinit var deviceInteractionListener: DeviceInteractionListener
-    private lateinit var mediaHandler: MediaHandler<*>
+    private lateinit var mediaHandler: MediaHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +70,7 @@ open class BaseActivity : AppCompatActivity() {
     private fun configureViewPager() {
         val pagerAdapter = PagerAdapter(supportFragmentManager, tab_layout.tabCount)
         deviceInteractionListener = pagerAdapter.getItem(0) as DeviceInteractionListener
-        mediaHandler = (pagerAdapter.getItem(0) as MediaListFragment<*>).mediaHandler
+        mediaHandler = (pagerAdapter.getItem(0) as MediaListFragment).mediaHandler
         view_pager.run {
             adapter = pagerAdapter
             addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tab_layout))
@@ -79,7 +79,7 @@ open class BaseActivity : AppCompatActivity() {
                     view_pager.currentItem = tab.position
                     deviceInteractionListener = pagerAdapter.getItem(tab.position) as DeviceInteractionListener
                     mediaHandler.stop()
-                    mediaHandler = (pagerAdapter.getItem(tab.position) as MediaListFragment<*>).mediaHandler
+                    mediaHandler = (pagerAdapter.getItem(tab.position) as MediaListFragment).mediaHandler
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab) { }

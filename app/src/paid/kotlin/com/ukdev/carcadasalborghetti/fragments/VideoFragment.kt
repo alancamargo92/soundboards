@@ -8,17 +8,14 @@ import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.adapter.VideoAdapter
 import com.ukdev.carcadasalborghetti.handlers.VideoHandler
-import com.ukdev.carcadasalborghetti.model.Video
-import com.ukdev.carcadasalborghetti.utils.provideViewModel
-import com.ukdev.carcadasalborghetti.viewmodel.VideoViewModel
+import com.ukdev.carcadasalborghetti.model.Media
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
-class VideoFragment : MediaListFragment<Video>(ITEM_SPAN_PORTRAIT, ITEM_SPAN_LANDSCAPE) {
+class VideoFragment : MediaListFragment(Media.Type.VIDEO, ITEM_SPAN_PORTRAIT, ITEM_SPAN_LANDSCAPE) {
 
     override val mediaHandler by inject<VideoHandler>{ parametersOf(this) }
-    override val viewModel by provideViewModel(VideoViewModel::class)
-    override val adapter: MediaAdapter<Video> = VideoAdapter()
+    override val adapter: MediaAdapter = VideoAdapter()
 
     override fun onCreateView(
             inflater: LayoutInflater,

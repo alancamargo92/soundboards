@@ -7,4 +7,11 @@ open class Media(
         open val length: String,
         open var position: Int,
         open val uri: Uri
-)
+) {
+
+    enum class Type {
+        AUDIO,
+        VIDEO
+    }
+
+}

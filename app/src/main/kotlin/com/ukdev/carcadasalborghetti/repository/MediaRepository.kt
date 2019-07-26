@@ -5,14 +5,14 @@ import com.ukdev.carcadasalborghetti.model.Media
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-abstract class MediaRepository<T: Media> : KoinComponent {
+abstract class MediaRepository : KoinComponent {
 
     protected val context: Context by inject()
 
-    abstract fun getMedia(resultCallback: ResultCallback<T>)
+    abstract fun getMedia(mediaType: Media.Type, resultCallback: ResultCallback)
 
-    interface ResultCallback<T: Media> {
-        fun onMediaFound(media: List<T>)
+    interface ResultCallback {
+        fun onMediaFound(media: List<Media>)
         fun onError()
     }
 

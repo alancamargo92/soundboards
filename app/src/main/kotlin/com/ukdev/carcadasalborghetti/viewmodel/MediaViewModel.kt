@@ -5,23 +5,24 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.repository.MediaRepository
+import com.ukdev.carcadasalborghetti.repository.MediaRepositoryImpl
 import com.ukdev.carcadasalborghetti.view.ViewLayer
 
-abstract class MediaViewModel<T: Media>(
+class MediaViewModel(
         application: Application
-) : AndroidViewModel(application), MediaRepository.ResultCallback<T> {
+) : AndroidViewModel(application), MediaRepository.ResultCallback {
 
-    protected abstract val repository: MediaRepository<T>
+    private val repository: MediaRepository = MediaRepositoryImpl()
 
-    private lateinit var view: ViewLayer<T>
+    private lateinit var view: ViewLayer
 
-    fun getMedia(view: ViewLayer<T>) {
+    fun getMedia(mediaType: Media.Type, view: ViewLayer) {
         this.view = view
-        repository.getMedia(resultCallback = this@MediaViewModel)
+        repository.getMedia(mediaType, resultCallback = this@MediaViewModel)
     }
 
-    override fun onMediaFound(media: List<T>) {
-        val liveData = MutableLiveData<List<T>>().apply {
+    override fun onMediaFound(media: List<Media>) {
+        val liveData = MutableLiveData<List<Media>>().apply {
             postValue(media)
         }
         view.displayMedia(liveData)

@@ -3,26 +3,25 @@ package com.ukdev.carcadasalborghetti.repository
 import android.content.res.Resources
 import android.net.Uri
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.model.Audio
+import com.ukdev.carcadasalborghetti.model.Media
 
-class AudioRepository : MediaRepository<Audio>() {
+class MediaRepositoryImpl : MediaRepository() {
 
-    override fun getMedia(resultCallback: ResultCallback<Audio>) {
+    override fun getMedia(mediaType: Media.Type, resultCallback: ResultCallback) {
         val rawList = fetchData()
         val media = sort(rawList)
         resultCallback.onMediaFound(media)
-
     }
 
-    private fun fetchData(): ArrayList<Audio> {
+    private fun fetchData(): ArrayList<Media> {
         val res = context.resources
         val titles = res.getStringArray(R.array.titles)
         val lengths = res.getStringArray(R.array.lengths)
         val audioUris = getAudioUris(res)
 
-        return arrayListOf<Audio>().apply {
+        return arrayListOf<Media>().apply {
             titles.forEachIndexed { index, title ->
-                add(Audio(title, lengths[index], index + 1, audioUris[index]))
+                add(Media(title, lengths[index], index + 1, audioUris[index]))
             }
         }
     }
@@ -41,7 +40,7 @@ class AudioRepository : MediaRepository<Audio>() {
         }.toTypedArray()
     }
 
-    private fun sort(rawList: ArrayList<Audio>): List<Audio> {
+    private fun sort(rawList: ArrayList<Media>): List<Media> {
         return rawList.sortedBy { it.title.split(".").last().trim() }
                 .apply {
                     forEachIndexed { index, audio ->

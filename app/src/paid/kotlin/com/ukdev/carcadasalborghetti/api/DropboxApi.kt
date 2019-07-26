@@ -2,8 +2,7 @@ package com.ukdev.carcadasalborghetti.api
 
 import com.ukdev.carcadasalborghetti.BuildConfig.ACCESS_TOKEN
 import com.ukdev.carcadasalborghetti.BuildConfig.BASE_URL
-import com.ukdev.carcadasalborghetti.model.Audio
-import com.ukdev.carcadasalborghetti.model.Video
+import com.ukdev.carcadasalborghetti.model.Media
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -14,15 +13,15 @@ import retrofit2.http.POST
 interface DropboxApi {
 
     @POST("2/files/list_folder")
-    fun getAudios(@Body dir: String = "/audios"): Call<List<Audio>>
-
-    @POST("2/files/list_folder")
-    fun getVideos(@Body dir: String = "/videos"): Call<List<Video>>
+    fun listMedia(@Body dir: String): Call<List<Media>>
 
     companion object {
+        const val DIR_AUDIO = "/audios"
+        const val DIR_VIDEO = "/videos"
+
         private val client = OkHttpClient.Builder().addInterceptor { chain ->
             val newRequest = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer $ACCESS_TOKEN")
+                    .addHeader("Authorization", "Bearer $ACCESS_TOKEN") // FIXME
                     .build()
             chain.proceed(newRequest)
         }.build()

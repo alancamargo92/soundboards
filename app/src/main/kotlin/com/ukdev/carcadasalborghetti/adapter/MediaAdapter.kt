@@ -4,28 +4,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Media
 
-abstract class MediaAdapter<T: Media> : RecyclerView.Adapter<MediaViewHolder<T>>() {
+abstract class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
 
-    private var data: List<T>? = null
-    private var listener: RecyclerViewInteractionListener<T>? = null
+    private var data: List<Media>? = null
+    private var listener: RecyclerViewInteractionListener? = null
 
-    fun setData(data: List<T>) {
+    fun setData(data: List<Media>) {
         this.data = data
         notifyDataSetChanged()
     }
 
-    fun setListener(listener: RecyclerViewInteractionListener<T>) {
+    fun setListener(listener: RecyclerViewInteractionListener) {
         this.listener = listener
     }
 
-    fun filter(media: List<T>, searchTerm: String?) {
+    fun filter(media: List<Media>, searchTerm: String?) {
         searchTerm?.toLowerCase()?.let { query ->
             data = media.filter { it.title.toLowerCase().contains(query) }
             notifyDataSetChanged()
         }
     }
 
-    override fun onBindViewHolder(holder: MediaViewHolder<T>, position: Int) {
+    override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
         data?.get(position)?.let { media ->
             holder.bindTo(media)
             holder.itemView.setOnClickListener { listener?.onItemClick(media) }

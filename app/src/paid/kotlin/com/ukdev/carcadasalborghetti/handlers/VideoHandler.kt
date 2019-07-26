@@ -1,11 +1,11 @@
 package com.ukdev.carcadasalborghetti.handlers
 
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
-import com.ukdev.carcadasalborghetti.model.Video
+import com.ukdev.carcadasalborghetti.model.Media
 
-class VideoHandler(callback: MediaCallback) : MediaHandler<Video>(callback) {
+class VideoHandler(callback: MediaCallback) : MediaHandler(callback) {
 
-    override fun play(media: Video) {
+    override fun play(media: Media) {
 
     }
 
@@ -13,7 +13,7 @@ class VideoHandler(callback: MediaCallback) : MediaHandler<Video>(callback) {
 
     }
 
-    override fun share(media: Video) {
+    override fun share(media: Media) {
 
     }
 

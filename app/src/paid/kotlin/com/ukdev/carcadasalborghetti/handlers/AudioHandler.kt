@@ -1,11 +1,11 @@
 package com.ukdev.carcadasalborghetti.handlers
 
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
-import com.ukdev.carcadasalborghetti.model.Audio
+import com.ukdev.carcadasalborghetti.model.Media
 
-class AudioHandler(callback: MediaCallback) : MediaHandler<Audio>(callback) {
+class AudioHandler(callback: MediaCallback) : MediaHandler(callback) {
 
-    override fun play(media: Audio) {
+    override fun play(media: Media) {
 
     }
 
@@ -13,7 +13,7 @@ class AudioHandler(callback: MediaCallback) : MediaHandler<Audio>(callback) {
 
     }
 
-    override fun share(media: Audio) {
+    override fun share(media: Media) {
 
     }
 
