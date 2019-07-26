@@ -7,24 +7,23 @@ import com.ukdev.carcadasalborghetti.model.Audio
 
 class AudioRepository : MediaRepository<Audio>() {
 
-    override fun getMedia(): List<Audio> {
-        with(context.resources) {
-            val titles = getStringArray(R.array.titles)
-            val lengths = getStringArray(R.array.lengths)
-            val audioUris = getAudioUris(this)
+    override fun getMedia(resultCallback: ResultCallback<Audio>) {
+        val rawList = fetchData()
+        val media = sort(rawList)
+        resultCallback.onMediaFound(media)
 
-            val rawList = arrayListOf<Audio>().apply {
-                titles.forEachIndexed { index, title ->
-                    add(Audio(title, lengths[index], index + 1, audioUris[index]))
-                }
+    }
+
+    private fun fetchData(): ArrayList<Audio> {
+        val res = context.resources
+        val titles = res.getStringArray(R.array.titles)
+        val lengths = res.getStringArray(R.array.lengths)
+        val audioUris = getAudioUris(res)
+
+        return arrayListOf<Audio>().apply {
+            titles.forEachIndexed { index, title ->
+                add(Audio(title, lengths[index], index + 1, audioUris[index]))
             }
-
-            return rawList.sortedBy { it.title.split(".").last().trim() }
-                    .apply {
-                        forEachIndexed { index, audio ->
-                            audio.position = index + 1
-                        }
-                    }
         }
     }
 
@@ -40,6 +39,15 @@ class AudioRepository : MediaRepository<Audio>() {
         return audios.map { resId ->
             Uri.parse("android.resource://${context.packageName}/$resId")
         }.toTypedArray()
+    }
+
+    private fun sort(rawList: ArrayList<Audio>): List<Audio> {
+        return rawList.sortedBy { it.title.split(".").last().trim() }
+                .apply {
+                    forEachIndexed { index, audio ->
+                        audio.position = index + 1
+                    }
+                }
     }
 
 }

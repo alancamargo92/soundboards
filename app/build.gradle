@@ -45,8 +45,8 @@ android {
         paid {
             dimension "version"
             applicationIdSuffix ".paid"
-            buildConfigField("String", "BASE_URL", "https://api.dropboxapi.com/")
-            buildConfigField("String", "ACCESS_TOKEN", System.getenv("ACCESS_TOKEN_CARCADAS"))
+            buildConfigField "String", "BASE_URL", '"https://api.dropboxapi.com/"'
+            buildConfigField "String", "ACCESS_TOKEN", "\"$System.env.ACCESS_TOKEN_CARCADAS\""
         }
     }
 

@@ -9,6 +9,11 @@ abstract class MediaRepository<T: Media> : KoinComponent {
 
     protected val context: Context by inject()
 
-    abstract fun getMedia(): List<T>
+    abstract fun getMedia(resultCallback: ResultCallback<T>)
+
+    interface ResultCallback<T: Media> {
+        fun onMediaFound(media: List<T>)
+        fun onError()
+    }
 
 }

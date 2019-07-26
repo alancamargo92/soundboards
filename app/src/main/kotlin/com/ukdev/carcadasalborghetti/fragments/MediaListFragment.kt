@@ -11,6 +11,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,13 +25,18 @@ import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.utils.hasStoragePermissions
 import com.ukdev.carcadasalborghetti.utils.requestStoragePermissions
+import com.ukdev.carcadasalborghetti.view.ViewLayer
 import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
 import kotlinx.android.synthetic.main.layout_list.*
 
 abstract class MediaListFragment<T: Media>(
         private val itemSpanPortrait: Int,
         private val itemSpanLandscape: Int
-) : Fragment(), RecyclerViewInteractionListener<T>, DeviceInteractionListener, MediaCallback {
+) : Fragment(),
+        RecyclerViewInteractionListener<T>,
+        DeviceInteractionListener,
+        MediaCallback,
+        ViewLayer<T> {
 
     abstract val mediaHandler: MediaHandler<T>
     abstract val adapter: MediaAdapter<T>
@@ -101,6 +107,19 @@ abstract class MediaListFragment<T: Media>(
         layoutManager.spanCount = itemSpanLandscape
     }
 
+    override fun displayMedia(media: LiveData<List<T>>) {
+        media.observe(this, Observer {
+            this.media = it
+            adapter.setData(it)
+            searchView.setOnQueryTextListener(QueryListener(adapter, it))
+            hideProgressBar()
+        })
+    }
+
+    override fun onError() {
+        // TODO
+    }
+
     private fun configureRecyclerView() {
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter.apply { setListener(this@MediaListFragment) }
@@ -114,12 +133,7 @@ abstract class MediaListFragment<T: Media>(
 
     private fun fetchMedia() {
         showProgressBar()
-        viewModel.getMedia().observe(this, Observer { media ->
-            this.media = media
-            adapter.setData(media)
-            searchView.setOnQueryTextListener(QueryListener(adapter, media))
-            hideProgressBar()
-        })
+        viewModel.getMedia(view = this)
     }
 
     private fun showProgressBar() {

@@ -4,8 +4,6 @@ import com.ukdev.carcadasalborghetti.model.Video
 
 class VideoRepository : MediaRepository<Video>() {
 
-    override fun getMedia(): List<Video> {
-        return emptyList()
-    }
+    override fun getMedia(resultCallback: ResultCallback<Video>) { }
 
 }
