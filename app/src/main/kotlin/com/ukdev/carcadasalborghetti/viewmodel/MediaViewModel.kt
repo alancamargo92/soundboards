@@ -24,13 +24,23 @@ class MediaViewModel(
 
     override fun onMediaFound(media: List<Media>) {
         val liveData = MutableLiveData<List<Media>>().apply {
-            postValue(media)
+            val sortedData = sort(media)
+            postValue(sortedData)
         }
         view.displayMedia(liveData)
     }
 
     override fun onError() {
         view.onError()
+    }
+
+    private fun sort(rawList: List<Media>): List<Media> {
+        return rawList.sortedBy { it.title.split(".").last().trim() }
+                .apply {
+                    forEachIndexed { index, audio ->
+                        audio.position = index + 1
+                    }
+                }
     }
 
 }

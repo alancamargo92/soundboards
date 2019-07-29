@@ -9,8 +9,7 @@ import com.ukdev.carcadasalborghetti.model.MediaType
 class MediaRepositoryImpl : MediaRepository() {
 
     override fun getMedia(mediaType: MediaType, resultCallback: ResultCallback) {
-        val rawList = fetchData()
-        val media = sort(rawList)
+        val media = fetchData()
         resultCallback.onMediaFound(media)
     }
 
@@ -39,15 +38,6 @@ class MediaRepositoryImpl : MediaRepository() {
         return audios.map { resId ->
             Uri.parse("android.resource://${context.packageName}/$resId")
         }.toTypedArray()
-    }
-
-    private fun sort(rawList: ArrayList<Media>): List<Media> {
-        return rawList.sortedBy { it.title.split(".").last().trim() }
-                .apply {
-                    forEachIndexed { index, audio ->
-                        audio.position = index + 1
-                    }
-                }
     }
 
 }
