@@ -5,7 +5,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class Media(
-        @Expose val id: String,
+        @Expose @SerializedName("path_lower") val path: String,
         @Expose @SerializedName("name") val title: String,
         val length: String,
         var position: Int,
