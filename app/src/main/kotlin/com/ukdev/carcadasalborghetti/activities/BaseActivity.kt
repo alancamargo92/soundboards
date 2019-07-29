@@ -16,6 +16,7 @@ import com.ukdev.carcadasalborghetti.listeners.DeviceInteractionListener
 import com.ukdev.carcadasalborghetti.utils.PreferenceUtils
 import com.ukdev.carcadasalborghetti.utils.getAppName
 import com.ukdev.carcadasalborghetti.utils.getAppVersion
+import com.ukdev.carcadasalborghetti.utils.getFragments
 import kotlinx.android.synthetic.main.activity_base.*
 
 open class BaseActivity : AppCompatActivity() {
@@ -61,8 +62,9 @@ open class BaseActivity : AppCompatActivity() {
 
     private fun configureTabLayout() {
         tab_layout.run {
-            addTab(newTab().setText(R.string.audios))
-            addTab(newTab().setText(R.string.videos))
+            getFragments().forEach {
+                addTab(newTab().setText(it.key))
+            }
             tabGravity = TabLayout.GRAVITY_FILL
         }
     }
