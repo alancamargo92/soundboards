@@ -13,7 +13,7 @@ import retrofit2.http.POST
 interface DropboxApi {
 
     @POST("2/files/list_folder")
-    fun listMedia(@Body dir: String): Call<List<Media>>
+    fun listMedia(@Body body: MediaRequest): Call<List<Media>>
 
     companion object {
         const val DIR_AUDIO = "/audios"
@@ -21,7 +21,7 @@ interface DropboxApi {
 
         private val client = OkHttpClient.Builder().addInterceptor { chain ->
             val newRequest = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer $ACCESS_TOKEN") // FIXME
+                    .addHeader("Authorization", "Bearer $ACCESS_TOKEN")
                     .build()
             chain.proceed(newRequest)
         }.build()

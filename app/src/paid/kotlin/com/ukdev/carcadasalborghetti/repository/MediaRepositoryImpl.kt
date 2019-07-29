@@ -1,6 +1,7 @@
 package com.ukdev.carcadasalborghetti.repository
 
 import com.ukdev.carcadasalborghetti.api.DropboxApi
+import com.ukdev.carcadasalborghetti.api.MediaRequest
 import com.ukdev.carcadasalborghetti.model.Media
 import retrofit2.Call
 import retrofit2.Callback
@@ -15,7 +16,8 @@ class MediaRepositoryImpl : MediaRepository() {
             DropboxApi.DIR_AUDIO
         else
             DropboxApi.DIR_VIDEO
-        api.listMedia(dir).enqueue(object : Callback<List<Media>> {
+        val request = MediaRequest(dir)
+        api.listMedia(request).enqueue(object : Callback<List<Media>> {
             override fun onResponse(call: Call<List<Media>>, response: Response<List<Media>>) {
                 if (response.isSuccessful)
                     response.body()?.let(resultCallback::onMediaFound)
