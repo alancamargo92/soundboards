@@ -9,12 +9,12 @@ import android.view.ViewGroup
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.AudioAdapter
 import com.ukdev.carcadasalborghetti.handlers.AudioHandler
-import com.ukdev.carcadasalborghetti.model.Media
+import com.ukdev.carcadasalborghetti.model.MediaType
 import kotlinx.android.synthetic.main.fragment_audio.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
-class AudioFragment : MediaListFragment(Media.Type.AUDIO, ITEM_SPAN_PORTRAIT, ITEM_SPAN_LANDSCAPE) {
+class AudioFragment : MediaListFragment(MediaType.AUDIO, ITEM_SPAN_PORTRAIT, ITEM_SPAN_LANDSCAPE) {
 
     override val mediaHandler by inject<AudioHandler> { parametersOf(this) }
     override val adapter = AudioAdapter()

@@ -2,7 +2,6 @@ package com.ukdev.carcadasalborghetti.api
 
 import com.ukdev.carcadasalborghetti.BuildConfig.ACCESS_TOKEN
 import com.ukdev.carcadasalborghetti.BuildConfig.BASE_URL
-import com.ukdev.carcadasalborghetti.model.Media
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -13,7 +12,7 @@ import retrofit2.http.POST
 interface DropboxApi {
 
     @POST("2/files/list_folder")
-    fun listMedia(@Body body: MediaRequest): Call<List<Media>>
+    fun listMedia(@Body body: MediaRequest): Call<MediaResponse>
 
     companion object {
         const val DIR_AUDIO = "/audios"

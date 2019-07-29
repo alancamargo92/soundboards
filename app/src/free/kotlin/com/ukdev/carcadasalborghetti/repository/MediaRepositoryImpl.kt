@@ -4,10 +4,11 @@ import android.content.res.Resources
 import android.net.Uri
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.model.Media
+import com.ukdev.carcadasalborghetti.model.MediaType
 
 class MediaRepositoryImpl : MediaRepository() {
 
-    override fun getMedia(mediaType: Media.Type, resultCallback: ResultCallback) {
+    override fun getMedia(mediaType: MediaType, resultCallback: ResultCallback) {
         val rawList = fetchData()
         val media = sort(rawList)
         resultCallback.onMediaFound(media)

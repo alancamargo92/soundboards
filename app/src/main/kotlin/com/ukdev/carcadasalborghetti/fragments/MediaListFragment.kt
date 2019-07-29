@@ -23,6 +23,7 @@ import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Media
+import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.hasStoragePermissions
 import com.ukdev.carcadasalborghetti.utils.provideViewModel
 import com.ukdev.carcadasalborghetti.utils.requestStoragePermissions
@@ -31,7 +32,7 @@ import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
 import kotlinx.android.synthetic.main.layout_list.*
 
 abstract class MediaListFragment(
-        private val mediaType: Media.Type,
+        private val mediaType: MediaType,
         private val itemSpanPortrait: Int,
         private val itemSpanLandscape: Int
 ) : Fragment(),

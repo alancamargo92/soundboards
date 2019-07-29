@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.ukdev.carcadasalborghetti.model.Media
+import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.repository.MediaRepositoryImpl
 import com.ukdev.carcadasalborghetti.view.ViewLayer
@@ -16,7 +17,7 @@ class MediaViewModel(
 
     private lateinit var view: ViewLayer
 
-    fun getMedia(mediaType: Media.Type, view: ViewLayer) {
+    fun getMedia(mediaType: MediaType, view: ViewLayer) {
         this.view = view
         repository.getMedia(mediaType, resultCallback = this@MediaViewModel)
     }
