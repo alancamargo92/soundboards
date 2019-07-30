@@ -25,7 +25,7 @@ class MediaViewModel(
     override fun onMediaFound(media: List<Media>) {
         val liveData = MutableLiveData<List<Media>>().apply {
             val sortedData = sort(media)
-            postValue(sortedData)
+            value = sortedData
         }
         view.displayMedia(liveData)
     }

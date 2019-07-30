@@ -1,6 +1,7 @@
 package com.ukdev.carcadasalborghetti.handlers
 
 import android.media.MediaPlayer
+import android.net.Uri
 import com.ukdev.carcadasalborghetti.api.DropboxApi
 import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
 import com.ukdev.carcadasalborghetti.api.responses.StreamLinkResponse
@@ -28,18 +29,19 @@ class AudioHandler(callback: MediaCallback) : MediaHandler(callback) {
                         initialiseMediaPlayer(linkResponse.link)
                     }
                 } else {
-
+                    // TODO
                 }
             }
 
             override fun onFailure(call: Call<StreamLinkResponse>, t: Throwable) {
-
+                // TODO
             }
         })
     }
 
     override fun stop() {
-
+        mediaPlayer?.stop()
+        callback.onStopPlayback()
     }
 
     override fun share(media: Media) {
@@ -47,19 +49,8 @@ class AudioHandler(callback: MediaCallback) : MediaHandler(callback) {
     }
 
     private fun initialiseMediaPlayer(mediaLink: String) {
-        mediaPlayer?.run {
-            release()
-            setOnPreparedListener { mp ->
-                mp.start()
-            }
-            setOnErrorListener { mp, _, _ ->
-                mp.reset()
-                false
-            }
-
-            setDataSource(mediaLink)
-            prepareAsync()
-        }
+        mediaPlayer?.release()
+        mediaPlayer = createMediaPlayer(Uri.parse(mediaLink))
     }
 
 }

@@ -113,7 +113,8 @@ abstract class MediaListFragment(
         media.observe(this, Observer {
             this.media = it
             adapter.setData(it)
-            searchView.setOnQueryTextListener(QueryListener(adapter, it))
+            if (mediaType != MediaType.VIDEO) // TODO: remove after adding videos
+                searchView.setOnQueryTextListener(QueryListener(adapter, it))
             hideProgressBar()
         })
     }

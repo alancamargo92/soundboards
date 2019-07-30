@@ -23,20 +23,7 @@ class AudioHandler(callback: MediaCallback) : MediaHandler(callback), KoinCompon
 
     override fun play(media: Media) {
         mediaPlayer?.release()
-
-        mediaPlayer = MediaPlayer.create(context, media.uri).apply {
-            if (isPlaying) {
-                stop()
-                callback.onStopPlayback()
-                start()
-                callback.onStartPlayback()
-            } else {
-                start()
-                callback.onStartPlayback()
-            }
-
-            setOnCompletionListener { callback.onStopPlayback() }
-        }
+        mediaPlayer = createMediaPlayer(media.uri)
     }
 
     override fun stop() {
