@@ -1,6 +1,5 @@
 package com.ukdev.carcadasalborghetti.handlers
 
-import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.media.MediaPlayer
@@ -14,14 +13,11 @@ import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.Media
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
 class AudioHandler(callback: MediaCallback) : MediaHandler(callback), KoinComponent {
-
-    private val context by inject<Context>()
 
     private var mediaPlayer: MediaPlayer? = null
 
