@@ -1,8 +1,8 @@
 package com.ukdev.carcadasalborghetti.repository
 
 import com.ukdev.carcadasalborghetti.api.DropboxApi
-import com.ukdev.carcadasalborghetti.api.MediaRequest
-import com.ukdev.carcadasalborghetti.api.MediaResponse
+import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
+import com.ukdev.carcadasalborghetti.api.responses.MediaResponse
 import com.ukdev.carcadasalborghetti.model.MediaType
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,8 +24,7 @@ class MediaRepositoryImpl : MediaRepository() {
                     response.body()?.let {
                         resultCallback.onMediaFound(it.entries)
                     }
-                }
-                else {
+                } else {
                     resultCallback.onError()
                 }
             }

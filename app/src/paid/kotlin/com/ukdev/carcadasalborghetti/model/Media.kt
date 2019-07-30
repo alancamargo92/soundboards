@@ -8,4 +8,8 @@ data class Media(
         @Expose @SerializedName("name") val title: String,
         var position: Int,
         var uri: String
-)
+) {
+
+    override fun toString() = title
+
+}
