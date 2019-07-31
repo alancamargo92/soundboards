@@ -33,7 +33,7 @@ open class BaseActivity : AppCompatActivity() {
         configureTabLayout()
         configureViewPager()
 
-        if (preferenceUtils.shouldShowTip() == true)
+        if (preferenceUtils.shouldShowTip())
             showTip()
     }
 
@@ -80,7 +80,8 @@ open class BaseActivity : AppCompatActivity() {
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     view_pager.currentItem = tab.position
                     deviceInteractionListener = pagerAdapter.getItem(tab.position) as DeviceInteractionListener
-                    mediaHandler.stop()
+                    if (mediaHandler.isPlaying())
+                        mediaHandler.stop()
                     mediaHandler = (pagerAdapter.getItem(tab.position) as MediaListFragment).mediaHandler
                 }
 

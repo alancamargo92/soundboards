@@ -58,6 +58,8 @@ class AudioHandler(callback: MediaCallback) : MediaHandler(callback), KoinCompon
         context.startActivity(chooser)
     }
 
+    override fun isPlaying() = mediaPlayer?.isPlaying ?: false
+
     private fun getFile(media: Media): File {
         val baseDir = "${Environment.getExternalStorageDirectory().absolutePath}/tmp_carcadas/"
         val dir = File(baseDir)

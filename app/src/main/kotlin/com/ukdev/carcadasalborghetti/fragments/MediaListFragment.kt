@@ -49,8 +49,7 @@ abstract class MediaListFragment(
     private val viewModel by provideViewModel(MediaViewModel::class)
     private val layoutManager by lazy { GridLayoutManager(requireContext(), itemSpanPortrait) }
 
-    private lateinit var searchView: SearchView
-
+    private var searchView: SearchView? = null
     private var mediaToShare: Media? = null
     private var topPosition = RECYCLER_VIEW_TOP_POSITION
 
@@ -113,8 +112,7 @@ abstract class MediaListFragment(
         media.observe(this, Observer {
             this.media = it
             adapter.setData(it)
-            if (mediaType != MediaType.VIDEO) // TODO: remove after adding videos
-                searchView.setOnQueryTextListener(QueryListener(adapter, it))
+            searchView?.setOnQueryTextListener(QueryListener(adapter, it))
             hideProgressBar()
         })
     }

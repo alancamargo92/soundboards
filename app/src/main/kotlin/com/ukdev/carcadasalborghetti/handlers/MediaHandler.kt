@@ -15,6 +15,7 @@ abstract class MediaHandler(protected val callback: MediaCallback) : KoinCompone
     abstract fun play(media: Media)
     abstract fun stop()
     abstract fun share(media: Media)
+    abstract fun isPlaying(): Boolean
 
     protected fun createMediaPlayer(uri: Uri): MediaPlayer {
         return MediaPlayer.create(context, uri).apply {
