@@ -12,7 +12,7 @@ class AudioViewHolder(itemView: View) : MediaViewHolder(itemView) {
     override fun bindTo(media: Media) {
         txtTitle.text = itemView.context.getString(
                 R.string.title_format, media.position, media.title
-        )
+        ).removeSuffix(".mp3")
     }
 
 }
