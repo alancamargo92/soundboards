@@ -2,15 +2,10 @@ package com.ukdev.carcadasalborghetti.handlers
 
 import com.ukdev.carcadasalborghetti.activities.VideoActivity
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
-import com.ukdev.carcadasalborghetti.model.Media
 
 class VideoHandler(callback: MediaCallback) : PaidMediaHandler(callback) {
 
     override fun stop() {
-
-    }
-
-    override fun share(media: Media) {
 
     }
 

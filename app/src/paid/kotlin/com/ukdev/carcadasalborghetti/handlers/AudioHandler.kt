@@ -3,7 +3,6 @@ package com.ukdev.carcadasalborghetti.handlers
 import android.media.MediaPlayer
 import android.net.Uri
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
-import com.ukdev.carcadasalborghetti.model.Media
 
 class AudioHandler(callback: MediaCallback) : PaidMediaHandler(callback) {
 
@@ -12,10 +11,6 @@ class AudioHandler(callback: MediaCallback) : PaidMediaHandler(callback) {
     override fun stop() {
         mediaPlayer?.stop()
         callback.onStopPlayback()
-    }
-
-    override fun share(media: Media) {
-
     }
 
     override fun isPlaying() = mediaPlayer?.isPlaying ?: false
