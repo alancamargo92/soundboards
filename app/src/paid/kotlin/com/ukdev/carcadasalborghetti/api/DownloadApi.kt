@@ -3,8 +3,8 @@ package com.ukdev.carcadasalborghetti.api
 import com.google.gson.GsonBuilder
 import com.ukdev.carcadasalborghetti.BuildConfig
 import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
-import com.ukdev.carcadasalborghetti.model.Media
 import okhttp3.OkHttpClient
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,9 +13,8 @@ import retrofit2.http.POST
 
 interface DownloadApi {
 
-    // FIXME
     @POST("2/files/download")
-    fun download(@Header("Dropbox-API-Arg") pathJson: MediaRequest): Call<Media>
+    fun download(@Header("Dropbox-API-Arg") pathJson: MediaRequest): Call<ResponseBody>
 
     companion object {
         private val client = OkHttpClient.Builder().addInterceptor { chain ->

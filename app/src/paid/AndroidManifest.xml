@@ -9,6 +9,16 @@
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.ukdev.carcadasalborghetti.activities.MainActivity"/>
         </activity>
+
+        <provider
+            android:authorities="com.ukdev.carcadasalborghetti.paid.provider"
+            android:name="com.ukdev.carcadasalborghetti.provider.PaidFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
     </application>
 
 </manifest>

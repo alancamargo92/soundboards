@@ -1,20 +1,12 @@
 package com.ukdev.carcadasalborghetti.handlers
 
-import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.media.MediaPlayer
-import android.net.Uri
-import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES.N
-import android.os.Environment
-import androidx.core.content.FileProvider
 import com.crashlytics.android.Crashlytics
-import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.Media
+import com.ukdev.carcadasalborghetti.model.MediaType
+import com.ukdev.carcadasalborghetti.utils.FileUtils
 import org.koin.core.KoinComponent
-import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
 
 class AudioHandler(callback: MediaCallback) : MediaHandler(callback), KoinComponent {
@@ -32,58 +24,21 @@ class AudioHandler(callback: MediaCallback) : MediaHandler(callback), KoinCompon
     }
 
     override fun share(media: Media) {
+        val fileUtils = FileUtils(context)
         val file = try {
-            getFile(media)
+            val fileName = "${media.title}.mp3"
+            val byteStream = context.contentResolver.openInputStream(media.uri)
+            fileUtils.getFile(byteStream, fileName)
         } catch (ex: IOException) {
             Crashlytics.log("Error creating file for ${media.title}")
             Crashlytics.logException(ex)
             return
         }
 
-        val uri = if (SDK_INT >= N) {
-            val authority = "${context.packageName}.provider"
-            FileProvider.getUriForFile(context, authority, file)
-        } else {
-            Uri.fromFile(file)
-        }
-
-        val shareIntent = Intent(Intent.ACTION_SEND).setType("audio/*")
-                .putExtra(Intent.EXTRA_STREAM, uri)
-                .putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.subject_share))
-                .putExtra(Intent.EXTRA_TEXT, media.title)
-
-        val chooser = Intent.createChooser(shareIntent,
-                context.getString(R.string.chooser_title_share))
-                .addFlags(FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(chooser)
+        val uri = fileUtils.getUri(file)
+        fileUtils.shareFile(uri, MediaType.AUDIO)
     }
 
     override fun isPlaying() = mediaPlayer?.isPlaying ?: false
-
-    private fun getFile(media: Media): File {
-        val baseDir = "${Environment.getExternalStorageDirectory().absolutePath}/tmp_carcadas/"
-        val dir = File(baseDir)
-        if (!dir.exists())
-            dir.mkdir()
-        val audioFile = File(baseDir, "${media.title}.mp3")
-
-        val buffer = ByteArray(1024 * 500)
-        context.contentResolver.openInputStream(media.uri)?.let { inputStream ->
-            val out = FileOutputStream(audioFile)
-            var content = inputStream.read(buffer)
-
-            while (content != -1) {
-                out.write(buffer, 0, content)
-                content = inputStream.read(buffer)
-            }
-
-            out.run {
-                flush()
-                close()
-            }
-        }
-
-        return audioFile
-    }
 
 }

@@ -7,6 +7,9 @@ import com.ukdev.carcadasalborghetti.api.responses.StreamLinkResponse
 import com.ukdev.carcadasalborghetti.listeners.LinkCallback
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.Media
+import com.ukdev.carcadasalborghetti.model.MediaType
+import com.ukdev.carcadasalborghetti.utils.FileUtils
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,16 +25,22 @@ abstract class PaidMediaHandler(callback: MediaCallback) : MediaHandler(callback
 
     override fun share(media: Media) {
         val request = MediaRequest(media.id)
-        downloadApi.download(request).enqueue(object : Callback<Media> {
-            override fun onResponse(call: Call<Media>, response: Response<Media>) {
+        downloadApi.download(request).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-
+                    response.body()?.byteStream()?.let {
+                        FileUtils(context).run {
+                            val file = getFile(it, media.title)
+                            val uri = getUri(file)
+                            shareFile(uri, MediaType.AUDIO)
+                        }
+                    }
                 } else {
                     onError()
                 }
             }
 
-            override fun onFailure(call: Call<Media>, t: Throwable) {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 onError()
             }
         })
