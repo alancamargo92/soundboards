@@ -21,7 +21,7 @@ abstract class PaidMediaHandler(callback: MediaCallback) : MediaHandler(callback
     }
 
     override fun share(media: Media) {
-        val request = MediaRequest(media.path)
+        val request = MediaRequest(media.id)
         downloadApi.download(request).enqueue(object : Callback<Media> {
             override fun onResponse(call: Call<Media>, response: Response<Media>) {
                 if (response.isSuccessful) {
@@ -38,7 +38,7 @@ abstract class PaidMediaHandler(callback: MediaCallback) : MediaHandler(callback
     }
 
     private fun getMediaLink(media: Media) {
-        val request = MediaRequest(media.path)
+        val request = MediaRequest(media.id)
         api.getStreamLink(request).enqueue(object : Callback<StreamLinkResponse> {
             override fun onResponse(
                     call: Call<StreamLinkResponse>,
