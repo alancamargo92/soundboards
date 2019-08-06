@@ -21,8 +21,9 @@ class MediaRepositoryImpl : MediaRepository() {
         api.listMedia(request).enqueue(object : Callback<MediaResponse> {
             override fun onResponse(call: Call<MediaResponse>, response: Response<MediaResponse>) {
                 if (response.isSuccessful) {
-                    response.body()?.let {
-                        resultCallback.onMediaFound(it.entries)
+                    response.body()?.let { responseBody ->
+                        val media = responseBody.entries.sortedBy { it.title }
+                        resultCallback.onMediaFound(media)
                     }
                 } else {
                     resultCallback.onError()
