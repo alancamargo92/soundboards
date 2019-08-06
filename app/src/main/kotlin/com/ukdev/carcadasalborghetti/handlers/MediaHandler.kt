@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.Media
+import com.ukdev.carcadasalborghetti.model.MediaType
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
@@ -14,7 +15,7 @@ abstract class MediaHandler(protected val callback: MediaCallback) : KoinCompone
 
     abstract fun play(media: Media)
     abstract fun stop()
-    abstract fun share(media: Media)
+    abstract fun share(media: Media, mediaType: MediaType)
     abstract fun isPlaying(): Boolean
 
     protected fun createMediaPlayer(uri: Uri): MediaPlayer {

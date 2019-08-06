@@ -23,7 +23,7 @@ abstract class PaidMediaHandler(callback: MediaCallback) : MediaHandler(callback
         getMediaLink(media)
     }
 
-    override fun share(media: Media) {
+    override fun share(media: Media, mediaType: MediaType) {
         val request = MediaRequest(media.id)
         downloadApi.download(request).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -32,7 +32,7 @@ abstract class PaidMediaHandler(callback: MediaCallback) : MediaHandler(callback
                         FileUtils(context).run {
                             val file = getFile(it, media.title)
                             val uri = getUri(file)
-                            shareFile(uri, MediaType.AUDIO)
+                            shareFile(uri, mediaType)
                         }
                     }
                 } else {

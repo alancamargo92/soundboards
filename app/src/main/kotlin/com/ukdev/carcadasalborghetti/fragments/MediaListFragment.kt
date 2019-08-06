@@ -75,7 +75,9 @@ abstract class MediaListFragment(
         val permissionsGranted = grantResults.all { it == PERMISSION_GRANTED }
 
         if (requestCode == REQUEST_CODE_STORAGE_PERMISSIONS == permissionsGranted)
-            mediaToShare?.let(mediaHandler::share)
+            mediaToShare?.let { media ->
+                mediaHandler.share(media, mediaType)
+            }
     }
 
     override fun onItemClick(media: Media) {
@@ -87,7 +89,7 @@ abstract class MediaListFragment(
             mediaToShare = media
             requestStoragePermissions(REQUEST_CODE_STORAGE_PERMISSIONS)
         } else {
-            mediaHandler.share(media)
+            mediaHandler.share(media, mediaType)
         }
     }
 

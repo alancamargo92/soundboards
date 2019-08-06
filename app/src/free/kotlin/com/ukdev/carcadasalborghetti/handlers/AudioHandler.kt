@@ -23,7 +23,7 @@ class AudioHandler(callback: MediaCallback) : MediaHandler(callback), KoinCompon
         callback.onStopPlayback()
     }
 
-    override fun share(media: Media) {
+    override fun share(media: Media, mediaType: MediaType) {
         val fileUtils = FileUtils(context)
         val file = try {
             val fileName = "${media.title}.mp3"
@@ -36,7 +36,7 @@ class AudioHandler(callback: MediaCallback) : MediaHandler(callback), KoinCompon
         }
 
         val uri = fileUtils.getUri(file)
-        fileUtils.shareFile(uri, MediaType.AUDIO)
+        fileUtils.shareFile(uri, mediaType)
     }
 
     override fun isPlaying() = mediaPlayer?.isPlaying ?: false
