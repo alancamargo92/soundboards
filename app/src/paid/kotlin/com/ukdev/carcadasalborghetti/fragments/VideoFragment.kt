@@ -12,7 +12,7 @@ import com.ukdev.carcadasalborghetti.model.MediaType
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
-class VideoFragment : MediaListFragment(MediaType.VIDEO, ITEM_SPAN_PORTRAIT, ITEM_SPAN_LANDSCAPE) {
+class VideoFragment : MediaListFragment(MediaType.VIDEO) {
 
     override val mediaHandler by inject<VideoHandler>{ parametersOf(this) }
     override val adapter: MediaAdapter = VideoAdapter()
@@ -31,11 +31,6 @@ class VideoFragment : MediaListFragment(MediaType.VIDEO, ITEM_SPAN_PORTRAIT, ITE
 
     override fun onStopPlayback() {
 
-    }
-
-    companion object {
-        private const val ITEM_SPAN_PORTRAIT = 2
-        private const val ITEM_SPAN_LANDSCAPE = 3
     }
 
 }

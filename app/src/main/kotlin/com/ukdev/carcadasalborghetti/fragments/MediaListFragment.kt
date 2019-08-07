@@ -14,11 +14,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.handlers.MediaHandler
-import com.ukdev.carcadasalborghetti.listeners.DeviceInteractionListener
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
@@ -31,13 +29,8 @@ import com.ukdev.carcadasalborghetti.view.ViewLayer
 import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
 import kotlinx.android.synthetic.main.layout_list.*
 
-abstract class MediaListFragment(
-        private val mediaType: MediaType,
-        private val itemSpanPortrait: Int,
-        private val itemSpanLandscape: Int
-) : Fragment(),
+abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         RecyclerViewInteractionListener,
-        DeviceInteractionListener,
         MediaCallback,
         ViewLayer {
 
@@ -47,11 +40,10 @@ abstract class MediaListFragment(
     protected var media: List<Media> = listOf()
 
     private val viewModel by provideViewModel(MediaViewModel::class)
-    private val layoutManager by lazy { GridLayoutManager(requireContext(), itemSpanPortrait) }
+    private val layoutManager by lazy { GridLayoutManager(requireContext(), ITEM_SPAN) }
 
     private var searchView: SearchView? = null
     private var mediaToShare: Media? = null
-    private var topPosition = RECYCLER_VIEW_TOP_POSITION
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -93,23 +85,6 @@ abstract class MediaListFragment(
         }
     }
 
-    override fun onBackPressed(): Boolean {
-        return if (topPosition == RECYCLER_VIEW_TOP_POSITION) {
-            true
-        } else {
-            recycler_view.smoothScrollToPosition(RECYCLER_VIEW_TOP_POSITION)
-            false
-        }
-    }
-
-    override fun onScreenOrientationChangedToPortrait() {
-        layoutManager.spanCount = itemSpanPortrait
-    }
-
-    override fun onScreenOrientationChangedToLandscape() {
-        layoutManager.spanCount = itemSpanLandscape
-    }
-
     override fun displayMedia(media: LiveData<List<Media>>) {
         media.observe(this, Observer {
             this.media = it
@@ -126,12 +101,6 @@ abstract class MediaListFragment(
     private fun configureRecyclerView() {
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter.apply { setListener(this@MediaListFragment) }
-        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                topPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
-            }
-        })
     }
 
     private fun fetchMedia() {
@@ -150,7 +119,7 @@ abstract class MediaListFragment(
     }
 
     companion object {
-        private const val RECYCLER_VIEW_TOP_POSITION = 0
+        private const val ITEM_SPAN = 3
         private const val REQUEST_CODE_STORAGE_PERMISSIONS = 123
     }
 

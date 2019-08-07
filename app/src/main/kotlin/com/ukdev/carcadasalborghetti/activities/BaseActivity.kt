@@ -1,8 +1,5 @@
 package com.ukdev.carcadasalborghetti.activities
 
-import android.content.res.Configuration
-import android.content.res.Configuration.ORIENTATION_LANDSCAPE
-import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
@@ -12,7 +9,6 @@ import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.PagerAdapter
 import com.ukdev.carcadasalborghetti.fragments.MediaListFragment
 import com.ukdev.carcadasalborghetti.handlers.MediaHandler
-import com.ukdev.carcadasalborghetti.listeners.DeviceInteractionListener
 import com.ukdev.carcadasalborghetti.utils.PreferenceUtils
 import com.ukdev.carcadasalborghetti.utils.getAppName
 import com.ukdev.carcadasalborghetti.utils.getAppVersion
@@ -23,7 +19,6 @@ open class BaseActivity : AppCompatActivity() {
 
     private val preferenceUtils by lazy { PreferenceUtils(this) }
 
-    private lateinit var deviceInteractionListener: DeviceInteractionListener
     private lateinit var mediaHandler: MediaHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,18 +33,8 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (deviceInteractionListener.onBackPressed())
-            super.onBackPressed()
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-
-        when (newConfig.orientation) {
-            ORIENTATION_PORTRAIT -> deviceInteractionListener.onScreenOrientationChangedToPortrait()
-            ORIENTATION_LANDSCAPE -> deviceInteractionListener.onScreenOrientationChangedToLandscape()
-            else -> deviceInteractionListener.onScreenOrientationChangedToPortrait()
-        }
+        mediaHandler.stop()
+        super.onBackPressed()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -71,7 +56,6 @@ open class BaseActivity : AppCompatActivity() {
 
     private fun configureViewPager() {
         val pagerAdapter = PagerAdapter(supportFragmentManager, tab_layout.tabCount)
-        deviceInteractionListener = pagerAdapter.getItem(0) as DeviceInteractionListener
         mediaHandler = (pagerAdapter.getItem(0) as MediaListFragment).mediaHandler
         view_pager.run {
             adapter = pagerAdapter
@@ -79,7 +63,6 @@ open class BaseActivity : AppCompatActivity() {
             tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     view_pager.currentItem = tab.position
-                    deviceInteractionListener = pagerAdapter.getItem(tab.position) as DeviceInteractionListener
                     if (mediaHandler.isPlaying())
                         mediaHandler.stop()
                     mediaHandler = (pagerAdapter.getItem(tab.position) as MediaListFragment).mediaHandler
