@@ -3,6 +3,7 @@
 
     <application android:name="com.ukdev.carcadasalborghetti.CarcadasAlborghettiApplication"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name="com.ukdev.carcadasalborghetti.activities.VideoActivity"
             android:parentActivityName="com.ukdev.carcadasalborghetti.activities.MainActivity">
         <meta-data

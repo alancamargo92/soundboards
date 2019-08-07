@@ -12,11 +12,21 @@ import kotlinx.android.synthetic.paid.activity_video.*
 class VideoActivity : AppCompatActivity() {
 
     private val url by lazy { intent.getStringExtra(EXTRA_URL) }
+    private val title by lazy { intent.getStringExtra(EXTRA_TITLE) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video)
+        configureActionBar()
         startPlayback()
+    }
+
+    private fun configureActionBar() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.let { actionBar ->
+            actionBar.setDisplayHomeAsUpEnabled(true)
+            actionBar.title = title.removeSuffix(".mp4")
+        }
     }
 
     private fun startPlayback() {
@@ -28,10 +38,12 @@ class VideoActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val EXTRA_TITLE = "EXTRA_TITLE"
         private const val EXTRA_URL = "EXTRA_URL"
 
-        fun getIntent(context: Context, videoUrl: String): Intent {
+        fun getIntent(context: Context, title: String, videoUrl: String): Intent {
             return Intent(context, VideoActivity::class.java)
+                    .putExtra(EXTRA_TITLE, title)
                     .putExtra(EXTRA_URL, videoUrl)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }

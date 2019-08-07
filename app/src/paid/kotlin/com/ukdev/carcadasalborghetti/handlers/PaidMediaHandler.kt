@@ -55,7 +55,7 @@ abstract class PaidMediaHandler(callback: MediaCallback) : MediaHandler(callback
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let { linkResponse ->
-                        onLinkReady(linkResponse.link)
+                        onLinkReady(linkResponse.link, media.title)
                     }
                 } else {
                     onError()

@@ -15,7 +15,7 @@ class AudioHandler(callback: MediaCallback) : PaidMediaHandler(callback) {
 
     override fun isPlaying() = mediaPlayer?.isPlaying ?: false
 
-    override fun onLinkReady(link: String) {
+    override fun onLinkReady(link: String, title: String) {
         initialiseMediaPlayer(link)
     }
 

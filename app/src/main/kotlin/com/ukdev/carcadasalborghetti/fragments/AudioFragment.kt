@@ -6,11 +6,11 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.AudioAdapter
 import com.ukdev.carcadasalborghetti.handlers.AudioHandler
 import com.ukdev.carcadasalborghetti.model.MediaType
-import kotlinx.android.synthetic.main.fragment_audio.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 
@@ -18,6 +18,8 @@ class AudioFragment : MediaListFragment(MediaType.AUDIO) {
 
     override val mediaHandler by inject<AudioHandler> { parametersOf(this) }
     override val adapter = AudioAdapter()
+
+    private var fab: FloatingActionButton? = null
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -29,15 +31,16 @@ class AudioFragment : MediaListFragment(MediaType.AUDIO) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fab.setOnClickListener { mediaHandler.stop() }
+        fab = requireActivity().findViewById(R.id.fab)
+        fab?.setOnClickListener { mediaHandler.stop() }
     }
 
     override fun onStartPlayback() {
-        fab.visibility = VISIBLE
+        fab?.visibility = VISIBLE
     }
 
     override fun onStopPlayback() {
-        fab.visibility = GONE
+        fab?.visibility = GONE
     }
 
 }
