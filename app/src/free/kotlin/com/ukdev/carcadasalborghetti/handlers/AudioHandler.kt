@@ -6,10 +6,10 @@ import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.FileUtils
-import org.koin.core.KoinComponent
+import com.ukdev.carcadasalborghetti.view.ViewLayer
 import java.io.IOException
 
-class AudioHandler(callback: MediaCallback) : MediaHandler(callback), KoinComponent {
+class AudioHandler(callback: MediaCallback, view: ViewLayer) : MediaHandler(callback, view) {
 
     private var mediaPlayer: MediaPlayer? = null
 

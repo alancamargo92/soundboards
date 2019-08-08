@@ -16,7 +16,7 @@ import org.koin.core.parameter.parametersOf
 
 class AudioFragment : MediaListFragment(MediaType.AUDIO) {
 
-    override val mediaHandler by inject<AudioHandler> { parametersOf(this) }
+    override val mediaHandler by inject<AudioHandler> { parametersOf(this, this) }
     override val adapter = AudioAdapter()
 
     private var fab: FloatingActionButton? = null

@@ -14,7 +14,7 @@ import org.koin.core.parameter.parametersOf
 
 class VideoFragment : MediaListFragment(MediaType.VIDEO) {
 
-    override val mediaHandler by inject<VideoHandler>{ parametersOf(this) }
+    override val mediaHandler by inject<VideoHandler>{ parametersOf(this, this) }
     override val adapter: MediaAdapter = VideoAdapter()
 
     override fun onCreateView(

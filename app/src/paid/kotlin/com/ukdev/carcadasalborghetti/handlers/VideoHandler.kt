@@ -2,8 +2,9 @@ package com.ukdev.carcadasalborghetti.handlers
 
 import com.ukdev.carcadasalborghetti.activities.VideoActivity
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
+import com.ukdev.carcadasalborghetti.view.ViewLayer
 
-class VideoHandler(callback: MediaCallback) : PaidMediaHandler(callback) {
+class VideoHandler(callback: MediaCallback, view: ViewLayer) : PaidMediaHandler(callback, view) {
 
     override fun stop() { }
 

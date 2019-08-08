@@ -9,6 +9,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -95,9 +96,34 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         })
     }
 
-    override fun onError(errorType: ErrorType) {
-        hideProgressBar()
-        // TODO
+    override fun onErrorFetchingData(errorType: ErrorType) {
+        progress_bar.visibility = GONE
+        recycler_view.visibility = GONE
+        group_error.visibility = VISIBLE
+
+        val icon: Int
+        val text: Int
+
+        if (errorType == ErrorType.CONNECTION) {
+            icon = R.drawable.ic_disconnected
+            text = R.string.error_connection
+        } else {
+            icon = R.drawable.ic_error
+            text = R.string.error_unknown
+        }
+
+        img_error.setImageResource(icon)
+        txt_error.setText(text)
+        bt_try_again.setOnClickListener { fetchMedia() }
+    }
+
+    override fun onMediaError(errorType: ErrorType) {
+        val msg = if (errorType == ErrorType.CONNECTION) {
+            R.string.error_media_disconnected
+        } else {
+            R.string.error_media_unknown
+        }
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
     }
 
     private fun configureRecyclerView() {
@@ -106,6 +132,7 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
     }
 
     private fun fetchMedia() {
+        group_error.visibility = GONE
         showProgressBar()
         viewModel.getMedia(mediaType, view = this)
     }

@@ -32,7 +32,7 @@ class MediaViewModel(
     }
 
     override fun onError(errorType: ErrorType) {
-        view.onError(errorType)
+        view.onErrorFetchingData(errorType)
     }
 
     private fun sort(rawList: List<Media>): List<Media> {

@@ -6,10 +6,14 @@ import android.net.Uri
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
+import com.ukdev.carcadasalborghetti.view.ViewLayer
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
-abstract class MediaHandler(protected val callback: MediaCallback) : KoinComponent {
+abstract class MediaHandler(
+        protected val callback: MediaCallback,
+        protected val view: ViewLayer
+) : KoinComponent {
 
     protected val context by inject<Context>()
 

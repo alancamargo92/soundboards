@@ -3,8 +3,9 @@ package com.ukdev.carcadasalborghetti.handlers
 import android.media.MediaPlayer
 import android.net.Uri
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
+import com.ukdev.carcadasalborghetti.view.ViewLayer
 
-class AudioHandler(callback: MediaCallback) : PaidMediaHandler(callback) {
+class AudioHandler(callback: MediaCallback, view: ViewLayer) : PaidMediaHandler(callback, view) {
 
     private var mediaPlayer: MediaPlayer? = null
 

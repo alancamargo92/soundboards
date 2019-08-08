@@ -13,4 +13,9 @@
     <string name="do_not_show_again">Não mostrar de novo</string>
     <string name="audios">Áudios</string>
     <string name="videos">Vídeos</string>
+    <string name="error_connection">Não foi possível carregar as carcadas. Verifique sua conexão.</string>
+    <string name="error_unknown">Não foi possível carregar as carcadas. Fica tranquilo que o desenvolvedor vai ficar sabendo.</string>
+    <string name="try_again">Tentar de novo</string>
+    <string name="error_media_disconnected">Não foi possível reproduzir a mídia. Verifique sua conexão.</string>
+    <string name="error_media_unknown">Não foi possível reproduzir a mídia. Fica tranquilo que o desenvolvedor vai ficar sabendo.</string>
 </resources>
