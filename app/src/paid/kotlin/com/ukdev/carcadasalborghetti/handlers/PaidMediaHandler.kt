@@ -28,6 +28,7 @@ abstract class PaidMediaHandler(
     private val downloadApi by lazy { getService(DownloadApi::class, BuildConfig.BASE_URL_DOWNLOADS) }
 
     override fun play(media: Media) {
+        view.notifyItemClicked()
         getMediaLink(media)
     }
 
@@ -36,6 +37,7 @@ abstract class PaidMediaHandler(
         downloadApi.download(request).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
+                    view.notifyItemReady()
                     response.body()?.byteStream()?.let {
                         FileUtils(context).run {
                             val file = getFile(it, media.title)
@@ -56,6 +58,7 @@ abstract class PaidMediaHandler(
     }
 
     override fun onError(errorType: ErrorType) {
+        view.notifyItemReady()
         view.onMediaError(errorType)
     }
 
@@ -68,6 +71,7 @@ abstract class PaidMediaHandler(
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let { linkResponse ->
+                        view.notifyItemReady()
                         onLinkReady(linkResponse.link, media.title)
                     }
                 } else {

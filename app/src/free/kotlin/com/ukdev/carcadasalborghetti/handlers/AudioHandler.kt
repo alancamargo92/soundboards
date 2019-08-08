@@ -14,6 +14,7 @@ class AudioHandler(callback: MediaCallback, view: ViewLayer) : MediaHandler(call
     private var mediaPlayer: MediaPlayer? = null
 
     override fun play(media: Media) {
+        view.notifyItemReady()
         mediaPlayer?.release()
         mediaPlayer = createMediaPlayer(media.uri)
     }
@@ -25,18 +26,19 @@ class AudioHandler(callback: MediaCallback, view: ViewLayer) : MediaHandler(call
 
     override fun share(media: Media, mediaType: MediaType) {
         val fileUtils = FileUtils(context)
-        val file = try {
+        try {
             val fileName = "${media.title}.mp3"
             val byteStream = context.contentResolver.openInputStream(media.uri)
-            fileUtils.getFile(byteStream, fileName)
+            val file = fileUtils.getFile(byteStream, fileName)
+            val uri = fileUtils.getUri(file)
+            fileUtils.shareFile(uri, mediaType)
         } catch (ex: IOException) {
             Crashlytics.log("Error creating file for ${media.title}")
             Crashlytics.logException(ex)
             return
+        } finally {
+            view.notifyItemReady()
         }
-
-        val uri = fileUtils.getUri(file)
-        fileUtils.shareFile(uri, mediaType)
     }
 
     override fun isPlaying() = mediaPlayer?.isPlaying ?: false

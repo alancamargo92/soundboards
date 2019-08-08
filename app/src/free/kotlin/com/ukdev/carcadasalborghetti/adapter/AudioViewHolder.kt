@@ -8,13 +8,11 @@ import com.ukdev.carcadasalborghetti.model.Media
 class AudioViewHolder(itemView: View) : MediaViewHolder(itemView) {
 
     private val txtTitle = itemView.findViewById<TextView>(R.id.txt_title)
-    private val txtLength = itemView.findViewById<TextView>(R.id.txt_length)
 
     override fun bindTo(media: Media) {
         txtTitle.text = itemView.context.getString(
                 R.string.title_format, media.position, media.title
         )
-        txtLength.text = media.length
     }
 
 }

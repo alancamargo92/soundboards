@@ -6,6 +6,8 @@ import com.ukdev.carcadasalborghetti.model.Media
 
 abstract class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
 
+    private lateinit var holder: MediaViewHolder
+
     private var data: List<Media>? = null
     private var listener: RecyclerViewInteractionListener? = null
 
@@ -25,16 +27,34 @@ abstract class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
         }
     }
 
+    fun notifyItemClicked() {
+        holder.notifyItemClicked()
+    }
+
+    fun notifyItemReady() {
+        holder.notifyItemReady()
+    }
+
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
         data?.get(position)?.let { media ->
-            holder.bindTo(media)
-            holder.itemView.setOnClickListener { listener?.onItemClick(media) }
-            holder.itemView.setOnLongClickListener {
-                listener?.run {
-                    onItemLongClick(media)
-                    return@setOnLongClickListener true
+            holder.run {
+                bindTo(media)
+
+                itemView.setOnClickListener {
+                    this@MediaAdapter.holder = holder
+                    notifyItemClicked()
+                    listener?.onItemClick(media)
                 }
-                false
+
+                itemView.setOnLongClickListener {
+                    this@MediaAdapter.holder = holder
+                    listener?.run {
+                        notifyItemClicked()
+                        onItemLongClick(media)
+                        return@setOnLongClickListener true
+                    }
+                    false
+                }
             }
         }
     }

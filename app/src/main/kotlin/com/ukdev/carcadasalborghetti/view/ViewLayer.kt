@@ -8,4 +8,6 @@ interface ViewLayer {
     fun displayMedia(media: LiveData<List<Media>>)
     fun onErrorFetchingData(errorType: ErrorType)
     fun onMediaError(errorType: ErrorType)
+    fun notifyItemClicked()
+    fun notifyItemReady()
 }

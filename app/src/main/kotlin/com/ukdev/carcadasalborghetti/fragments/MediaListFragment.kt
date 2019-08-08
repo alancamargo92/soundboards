@@ -126,6 +126,14 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
     }
 
+    override fun notifyItemClicked() {
+        adapter.notifyItemClicked()
+    }
+
+    override fun notifyItemReady() {
+        adapter.notifyItemReady()
+    }
+
     private fun configureRecyclerView() {
         recycler_view.layoutManager = layoutManager
         recycler_view.adapter = adapter.apply { setListener(this@MediaListFragment) }
