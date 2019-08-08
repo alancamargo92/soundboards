@@ -3,6 +3,7 @@ package com.ukdev.carcadasalborghetti.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.ukdev.carcadasalborghetti.model.ErrorType
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.repository.MediaRepository
@@ -30,8 +31,8 @@ class MediaViewModel(
         view.displayMedia(liveData)
     }
 
-    override fun onError() {
-        view.onError()
+    override fun onError(errorType: ErrorType) {
+        view.onError(errorType)
     }
 
     private fun sort(rawList: List<Media>): List<Media> {

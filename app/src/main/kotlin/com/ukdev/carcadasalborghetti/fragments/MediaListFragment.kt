@@ -20,6 +20,7 @@ import com.ukdev.carcadasalborghetti.handlers.MediaHandler
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
+import com.ukdev.carcadasalborghetti.model.ErrorType
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.hasStoragePermissions
@@ -94,7 +95,8 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         })
     }
 
-    override fun onError() {
+    override fun onError(errorType: ErrorType) {
+        hideProgressBar()
         // TODO
     }
 

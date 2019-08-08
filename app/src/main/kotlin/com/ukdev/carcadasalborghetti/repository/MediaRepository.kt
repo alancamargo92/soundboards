@@ -1,6 +1,7 @@
 package com.ukdev.carcadasalborghetti.repository
 
 import android.content.Context
+import com.ukdev.carcadasalborghetti.model.ErrorType
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import org.koin.core.KoinComponent
@@ -14,7 +15,7 @@ abstract class MediaRepository : KoinComponent {
 
     interface ResultCallback {
         fun onMediaFound(media: List<Media>)
-        fun onError()
+        fun onError(errorType: ErrorType)
     }
 
 }

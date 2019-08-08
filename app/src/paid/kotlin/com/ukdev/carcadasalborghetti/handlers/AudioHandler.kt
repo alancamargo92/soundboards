@@ -19,10 +19,6 @@ class AudioHandler(callback: MediaCallback) : PaidMediaHandler(callback) {
         initialiseMediaPlayer(link)
     }
 
-    override fun onError() {
-
-    }
-
     private fun initialiseMediaPlayer(mediaLink: String) {
         mediaPlayer?.release()
         mediaPlayer = createMediaPlayer(Uri.parse(mediaLink))

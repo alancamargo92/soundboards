@@ -48,6 +48,10 @@ abstract class PaidMediaHandler(callback: MediaCallback) : MediaHandler(callback
         })
     }
 
+    override fun onError() {
+        // TODO
+    }
+
     private fun getMediaLink(media: Media) {
         val request = MediaRequest(media.id)
         api.getStreamLink(request).enqueue(object : Callback<StreamLinkResponse> {

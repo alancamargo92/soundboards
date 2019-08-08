@@ -14,8 +14,4 @@ class VideoHandler(callback: MediaCallback) : PaidMediaHandler(callback) {
         context.startActivity(intent)
     }
 
-    override fun onError() {
-
-    }
-
 }
