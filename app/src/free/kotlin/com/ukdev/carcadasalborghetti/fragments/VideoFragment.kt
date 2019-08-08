@@ -1,10 +1,11 @@
 package com.ukdev.carcadasalborghetti.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.VideoAdapter
 import com.ukdev.carcadasalborghetti.handlers.VideoHandler
@@ -39,8 +40,9 @@ class VideoFragment : MediaListFragment(MediaType.VIDEO) {
     override fun onStopPlayback() { }
 
     private fun showPaidVersion() {
-        // TODO
-        Toast.makeText(requireContext(), "Test", Toast.LENGTH_SHORT).show()
+        val url = "https://play.google.com/store/apps/details?id=com.ukdev.carcadasalborghetti.paid"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
     }
 
 }
