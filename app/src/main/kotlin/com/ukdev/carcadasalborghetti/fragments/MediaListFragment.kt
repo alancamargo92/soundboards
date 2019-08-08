@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.handlers.MediaHandler
@@ -42,7 +43,9 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
     protected var media: List<Media> = listOf()
 
     private val viewModel by provideViewModel(MediaViewModel::class)
-    private val layoutManager by lazy { GridLayoutManager(requireContext(), ITEM_SPAN) }
+    private val layoutManager by lazy {
+        GridLayoutManager(requireContext(), ITEM_SPAN, RecyclerView.VERTICAL, false)
+    }
 
     private var searchView: SearchView? = null
     private var mediaToShare: Media? = null
@@ -136,6 +139,7 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
 
     private fun configureRecyclerView() {
         recycler_view.layoutManager = layoutManager
+        recycler_view.setHasFixedSize(true)
         recycler_view.adapter = adapter.apply { setListener(this@MediaListFragment) }
     }
 
