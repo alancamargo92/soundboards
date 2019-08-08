@@ -16,12 +16,11 @@ class MediaRepositoryImpl : MediaRepository() {
     private fun fetchData(): ArrayList<Media> {
         val res = context.resources
         val titles = res.getStringArray(R.array.titles)
-        val lengths = res.getStringArray(R.array.lengths)
         val audioUris = getAudioUris(res)
 
         return arrayListOf<Media>().apply {
             titles.forEachIndexed { index, title ->
-                add(Media(title, lengths[index], index + 1, audioUris[index]))
+                add(Media(title, index + 1, audioUris[index]))
             }
         }
     }
