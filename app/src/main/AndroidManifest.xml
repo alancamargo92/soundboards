@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.ukdev.carcadasalborghetti">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.ukdev.carcadasalborghetti">
 
     <!-- region Permissions -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -10,7 +10,6 @@
     <!-- endregion -->
 
     <application
-        android:name=".CarcadasAlborghettiApplication"
         android:allowBackup="true"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
@@ -21,28 +20,16 @@
 
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
+        <activity android:name=".activities.BaseActivity"
+            android:screenOrientation="portrait"/>
+
         <activity android:name=".activities.MainActivity"
-            android:configChanges="orientation">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <provider
-            android:authorities="com.ukdev.carcadasalborghetti.provider"
-            android:name=".provider.CustomFileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/provider_paths"/>
-        </provider>
-
-
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/admob_app_id"/>
 
     </application>
 

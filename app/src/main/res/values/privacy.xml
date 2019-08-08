@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="privacy_terms_title">Termos de privacidade</string>
+    <string name="privacy_terms">
+        Eu não rastreio nenhum dado seu nem do seu celular. A única informação que o aplicativo
+        salva é sobre quais áudios e vídeos os usuários mais reproduzem e compartilham para eu poder
+        saber o que as pessoas mais gostam, nada além disso.
+        O serviço utilizado para obter essas informações é o Google Firebase. Se algum dia qualquer
+        informação além das que eu citei for extraída a responsabilidade é do Google e não minha.
+    </string>
+</resources>
