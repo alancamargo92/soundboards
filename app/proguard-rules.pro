@@ -1,7 +1,6 @@
 # Model classes
+-keep class com.ukdev.carcadasalborghetti.api.** { *; }
 -keep class com.ukdev.carcadasalborghetti.model.** { *; }
--keep class com.ukdev.carcadasalborghetti.paid.model.** { *; }
--keep class com.ukdev.carcadasalborghetti.paid.api.** { *; }
 
 # Retrofit
 -dontwarn retrofit.**
