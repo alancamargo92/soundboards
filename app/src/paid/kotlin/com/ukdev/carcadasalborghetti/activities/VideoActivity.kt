@@ -25,7 +25,7 @@ class VideoActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.let { actionBar ->
             actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = title.removeSuffix(".mp4")
+            actionBar.title = title?.removeSuffix(".mp4")
         }
     }
 
