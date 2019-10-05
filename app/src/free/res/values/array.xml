@@ -103,6 +103,7 @@
         <item>Oh Rio de Janeiro do meu saco</item>
         <item>Sua vagabunda capivara</item>
         <item>A senhora ta transformando seu filho num marginal</item>
+        <item>Gazela do satanás</item>
     </string-array>
 
     <!-- Audios -->
@@ -207,6 +208,7 @@
         <item>@raw/aud98</item>
         <item>@raw/aud99</item>
         <item>@raw/aud100</item>
+        <item>@raw/aud101</item>
     </array>
 
 </resources>
