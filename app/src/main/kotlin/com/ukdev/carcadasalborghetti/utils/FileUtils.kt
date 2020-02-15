@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.N
-import android.os.Environment
 import androidx.core.content.FileProvider
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.model.MediaType
@@ -16,25 +15,20 @@ import java.io.InputStream
 class FileUtils(private val context: Context) {
 
     fun getFile(byteStream: InputStream?, fileName: String): File {
-        val baseDir = "${Environment.getExternalStorageDirectory().absolutePath}/tmp_carcadas/"
-        val dir = File(baseDir)
-        if (!dir.exists())
-            dir.mkdir()
-        val file = File(baseDir, fileName)
+        val dir = context.filesDir
+        val file = File(dir, fileName)
 
-        val buffer = ByteArray(1024 * 500)
         byteStream?.let { inputStream ->
-            val out = FileOutputStream(file)
-            var content = inputStream.read(buffer)
+            FileOutputStream(file).use { out ->
+                val buffer = ByteArray(inputStream.available())
+                var content = inputStream.read(buffer)
 
-            while (content != -1) {
-                out.write(buffer, 0, content)
-                content = inputStream.read(buffer)
-            }
+                while (content != -1) {
+                    out.write(buffer, 0, content)
+                    content = inputStream.read(buffer)
+                }
 
-            out.run {
-                flush()
-                close()
+                out.flush()
             }
         }
 

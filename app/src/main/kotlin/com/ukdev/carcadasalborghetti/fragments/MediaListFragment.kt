@@ -1,8 +1,5 @@
 package com.ukdev.carcadasalborghetti.fragments
 
-import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES.M
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -25,9 +22,7 @@ import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.ErrorType
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
-import com.ukdev.carcadasalborghetti.utils.hasStoragePermissions
 import com.ukdev.carcadasalborghetti.utils.provideViewModel
-import com.ukdev.carcadasalborghetti.utils.requestStoragePermissions
 import com.ukdev.carcadasalborghetti.view.ViewLayer
 import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
 import kotlinx.android.synthetic.main.layout_list.*
@@ -43,12 +38,12 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
     protected var media: List<Media> = listOf()
 
     private val viewModel by provideViewModel(MediaViewModel::class)
+
     private val layoutManager by lazy {
         GridLayoutManager(requireContext(), ITEM_SPAN, RecyclerView.VERTICAL, false)
     }
 
     private var searchView: SearchView? = null
-    private var mediaToShare: Media? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,29 +60,12 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<out String>,
-                                            grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        val permissionsGranted = grantResults.all { it == PERMISSION_GRANTED }
-
-        if (requestCode == REQUEST_CODE_STORAGE_PERMISSIONS == permissionsGranted)
-            mediaToShare?.let { media ->
-                mediaHandler.share(media, mediaType)
-            }
-    }
-
     override fun onItemClick(media: Media) {
         mediaHandler.play(media)
     }
 
     override fun onItemLongClick(media: Media) {
-        if (SDK_INT >= M && !hasStoragePermissions()) {
-            mediaToShare = media
-            requestStoragePermissions(REQUEST_CODE_STORAGE_PERMISSIONS)
-        } else {
-            mediaHandler.share(media, mediaType)
-        }
+        mediaHandler.share(media, mediaType)
     }
 
     override fun displayMedia(media: LiveData<List<Media>>) {
@@ -161,7 +139,6 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
 
     companion object {
         private const val ITEM_SPAN = 3
-        private const val REQUEST_CODE_STORAGE_PERMISSIONS = 123
     }
 
 }
