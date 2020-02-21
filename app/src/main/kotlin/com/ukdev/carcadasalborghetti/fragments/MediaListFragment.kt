@@ -77,7 +77,7 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         hideProgressBar()
     }
 
-    override fun onErrorFetchingData(errorType: ErrorType) {
+    private fun onErrorFetchingData(errorType: ErrorType) {
         progress_bar.visibility = GONE
         recycler_view.visibility = GONE
         group_error.visibility = VISIBLE
