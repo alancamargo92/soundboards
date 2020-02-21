@@ -60,7 +60,11 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
     }
 
     override fun onItemClick(media: Media) {
-        mediaHandler.play(media)
+        lifecycleScope.launch {
+            adapter.notifyItemClicked()
+            mediaHandler.play(media)
+            adapter.notifyItemReady()
+        }
     }
 
     override fun onItemLongClick(media: Media) {
@@ -101,10 +105,6 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
             R.string.error_media_unknown
         }
         Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
-    }
-
-    override fun notifyItemClicked() {
-        adapter.notifyItemClicked()
     }
 
     override fun notifyItemReady() {

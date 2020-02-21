@@ -5,15 +5,17 @@ import com.ukdev.carcadasalborghetti.BuildConfig
 import com.ukdev.carcadasalborghetti.api.DownloadApi
 import com.ukdev.carcadasalborghetti.api.DropboxApi
 import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
-import com.ukdev.carcadasalborghetti.api.responses.StreamLinkResponse
 import com.ukdev.carcadasalborghetti.listeners.LinkCallback
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.ErrorType
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
+import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import com.ukdev.carcadasalborghetti.utils.FileUtils
 import com.ukdev.carcadasalborghetti.utils.getService
 import com.ukdev.carcadasalborghetti.view.ViewLayer
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,15 +23,22 @@ import retrofit2.Response
 
 abstract class PaidMediaHandler(
         callback: MediaCallback,
-        view: ViewLayer
-) : MediaHandler(callback, view), LinkCallback {
+        view: ViewLayer,
+        crashReportManager: CrashReportManager
+) : MediaHandler(callback, view, crashReportManager), LinkCallback {
 
     private val api by lazy { getService(DropboxApi::class, BuildConfig.BASE_URL) }
     private val downloadApi by lazy { getService(DownloadApi::class, BuildConfig.BASE_URL_DOWNLOADS) }
 
-    override fun play(media: Media) {
-        view.notifyItemClicked()
-        getMediaLink(media)
+    protected abstract fun playMedia(link: String, title: String)
+
+    override suspend fun play(media: Media) {
+        try {
+            val link = getMediaLink(media.id)
+            playMedia(link, media.title)
+        } catch (t: Throwable) {
+            crashReportManager.logException(t)
+        }
     }
 
     override fun share(media: Media, mediaType: MediaType) {
@@ -62,28 +71,9 @@ abstract class PaidMediaHandler(
         view.onMediaError(errorType)
     }
 
-    private fun getMediaLink(media: Media) {
-        val request = MediaRequest(media.id)
-        api.getStreamLink(request).enqueue(object : Callback<StreamLinkResponse> {
-            override fun onResponse(
-                    call: Call<StreamLinkResponse>,
-                    response: Response<StreamLinkResponse>
-            ) {
-                if (response.isSuccessful) {
-                    response.body()?.let { linkResponse ->
-                        view.notifyItemReady()
-                        onLinkReady(linkResponse.link, media.title)
-                    }
-                } else {
-                    Crashlytics.log("Error getting stream link for ${media.title}")
-                    onError(ErrorType.UNKNOWN)
-                }
-            }
-
-            override fun onFailure(call: Call<StreamLinkResponse>, t: Throwable) {
-                onError(ErrorType.CONNECTION)
-            }
-        })
+    private suspend fun getMediaLink(mediaId: String) = withContext(Dispatchers.IO) {
+        val request = MediaRequest(mediaId)
+        api.getStreamLink(request).link
     }
 
 }

@@ -5,18 +5,26 @@ import com.crashlytics.android.Crashlytics
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
+import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import com.ukdev.carcadasalborghetti.utils.FileUtils
 import com.ukdev.carcadasalborghetti.view.ViewLayer
 import java.io.IOException
 
-class AudioHandler(callback: MediaCallback, view: ViewLayer) : MediaHandler(callback, view) {
+class AudioHandler(
+        callback: MediaCallback,
+        view: ViewLayer,
+        crashReportManager: CrashReportManager
+) : MediaHandler(callback, view, crashReportManager) {
 
     private var mediaPlayer: MediaPlayer? = null
 
-    override fun play(media: Media) {
-        view.notifyItemReady()
-        mediaPlayer?.release()
-        mediaPlayer = createMediaPlayer(media.uri)
+    override suspend fun play(media: Media) {
+        try {
+            mediaPlayer?.release()
+            mediaPlayer = createMediaPlayer(media.uri)
+        } catch (t: Throwable) {
+            crashReportManager.logException(t)
+        }
     }
 
     override fun stop() {

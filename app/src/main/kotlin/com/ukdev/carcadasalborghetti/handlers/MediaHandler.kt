@@ -6,18 +6,20 @@ import android.net.Uri
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
+import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import com.ukdev.carcadasalborghetti.view.ViewLayer
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 
 abstract class MediaHandler(
         protected val callback: MediaCallback,
-        protected val view: ViewLayer
+        protected val view: ViewLayer,
+        protected val crashReportManager: CrashReportManager
 ) : KoinComponent {
 
     protected val context by inject<Context>()
 
-    abstract fun play(media: Media)
+    abstract suspend fun play(media: Media)
     abstract fun stop()
     abstract fun share(media: Media, mediaType: MediaType)
     abstract fun isPlaying(): Boolean
