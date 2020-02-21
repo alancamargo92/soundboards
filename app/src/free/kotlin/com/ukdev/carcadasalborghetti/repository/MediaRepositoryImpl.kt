@@ -4,23 +4,35 @@ import android.content.Context
 import android.content.res.Resources
 import android.net.Uri
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.model.Media
-import com.ukdev.carcadasalborghetti.model.MediaType
+import com.ukdev.carcadasalborghetti.model.*
+import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class MediaRepositoryImpl(private val context: Context) : MediaRepository() {
+class MediaRepositoryImpl(
+        crashReportManager: CrashReportManager,
+        private val context: Context
+) : MediaRepository(crashReportManager) {
 
-    override suspend fun getMedia(mediaType: MediaType): List<Media> = withContext(Dispatchers.IO) {
-        val res = context.resources
-        val titles = res.getStringArray(R.array.titles)
-        val audioUris = getAudioUris(res)
+    override suspend fun getMedia(mediaType: MediaType): Result<List<Media>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val res = context.resources
+                val titles = res.getStringArray(R.array.titles)
+                val audioUris = getAudioUris(res)
 
-        arrayListOf<Media>().apply {
-            titles.forEachIndexed { index, title ->
-                add(Media(title, index + 1, audioUris[index]))
+                val media = arrayListOf<Media>().apply {
+                    titles.forEachIndexed { index, title ->
+                        add(Media(title, index + 1, audioUris[index]))
+                    }
+                }.sort()
+
+                Success(media)
+            } catch (t: Throwable) {
+                crashReportManager.logException(t)
+                GenericError
             }
-        }.sort()
+        }
     }
 
     private fun getAudioUris(resources: Resources): Array<Uri> {

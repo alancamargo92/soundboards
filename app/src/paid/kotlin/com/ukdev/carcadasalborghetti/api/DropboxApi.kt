@@ -10,7 +10,7 @@ import retrofit2.http.POST
 interface DropboxApi {
 
     @POST("2/files/list_folder")
-    fun listMedia(@Body body: MediaRequest): Call<MediaResponse>
+    suspend fun listMedia(@Body body: MediaRequest): MediaResponse
 
     @POST("2/files/get_temporary_link")
     fun getStreamLink(@Body body: MediaRequest): Call<StreamLinkResponse>
