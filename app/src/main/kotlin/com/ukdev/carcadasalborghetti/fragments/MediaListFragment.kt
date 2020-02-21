@@ -6,7 +6,6 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -21,7 +20,6 @@ import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.*
-import com.ukdev.carcadasalborghetti.view.ViewLayer
 import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
 import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.coroutines.launch
@@ -30,10 +28,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 abstract class MediaListFragment(
         @LayoutRes layoutId: Int,
         private val mediaType: MediaType
-) : Fragment(layoutId),
-        RecyclerViewInteractionListener,
-        MediaCallback,
-        ViewLayer {
+) : Fragment(layoutId), RecyclerViewInteractionListener, MediaCallback {
 
     abstract val mediaHandler: MediaHandler
     abstract val adapter: MediaAdapter
@@ -74,6 +69,7 @@ abstract class MediaListFragment(
     override fun onItemLongClick(media: Media) {
         lifecycleScope.launch {
             mediaHandler.share(media, mediaType)
+            adapter.notifyItemReady()
         }
     }
 
@@ -102,19 +98,6 @@ abstract class MediaListFragment(
         img_error.setImageResource(icon)
         txt_error.setText(text)
         bt_try_again.setOnClickListener { fetchMedia() }
-    }
-
-    override fun onMediaError(errorType: ErrorType) {
-        val msg = if (errorType == ErrorType.CONNECTION) {
-            R.string.error_media_disconnected
-        } else {
-            R.string.error_media_unknown
-        }
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
-    }
-
-    override fun notifyItemReady() {
-        adapter.notifyItemReady()
     }
 
     private fun configureRecyclerView() {

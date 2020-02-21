@@ -7,12 +7,10 @@ import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
-import com.ukdev.carcadasalborghetti.view.ViewLayer
 
 abstract class MediaHandler(
         protected val context: Context,
         protected val callback: MediaCallback,
-        protected val view: ViewLayer,
         protected val crashReportManager: CrashReportManager
 ) {
 

@@ -7,16 +7,14 @@ import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import com.ukdev.carcadasalborghetti.utils.FileSharingHelper
-import com.ukdev.carcadasalborghetti.view.ViewLayer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class AudioHandler(
         context: Context,
         callback: MediaCallback,
-        view: ViewLayer,
         crashReportManager: CrashReportManager
-) : MediaHandler(context, callback, view, crashReportManager) {
+) : MediaHandler(context, callback, crashReportManager) {
 
     private var mediaPlayer: MediaPlayer? = null
 
@@ -44,8 +42,6 @@ class AudioHandler(
             }
         } catch (t: Throwable) {
             crashReportManager.logException(t)
-        } finally {
-            view.notifyItemReady()
         }
     }
 

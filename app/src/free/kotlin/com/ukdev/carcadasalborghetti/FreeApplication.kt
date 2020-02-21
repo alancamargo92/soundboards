@@ -7,7 +7,6 @@ import com.ukdev.carcadasalborghetti.handlers.VideoHandler
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.repository.MediaRepositoryImpl
-import com.ukdev.carcadasalborghetti.view.ViewLayer
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -19,12 +18,12 @@ class FreeApplication : CarcadasAlborghettiApplication() {
     }
 
     private val handlers = module {
-        factory { (callback: MediaCallback, view: ViewLayer) ->
-            AudioHandler(androidContext(), callback, view, get())
+        factory { (callback: MediaCallback) ->
+            AudioHandler(androidContext(), callback, get())
         }
 
-        factory { (callback: MediaCallback, view: ViewLayer) ->
-            VideoHandler(androidContext(), callback, view, get())
+        factory { (callback: MediaCallback) ->
+            VideoHandler(androidContext(), callback, get())
         }
     }
 
