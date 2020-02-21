@@ -1,7 +1,6 @@
 package com.ukdev.carcadasalborghetti.handlers
 
 import android.content.Context
-import com.crashlytics.android.Crashlytics
 import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
 import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
@@ -54,7 +53,7 @@ abstract class PaidMediaHandler(
                         }
                     }
                 } else {
-                    Crashlytics.log("Error playing")
+                    crashReportManager.log("Error playing")
                     onError(ErrorType.UNKNOWN)
                 }
             }
