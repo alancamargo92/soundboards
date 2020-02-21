@@ -8,16 +8,13 @@ import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import com.ukdev.carcadasalborghetti.view.ViewLayer
-import org.koin.core.KoinComponent
-import org.koin.core.inject
 
 abstract class MediaHandler(
+        protected val context: Context,
         protected val callback: MediaCallback,
         protected val view: ViewLayer,
         protected val crashReportManager: CrashReportManager
-) : KoinComponent {
-
-    protected val context by inject<Context>()
+) {
 
     abstract suspend fun play(media: Media)
     abstract fun stop()

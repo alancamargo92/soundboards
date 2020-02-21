@@ -1,5 +1,6 @@
 package com.ukdev.carcadasalborghetti.handlers
 
+import android.content.Context
 import android.media.MediaPlayer
 import com.crashlytics.android.Crashlytics
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
@@ -11,10 +12,11 @@ import com.ukdev.carcadasalborghetti.view.ViewLayer
 import java.io.IOException
 
 class AudioHandler(
+        context: Context,
         callback: MediaCallback,
         view: ViewLayer,
         crashReportManager: CrashReportManager
-) : MediaHandler(callback, view, crashReportManager) {
+) : MediaHandler(context, callback, view, crashReportManager) {
 
     private var mediaPlayer: MediaPlayer? = null
 

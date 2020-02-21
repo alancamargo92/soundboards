@@ -7,6 +7,7 @@ import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import com.ukdev.carcadasalborghetti.utils.CrashReportManagerImpl
 import com.ukdev.carcadasalborghetti.view.ViewLayer
 import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
+import org.koin.android.ext.koin.androidContext
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -17,8 +18,13 @@ private fun viewModel() = module {
 }
 
 private fun handlers() = module {
-    factory { (callback: MediaCallback, view: ViewLayer) -> AudioHandler(callback, view, get()) }
-    factory { (callback: MediaCallback, view: ViewLayer) -> VideoHandler(callback, view, get()) }
+    factory { (callback: MediaCallback, view: ViewLayer) ->
+        AudioHandler(androidContext(), callback, view, get())
+    }
+
+    factory { (callback: MediaCallback, view: ViewLayer) ->
+        VideoHandler(androidContext(), callback, view, get())
+    }
 }
 
 private fun helpers() = module {

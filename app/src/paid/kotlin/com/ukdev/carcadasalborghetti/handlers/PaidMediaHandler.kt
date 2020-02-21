@@ -1,5 +1,6 @@
 package com.ukdev.carcadasalborghetti.handlers
 
+import android.content.Context
 import com.crashlytics.android.Crashlytics
 import com.ukdev.carcadasalborghetti.BuildConfig
 import com.ukdev.carcadasalborghetti.api.DownloadApi
@@ -22,10 +23,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 abstract class PaidMediaHandler(
+        context: Context,
         callback: MediaCallback,
         view: ViewLayer,
         crashReportManager: CrashReportManager
-) : MediaHandler(callback, view, crashReportManager), LinkCallback {
+) : MediaHandler(context, callback, view, crashReportManager), LinkCallback {
 
     private val api by lazy { getService(DropboxApi::class, BuildConfig.BASE_URL) }
     private val downloadApi by lazy { getService(DownloadApi::class, BuildConfig.BASE_URL_DOWNLOADS) }
