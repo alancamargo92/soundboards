@@ -2,12 +2,11 @@ package com.ukdev.carcadasalborghetti.handlers
 
 import android.content.Context
 import android.media.MediaPlayer
-import com.crashlytics.android.Crashlytics
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
-import com.ukdev.carcadasalborghetti.utils.FileUtils
+import com.ukdev.carcadasalborghetti.utils.FileSharingHelper
 import com.ukdev.carcadasalborghetti.view.ViewLayer
 import java.io.IOException
 
@@ -35,17 +34,14 @@ class AudioHandler(
     }
 
     override fun share(media: Media, mediaType: MediaType) {
-        val fileUtils = FileUtils(context)
         try {
             val fileName = "${media.title}.mp3"
             val byteStream = context.contentResolver.openInputStream(media.uri)
-            val file = fileUtils.getFile(byteStream, fileName)
-            val uri = fileUtils.getUri(file)
-            fileUtils.shareFile(uri, mediaType)
+            FileSharingHelper(context).shareFile(byteStream, fileName, mediaType)
         } catch (ex: IOException) {
-            Crashlytics.log("Error creating file for ${media.title}")
-            Crashlytics.logException(ex)
-            return
+            with(crashReportManager) {
+                logException(ex)
+            }
         } finally {
             view.notifyItemReady()
         }

@@ -8,7 +8,7 @@ import com.ukdev.carcadasalborghetti.model.ErrorType
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
-import com.ukdev.carcadasalborghetti.utils.FileUtils
+import com.ukdev.carcadasalborghetti.utils.FileSharingHelper
 import com.ukdev.carcadasalborghetti.view.ViewLayer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -46,14 +46,9 @@ abstract class PaidMediaHandler(
                 if (response.isSuccessful) {
                     view.notifyItemReady()
                     response.body()?.byteStream()?.use { byteStream ->
-                        with(FileUtils(context)) {
-                            val file = getFile(byteStream, media.title)
-                            val uri = getUri(file)
-                            shareFile(uri, mediaType)
-                        }
+                        FileSharingHelper(context).shareFile(byteStream, media.title, mediaType)
                     }
                 } else {
-                    crashReportManager.log("Error playing")
                     onError(ErrorType.UNKNOWN)
                 }
             }
