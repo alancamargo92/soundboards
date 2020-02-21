@@ -73,7 +73,6 @@ abstract class MediaListFragment(
 
     override fun onItemLongClick(media: Media) {
         lifecycleScope.launch {
-
             mediaHandler.share(media, mediaType)
         }
     }
