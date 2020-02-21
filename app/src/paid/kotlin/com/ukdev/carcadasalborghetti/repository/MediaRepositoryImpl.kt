@@ -1,7 +1,7 @@
 package com.ukdev.carcadasalborghetti.repository
 
 import com.ukdev.carcadasalborghetti.api.DropboxApi
-import com.ukdev.carcadasalborghetti.api.provider.ApiProvider
+import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
 import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
 import com.ukdev.carcadasalborghetti.model.*
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager

@@ -1,6 +1,5 @@
-package com.ukdev.carcadasalborghetti.api.provider
+package com.ukdev.carcadasalborghetti.api.tools
 
-import com.ukdev.carcadasalborghetti.BuildConfig
 import com.ukdev.carcadasalborghetti.api.DownloadApi
 import com.ukdev.carcadasalborghetti.api.DropboxApi
 import okhttp3.OkHttpClient
@@ -9,7 +8,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 
-class ApiProvider(private val dropboxBaseUrl: String, private val downloadBaseUrl: String) {
+class ApiProvider(
+        private val dropboxBaseUrl: String,
+        private val downloadBaseUrl: String,
+        private val tokenHelper: TokenHelper
+) {
 
     fun getDropboxService(): DropboxApi {
         return getService(DropboxApi::class, dropboxBaseUrl)
@@ -31,7 +34,7 @@ class ApiProvider(private val dropboxBaseUrl: String, private val downloadBaseUr
     private fun buildClient(): OkHttpClient {
         return OkHttpClient.Builder().addInterceptor { chain ->
             val newRequest = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer ${BuildConfig.ACCESS_TOKEN}")
+                    .addHeader("Authorization", "Bearer ${tokenHelper.getAccessToken()}")
                     .build()
             chain.proceed(newRequest)
         }.readTimeout(TIMEOUT, TimeUnit.SECONDS)

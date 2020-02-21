@@ -2,7 +2,7 @@ package com.ukdev.carcadasalborghetti.handlers
 
 import android.content.Context
 import com.crashlytics.android.Crashlytics
-import com.ukdev.carcadasalborghetti.api.provider.ApiProvider
+import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
 import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.ErrorType

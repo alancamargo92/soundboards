@@ -2,7 +2,7 @@ package com.ukdev.carcadasalborghetti.handlers
 
 import android.content.Context
 import com.ukdev.carcadasalborghetti.activities.VideoActivity
-import com.ukdev.carcadasalborghetti.api.provider.ApiProvider
+import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import com.ukdev.carcadasalborghetti.view.ViewLayer
