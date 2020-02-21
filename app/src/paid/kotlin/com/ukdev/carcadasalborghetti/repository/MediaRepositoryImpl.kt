@@ -6,17 +6,20 @@ import com.ukdev.carcadasalborghetti.api.DropboxApi
 import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
 import com.ukdev.carcadasalborghetti.api.responses.MediaResponse
 import com.ukdev.carcadasalborghetti.model.ErrorType
+import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.getService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MediaRepositoryImpl : MediaRepository {
+class MediaRepositoryImpl : MediaRepository() {
 
     private val api by lazy { getService(DropboxApi::class, BuildConfig.BASE_URL) }
 
-    override fun getMedia(mediaType: MediaType, resultCallback: MediaRepository.ResultCallback) {
+    override suspend fun getMedia(mediaType: MediaType): List<Media> = withContext(Dispatchers.IO) {
         val dir = if (mediaType == MediaType.AUDIO)
             DropboxApi.DIR_AUDIO
         else
@@ -26,7 +29,7 @@ class MediaRepositoryImpl : MediaRepository {
             override fun onResponse(call: Call<MediaResponse>, response: Response<MediaResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.let { responseBody ->
-                        val media = responseBody.entries.sortedBy { it.title }
+                        val media = responseBody.entries.sort()
                         resultCallback.onMediaFound(media)
                     }
                 } else {

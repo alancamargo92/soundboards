@@ -6,24 +6,21 @@ import android.net.Uri
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class MediaRepositoryImpl(private val context: Context) : MediaRepository {
+class MediaRepositoryImpl(private val context: Context) : MediaRepository() {
 
-    override fun getMedia(mediaType: MediaType, resultCallback: MediaRepository.ResultCallback) {
-        val media = fetchData()
-        resultCallback.onMediaFound(media)
-    }
-
-    private fun fetchData(): ArrayList<Media> {
+    override suspend fun getMedia(mediaType: MediaType): List<Media> = withContext(Dispatchers.IO) {
         val res = context.resources
         val titles = res.getStringArray(R.array.titles)
         val audioUris = getAudioUris(res)
 
-        return arrayListOf<Media>().apply {
+        arrayListOf<Media>().apply {
             titles.forEachIndexed { index, title ->
                 add(Media(title, index + 1, audioUris[index]))
             }
-        }
+        }.sort()
     }
 
     private fun getAudioUris(resources: Resources): Array<Uri> {

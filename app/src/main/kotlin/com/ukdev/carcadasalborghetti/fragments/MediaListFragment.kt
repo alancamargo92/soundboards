@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
@@ -22,15 +23,14 @@ import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.ErrorType
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
-import com.ukdev.carcadasalborghetti.view.ViewLayer
 import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
 import kotlinx.android.synthetic.main.layout_list.*
+import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
 abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         RecyclerViewInteractionListener,
-        MediaCallback,
-        ViewLayer {
+        MediaCallback {
 
     abstract val mediaHandler: MediaHandler
     abstract val adapter: MediaAdapter
@@ -68,7 +68,7 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         mediaHandler.share(media, mediaType)
     }
 
-    override fun displayMedia(media: LiveData<List<Media>>) {
+    private fun displayMedia(media: LiveData<List<Media>>) {
         media.observe(this, Observer {
             this.media = it
             adapter.setData(it)
@@ -77,7 +77,7 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         })
     }
 
-    override fun onErrorFetchingData(errorType: ErrorType) {
+    private fun onErrorFetchingData(errorType: ErrorType) {
         progress_bar.visibility = GONE
         recycler_view.visibility = GONE
         group_error.visibility = VISIBLE
@@ -98,7 +98,7 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         bt_try_again.setOnClickListener { fetchMedia() }
     }
 
-    override fun onMediaError(errorType: ErrorType) {
+    private fun onMediaError(errorType: ErrorType) {
         val msg = if (errorType == ErrorType.CONNECTION) {
             R.string.error_media_disconnected
         } else {
@@ -107,11 +107,11 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         Toast.makeText(requireContext(), msg, Toast.LENGTH_LONG).show()
     }
 
-    override fun notifyItemClicked() {
+    private fun notifyItemClicked() {
         adapter.notifyItemClicked()
     }
 
-    override fun notifyItemReady() {
+    private fun notifyItemReady() {
         adapter.notifyItemReady()
     }
 
@@ -124,7 +124,10 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
     private fun fetchMedia() {
         group_error.visibility = GONE
         showProgressBar()
-        viewModel.getMedia(mediaType, view = this)
+        lifecycleScope.launch {
+            val media = viewModel.getMedia(mediaType)
+            displayMedia(media)
+        }
     }
 
     private fun showProgressBar() {
