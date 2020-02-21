@@ -2,18 +2,14 @@ package com.ukdev.carcadasalborghetti.handlers
 
 import android.content.Context
 import com.crashlytics.android.Crashlytics
-import com.ukdev.carcadasalborghetti.BuildConfig
-import com.ukdev.carcadasalborghetti.api.DownloadApi
-import com.ukdev.carcadasalborghetti.api.DropboxApi
+import com.ukdev.carcadasalborghetti.api.provider.ApiProvider
 import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
-import com.ukdev.carcadasalborghetti.listeners.LinkCallback
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.ErrorType
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import com.ukdev.carcadasalborghetti.utils.FileUtils
-import com.ukdev.carcadasalborghetti.utils.getService
 import com.ukdev.carcadasalborghetti.view.ViewLayer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -26,11 +22,12 @@ abstract class PaidMediaHandler(
         context: Context,
         callback: MediaCallback,
         view: ViewLayer,
-        crashReportManager: CrashReportManager
-) : MediaHandler(context, callback, view, crashReportManager), LinkCallback {
+        crashReportManager: CrashReportManager,
+        private val apiProvider: ApiProvider
+) : MediaHandler(context, callback, view, crashReportManager) {
 
-    private val api by lazy { getService(DropboxApi::class, BuildConfig.BASE_URL) }
-    private val downloadApi by lazy { getService(DownloadApi::class, BuildConfig.BASE_URL_DOWNLOADS) }
+    private val api by lazy { apiProvider.getDropboxService() }
+    private val downloadApi by lazy { apiProvider.getDownloadService() }
 
     protected abstract fun playMedia(link: String, title: String)
 
@@ -68,14 +65,16 @@ abstract class PaidMediaHandler(
         })
     }
 
-    override fun onError(errorType: ErrorType) {
-        view.notifyItemReady()
-        view.onMediaError(errorType)
-    }
-
     private suspend fun getMediaLink(mediaId: String) = withContext(Dispatchers.IO) {
         val request = MediaRequest(mediaId)
         api.getStreamLink(request).link
+    }
+
+    private fun onError(errorType: ErrorType) {
+        with(view) {
+            notifyItemReady()
+            onMediaError(errorType)
+        }
     }
 
 }

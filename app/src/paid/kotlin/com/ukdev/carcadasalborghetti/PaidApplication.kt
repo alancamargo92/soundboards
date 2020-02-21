@@ -1,20 +1,40 @@
 package com.ukdev.carcadasalborghetti
 
+import com.ukdev.carcadasalborghetti.api.provider.ApiProvider
 import com.ukdev.carcadasalborghetti.di.modules
+import com.ukdev.carcadasalborghetti.handlers.AudioHandler
+import com.ukdev.carcadasalborghetti.handlers.VideoHandler
+import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.repository.MediaRepositoryImpl
+import com.ukdev.carcadasalborghetti.view.ViewLayer
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 @Suppress("unused")
 class PaidApplication : CarcadasAlborghettiApplication() {
 
     private val data = module {
-        factory<MediaRepository> { MediaRepositoryImpl(get()) }
+        factory { ApiProvider(BuildConfig.BASE_URL, BuildConfig.BASE_URL_DOWNLOADS) }
+        factory<MediaRepository> { MediaRepositoryImpl(get(), get()) }
+    }
+
+    private val handlers = module {
+        factory { (callback: MediaCallback, view: ViewLayer) ->
+            AudioHandler(androidContext(), callback, view, get(), get())
+        }
+
+        factory { (callback: MediaCallback, view: ViewLayer) ->
+            VideoHandler(androidContext(), callback, view, get(), get())
+        }
     }
 
     override fun onCreate() {
         super.onCreate()
-        modules.add(data)
+        with(modules) {
+            add(data)
+            add(handlers)
+        }
         startDependencyInjection()
     }
 
