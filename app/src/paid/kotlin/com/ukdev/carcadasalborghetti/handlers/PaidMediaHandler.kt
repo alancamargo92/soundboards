@@ -12,10 +12,8 @@ import com.ukdev.carcadasalborghetti.utils.FileSharingHelper
 import com.ukdev.carcadasalborghetti.view.ViewLayer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import retrofit2.HttpException
+import java.io.IOException
 
 abstract class PaidMediaHandler(
         context: Context,
@@ -39,24 +37,24 @@ abstract class PaidMediaHandler(
         }
     }
 
-    override fun share(media: Media, mediaType: MediaType) {
+    override suspend fun share(media: Media, mediaType: MediaType) {
         val request = MediaRequest(media.id)
-        downloadApi.download(request).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.isSuccessful) {
-                    view.notifyItemReady()
-                    response.body()?.byteStream()?.use { byteStream ->
-                        FileSharingHelper(context).shareFile(byteStream, media.title, mediaType)
-                    }
-                } else {
-                    onError(ErrorType.UNKNOWN)
+
+        try {
+            withContext(Dispatchers.IO) {
+                withContext(Dispatchers.IO) {
+                    downloadApi.download(request).byteStream()
+                }.use { byteStream ->
+                    FileSharingHelper(context).shareFile(byteStream, media.title, mediaType)
                 }
             }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                onError(ErrorType.CONNECTION)
-            }
-        })
+        } catch (httpException: HttpException) {
+            crashReportManager.logException(httpException)
+            onError(ErrorType.UNKNOWN)
+        } catch (ioException: IOException) {
+            crashReportManager.logException(ioException)
+            onError(ErrorType.CONNECTION)
+        }
     }
 
     private suspend fun getMediaLink(mediaId: String): String {

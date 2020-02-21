@@ -31,7 +31,10 @@ class FreeApplication : CarcadasAlborghettiApplication() {
     override fun onCreate() {
         super.onCreate()
         MobileAds.initialize(this)
-        modules.add(data)
+        with(modules) {
+            add(data)
+            add(handlers)
+        }
         startDependencyInjection()
     }
 

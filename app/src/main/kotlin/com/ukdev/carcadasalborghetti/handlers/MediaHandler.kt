@@ -17,8 +17,8 @@ abstract class MediaHandler(
 ) {
 
     abstract suspend fun play(media: Media)
+    abstract suspend fun share(media: Media, mediaType: MediaType)
     abstract fun stop()
-    abstract fun share(media: Media, mediaType: MediaType)
     abstract fun isPlaying(): Boolean
 
     protected fun createMediaPlayer(uri: Uri): MediaPlayer {

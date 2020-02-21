@@ -15,6 +15,6 @@ class VideoHandler(
 ) : MediaHandler(context, callback, view, crashReportManager) {
     override suspend fun play(media: Media) { }
     override fun stop() { }
-    override fun share(media: Media, mediaType: MediaType) { }
+    override suspend fun share(media: Media, mediaType: MediaType) { }
     override fun isPlaying() = false
 }

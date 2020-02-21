@@ -8,13 +8,15 @@ import android.os.Build.VERSION_CODES.N
 import androidx.core.content.FileProvider
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.model.MediaType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 
 class FileSharingHelper(private val context: Context) {
 
-    fun shareFile(byteStream: InputStream?, fileName: String, mediaType: MediaType) {
+    suspend fun shareFile(byteStream: InputStream?, fileName: String, mediaType: MediaType) {
         val uri = getFileUri(byteStream, fileName)
         val type = if (mediaType == MediaType.AUDIO) "audio/*" else "video/*"
         val shareIntent = Intent(Intent.ACTION_SEND).setType(type)
@@ -24,10 +26,13 @@ class FileSharingHelper(private val context: Context) {
         val chooser = Intent.createChooser(shareIntent,
                 context.getString(R.string.chooser_title_share))
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(chooser)
+
+        withContext(Dispatchers.Main) {
+            context.startActivity(chooser)
+        }
     }
 
-    private fun getFileUri(byteStream: InputStream?, fileName: String): Uri {
+    private suspend fun getFileUri(byteStream: InputStream?, fileName: String): Uri {
         val file = getFile(byteStream, fileName)
 
         return if (SDK_INT >= N) {
@@ -38,21 +43,23 @@ class FileSharingHelper(private val context: Context) {
         }
     }
 
-    private fun getFile(byteStream: InputStream?, fileName: String): File {
+    private suspend fun getFile(byteStream: InputStream?, fileName: String): File {
         val dir = context.filesDir
         val file = File(dir, fileName)
 
-        byteStream?.let { inputStream ->
-            FileOutputStream(file).use { out ->
-                val buffer = ByteArray(inputStream.available())
-                var content = inputStream.read(buffer)
+        withContext(Dispatchers.IO) {
+            byteStream?.let { inputStream ->
+                FileOutputStream(file).use { out ->
+                    val buffer = ByteArray(inputStream.available())
+                    var content = inputStream.read(buffer)
 
-                while (content != -1) {
-                    out.write(buffer, 0, content)
-                    content = inputStream.read(buffer)
+                    while (content != -1) {
+                        out.write(buffer, 0, content)
+                        content = inputStream.read(buffer)
+                    }
+
+                    out.flush()
                 }
-
-                out.flush()
             }
         }
 

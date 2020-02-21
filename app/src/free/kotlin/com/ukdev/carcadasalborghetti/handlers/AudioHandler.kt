@@ -8,7 +8,8 @@ import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import com.ukdev.carcadasalborghetti.utils.FileSharingHelper
 import com.ukdev.carcadasalborghetti.view.ViewLayer
-import java.io.IOException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class AudioHandler(
         context: Context,
@@ -33,15 +34,16 @@ class AudioHandler(
         callback.onStopPlayback()
     }
 
-    override fun share(media: Media, mediaType: MediaType) {
+    override suspend fun share(media: Media, mediaType: MediaType) {
         try {
             val fileName = "${media.title}.mp3"
-            val byteStream = context.contentResolver.openInputStream(media.uri)
-            FileSharingHelper(context).shareFile(byteStream, fileName, mediaType)
-        } catch (ex: IOException) {
-            with(crashReportManager) {
-                logException(ex)
+            withContext(Dispatchers.IO) {
+                context.contentResolver.openInputStream(media.uri)
+            }.use { byteStream ->
+                FileSharingHelper(context).shareFile(byteStream, fileName, mediaType)
             }
+        } catch (t: Throwable) {
+            crashReportManager.logException(t)
         } finally {
             view.notifyItemReady()
         }
