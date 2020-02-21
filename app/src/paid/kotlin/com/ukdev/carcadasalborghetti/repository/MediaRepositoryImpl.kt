@@ -34,6 +34,9 @@ class MediaRepositoryImpl(
             } catch (ioException: IOException) {
                 crashReportManager.logException(ioException)
                 NetworkError
+            } catch (t: Throwable) {
+                crashReportManager.logException(t)
+                GenericError
             }
         }
     }
