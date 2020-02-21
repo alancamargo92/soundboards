@@ -22,10 +22,10 @@ import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.ErrorType
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
-import com.ukdev.carcadasalborghetti.utils.provideViewModel
 import com.ukdev.carcadasalborghetti.view.ViewLayer
 import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
 import kotlinx.android.synthetic.main.layout_list.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         RecyclerViewInteractionListener,
@@ -37,7 +37,7 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
 
     protected var media: List<Media> = listOf()
 
-    private val viewModel by provideViewModel(MediaViewModel::class)
+    private val viewModel by viewModel<MediaViewModel>()
 
     private val layoutManager by lazy {
         GridLayoutManager(requireContext(), ITEM_SPAN, RecyclerView.VERTICAL, false)

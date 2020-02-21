@@ -1,14 +1,15 @@
 package com.ukdev.carcadasalborghetti.repository
 
+import android.content.Context
 import android.content.res.Resources
 import android.net.Uri
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 
-class MediaRepositoryImpl : MediaRepository() {
+class MediaRepositoryImpl(private val context: Context) : MediaRepository {
 
-    override fun getMedia(mediaType: MediaType, resultCallback: ResultCallback) {
+    override fun getMedia(mediaType: MediaType, resultCallback: MediaRepository.ResultCallback) {
         val media = fetchData()
         resultCallback.onMediaFound(media)
     }

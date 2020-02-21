@@ -1,20 +1,16 @@
 package com.ukdev.carcadasalborghetti.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.ukdev.carcadasalborghetti.model.ErrorType
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.repository.MediaRepository
-import com.ukdev.carcadasalborghetti.repository.MediaRepositoryImpl
 import com.ukdev.carcadasalborghetti.view.ViewLayer
 
 class MediaViewModel(
-        application: Application
-) : AndroidViewModel(application), MediaRepository.ResultCallback {
-
-    private val repository: MediaRepository = MediaRepositoryImpl()
+        private val repository: MediaRepository
+) : ViewModel(), MediaRepository.ResultCallback {
 
     private lateinit var view: ViewLayer
 

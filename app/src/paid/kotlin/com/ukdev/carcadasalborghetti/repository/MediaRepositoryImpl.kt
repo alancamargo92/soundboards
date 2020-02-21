@@ -12,11 +12,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MediaRepositoryImpl : MediaRepository() {
+class MediaRepositoryImpl : MediaRepository {
 
     private val api by lazy { getService(DropboxApi::class, BuildConfig.BASE_URL) }
 
-    override fun getMedia(mediaType: MediaType, resultCallback: ResultCallback) {
+    override fun getMedia(mediaType: MediaType, resultCallback: MediaRepository.ResultCallback) {
         val dir = if (mediaType == MediaType.AUDIO)
             DropboxApi.DIR_AUDIO
         else
