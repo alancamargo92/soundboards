@@ -6,7 +6,6 @@ import com.ukdev.carcadasalborghetti.api.tools.TokenHelperImpl
 import com.ukdev.carcadasalborghetti.di.modules
 import com.ukdev.carcadasalborghetti.handlers.AudioHandler
 import com.ukdev.carcadasalborghetti.handlers.VideoHandler
-import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.repository.MediaRepositoryImpl
 import org.koin.android.ext.koin.androidContext
@@ -21,13 +20,9 @@ class PaidApplication : CarcadasAlborghettiApplication() {
     }
 
     private val handlers = module {
-        factory { (callback: MediaCallback) ->
-            AudioHandler(androidContext(), callback, get(), get())
-        }
+        factory { AudioHandler(androidContext(), get(), get()) }
 
-        factory { (callback: MediaCallback) ->
-            VideoHandler(androidContext(), callback, get(), get())
-        }
+        factory { VideoHandler(androidContext(), get(), get()) }
     }
 
     private val api = module {

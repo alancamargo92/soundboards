@@ -2,7 +2,6 @@ package com.ukdev.carcadasalborghetti.handlers
 
 import android.content.Context
 import android.media.MediaPlayer
-import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
@@ -12,9 +11,8 @@ import kotlinx.coroutines.withContext
 
 class AudioHandler(
         context: Context,
-        callback: MediaCallback,
         crashReportManager: CrashReportManager
-) : MediaHandler(context, callback, crashReportManager) {
+) : MediaHandler(context, crashReportManager) {
 
     private var mediaPlayer: MediaPlayer? = null
 
@@ -29,7 +27,7 @@ class AudioHandler(
 
     override fun stop() {
         mediaPlayer?.stop()
-        callback.onStopPlayback()
+        isPlayingLiveData.value = false
     }
 
     override suspend fun share(media: Media, mediaType: MediaType) {
@@ -45,6 +43,8 @@ class AudioHandler(
         }
     }
 
-    override fun isPlaying() = mediaPlayer?.isPlaying ?: false
+    override fun isPlaying() = isPlayingLiveData.apply {
+        value = mediaPlayer?.isPlaying ?: false
+    }
 
 }

@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.handlers.MediaHandler
-import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.*
@@ -28,7 +27,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 abstract class MediaListFragment(
         @LayoutRes layoutId: Int,
         private val mediaType: MediaType
-) : Fragment(layoutId), RecyclerViewInteractionListener, MediaCallback {
+) : Fragment(layoutId), RecyclerViewInteractionListener {
 
     abstract val mediaHandler: MediaHandler
     abstract val adapter: MediaAdapter
@@ -48,6 +47,7 @@ abstract class MediaListFragment(
         configureRecyclerView()
         fetchMedia()
         setHasOptionsMenu(true)
+        observePlaybackState()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -63,6 +63,7 @@ abstract class MediaListFragment(
             adapter.notifyItemClicked()
             mediaHandler.play(media)
             adapter.notifyItemReady()
+            onPlaybackStarted()
         }
     }
 
@@ -71,6 +72,33 @@ abstract class MediaListFragment(
             mediaHandler.share(media, mediaType)
             adapter.notifyItemReady()
         }
+    }
+
+    abstract fun onPlaybackStarted()
+
+    abstract fun onPlaybackStopped()
+
+    private fun fetchMedia() {
+        group_error.visibility = GONE
+        showProgressBar()
+        lifecycleScope.launch {
+            viewModel.getMedia(mediaType).observe(this@MediaListFragment, Observer { result ->
+                when (result) {
+                    is Success<List<Media>> -> displayMedia(result.body)
+                    is GenericError -> onErrorFetchingData(ErrorType.UNKNOWN)
+                    is NetworkError -> onErrorFetchingData(ErrorType.CONNECTION)
+                }
+            })
+        }
+    }
+
+    private fun observePlaybackState() {
+        mediaHandler.isPlaying().observe(this, Observer { isPlaying ->
+            if (isPlaying)
+                onPlaybackStarted()
+            else
+                onPlaybackStopped()
+        })
     }
 
     private fun displayMedia(media: List<Media>) {
@@ -104,20 +132,6 @@ abstract class MediaListFragment(
         recycler_view.layoutManager = layoutManager
         recycler_view.setHasFixedSize(true)
         recycler_view.adapter = adapter.apply { setListener(this@MediaListFragment) }
-    }
-
-    private fun fetchMedia() {
-        group_error.visibility = GONE
-        showProgressBar()
-        lifecycleScope.launch {
-            viewModel.getMedia(mediaType).observe(this@MediaListFragment, Observer { result ->
-                when (result) {
-                    is Success<List<Media>> -> displayMedia(result.body)
-                    is GenericError -> onErrorFetchingData(ErrorType.UNKNOWN)
-                    is NetworkError -> onErrorFetchingData(ErrorType.CONNECTION)
-                }
-            })
-        }
     }
 
     private fun showProgressBar() {

@@ -4,7 +4,6 @@ import com.google.android.gms.ads.MobileAds
 import com.ukdev.carcadasalborghetti.di.modules
 import com.ukdev.carcadasalborghetti.handlers.AudioHandler
 import com.ukdev.carcadasalborghetti.handlers.VideoHandler
-import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.repository.MediaRepositoryImpl
 import org.koin.android.ext.koin.androidContext
@@ -18,13 +17,9 @@ class FreeApplication : CarcadasAlborghettiApplication() {
     }
 
     private val handlers = module {
-        factory { (callback: MediaCallback) ->
-            AudioHandler(androidContext(), callback, get())
-        }
+        factory { AudioHandler(androidContext(), get()) }
 
-        factory { (callback: MediaCallback) ->
-            VideoHandler(androidContext(), callback, get())
-        }
+        factory { VideoHandler(androidContext(), get()) }
     }
 
     override fun onCreate() {
