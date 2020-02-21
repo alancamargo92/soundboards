@@ -9,7 +9,6 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -106,10 +105,6 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
 
     override fun notifyItemClicked() {
         adapter.notifyItemClicked()
-    }
-
-    override fun displayMedia(media: LiveData<List<Media>>) {
-
     }
 
     override fun notifyItemReady() {

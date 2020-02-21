@@ -3,6 +3,7 @@ package com.ukdev.carcadasalborghetti.adapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Media
+import java.util.*
 
 abstract class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
 
@@ -21,8 +22,8 @@ abstract class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
     }
 
     fun filter(media: List<Media>, searchTerm: String?) {
-        searchTerm?.toLowerCase()?.let { query ->
-            data = media.filter { it.title.toLowerCase().contains(query) }
+        searchTerm?.toLowerCase(Locale.getDefault())?.let { query ->
+            data = media.filter { it.title.toLowerCase(Locale.getDefault()).contains(query) }
             notifyDataSetChanged()
         }
     }
