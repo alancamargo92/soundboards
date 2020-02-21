@@ -45,9 +45,9 @@ abstract class PaidMediaHandler(
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     view.notifyItemReady()
-                    response.body()?.byteStream()?.use {
+                    response.body()?.byteStream()?.use { byteStream ->
                         with(FileUtils(context)) {
-                            val file = getFile(it, media.title)
+                            val file = getFile(byteStream, media.title)
                             val uri = getUri(file)
                             shareFile(uri, mediaType)
                         }
