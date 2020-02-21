@@ -46,7 +46,7 @@ abstract class PaidMediaHandler(
                 if (response.isSuccessful) {
                     view.notifyItemReady()
                     response.body()?.byteStream()?.use {
-                        FileUtils(context).run {
+                        with(FileUtils(context)) {
                             val file = getFile(it, media.title)
                             val uri = getUri(file)
                             shareFile(uri, mediaType)
@@ -64,9 +64,11 @@ abstract class PaidMediaHandler(
         })
     }
 
-    private suspend fun getMediaLink(mediaId: String) = withContext(Dispatchers.IO) {
+    private suspend fun getMediaLink(mediaId: String): String {
         val request = MediaRequest(mediaId)
-        api.getStreamLink(request).link
+        return withContext(Dispatchers.IO) {
+            api.getStreamLink(request).link
+        }
     }
 
     private fun onError(errorType: ErrorType) {
