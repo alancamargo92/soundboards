@@ -2,8 +2,8 @@ package com.ukdev.carcadasalborghetti.handlers
 
 import android.content.Context
 import com.crashlytics.android.Crashlytics
-import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
 import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
+import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
 import com.ukdev.carcadasalborghetti.listeners.MediaCallback
 import com.ukdev.carcadasalborghetti.model.ErrorType
 import com.ukdev.carcadasalborghetti.model.Media
@@ -46,7 +46,7 @@ abstract class PaidMediaHandler(
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     view.notifyItemReady()
-                    response.body()?.byteStream()?.let {
+                    response.body()?.byteStream()?.use {
                         FileUtils(context).run {
                             val file = getFile(it, media.title)
                             val uri = getUri(file)
