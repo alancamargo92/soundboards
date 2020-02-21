@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.google.android.material.tabs.TabLayout
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.PagerAdapter
@@ -63,10 +62,7 @@ open class BaseActivity : AppCompatActivity(R.layout.activity_main) {
             tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     view_pager.currentItem = tab.position
-                    mediaHandler.isPlaying().observe(this@BaseActivity, Observer { isPlaying ->
-                        if (isPlaying)
-                            mediaHandler.stop()
-                    })
+                    mediaHandler.stop()
                     mediaHandler = (pagerAdapter.getItem(tab.position) as MediaListFragment).mediaHandler
                 }
 
