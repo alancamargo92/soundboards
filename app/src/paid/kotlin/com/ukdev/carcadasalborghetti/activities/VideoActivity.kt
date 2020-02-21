@@ -9,14 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ukdev.carcadasalborghetti.R
 import kotlinx.android.synthetic.paid.activity_video.*
 
-class VideoActivity : AppCompatActivity() {
+class VideoActivity : AppCompatActivity(R.layout.activity_video) {
 
     private val url by lazy { intent.getStringExtra(EXTRA_URL) }
     private val title by lazy { intent.getStringExtra(EXTRA_TITLE) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_video)
         configureActionBar()
         startPlayback()
     }

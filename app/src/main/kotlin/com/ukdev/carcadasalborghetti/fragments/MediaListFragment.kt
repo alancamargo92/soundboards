@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -26,7 +27,10 @@ import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
-abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
+abstract class MediaListFragment(
+        @LayoutRes layoutId: Int,
+        private val mediaType: MediaType
+) : Fragment(layoutId),
         RecyclerViewInteractionListener,
         MediaCallback,
         ViewLayer {
