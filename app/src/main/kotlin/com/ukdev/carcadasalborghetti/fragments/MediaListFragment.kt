@@ -33,8 +33,6 @@ abstract class MediaListFragment(
     abstract val mediaHandler: MediaHandler
     abstract val adapter: MediaAdapter
 
-    protected var media: List<Media> = listOf()
-
     private val viewModel by viewModel<MediaViewModel>()
 
     private val layoutManager by lazy {
@@ -53,9 +51,7 @@ abstract class MediaListFragment(
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
-        menu.run {
-            searchView = findItem(R.id.item_search)?.actionView as SearchView
-        }
+        searchView = menu.findItem(R.id.item_search)?.actionView as SearchView
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -79,6 +75,12 @@ abstract class MediaListFragment(
 
     abstract fun onPlaybackStopped()
 
+    private fun configureRecyclerView() {
+        recycler_view.layoutManager = layoutManager
+        recycler_view.setHasFixedSize(true)
+        recycler_view.adapter = adapter.apply { setListener(this@MediaListFragment) }
+    }
+
     private fun fetchMedia() {
         group_error.hide()
         showProgressBar()
@@ -86,8 +88,8 @@ abstract class MediaListFragment(
             viewModel.getMedia(mediaType).observe(this@MediaListFragment, Observer { result ->
                 when (result) {
                     is Success<List<Media>> -> displayMedia(result.body)
-                    is GenericError -> onErrorFetchingData(ErrorType.UNKNOWN)
-                    is NetworkError -> onErrorFetchingData(ErrorType.CONNECTION)
+                    is GenericError -> showError(ErrorType.UNKNOWN)
+                    is NetworkError -> showError(ErrorType.CONNECTION)
                 }
             })
         }
@@ -102,6 +104,11 @@ abstract class MediaListFragment(
         })
     }
 
+    private fun showProgressBar() {
+        recycler_view.hide()
+        progress_bar.show()
+    }
+
     private fun displayMedia(media: List<Media>) {
         if (group_error.isVisible())
             group_error.hide()
@@ -111,7 +118,7 @@ abstract class MediaListFragment(
         hideProgressBar()
     }
 
-    private fun onErrorFetchingData(errorType: ErrorType) {
+    private fun showError(errorType: ErrorType) {
         progress_bar.hide()
         recycler_view.hide()
         group_error.show()
@@ -132,24 +139,13 @@ abstract class MediaListFragment(
         bt_try_again.setOnClickListener { fetchMedia() }
     }
 
-    private fun configureRecyclerView() {
-        recycler_view.layoutManager = layoutManager
-        recycler_view.setHasFixedSize(true)
-        recycler_view.adapter = adapter.apply { setListener(this@MediaListFragment) }
-    }
-
-    private fun showProgressBar() {
-        recycler_view.hide()
-        progress_bar.show()
-    }
-
     private fun hideProgressBar() {
         progress_bar.hide()
         recycler_view.show()
     }
 
-    companion object {
-        private const val ITEM_SPAN = 3
+    private companion object {
+        const val ITEM_SPAN = 3
     }
 
 }
