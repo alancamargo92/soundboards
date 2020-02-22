@@ -23,7 +23,7 @@ class MediaRepositoryImpl(
 
                 val media = arrayListOf<Media>().apply {
                     titles.forEachIndexed { index, title ->
-                        add(Media(title, index + 1, audioUris[index]))
+                        add(Media(title, audioUris[index]))
                     }
                 }.sort()
 
