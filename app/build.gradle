@@ -65,6 +65,9 @@ android {
         main.java.srcDirs = ['src/main/kotlin']
         free.java.srcDirs = ['src/free/kotlin']
         paid.java.srcDirs = ['src/paid/kotlin']
+        test.java.srcDirs = ['src/test/kotlin']
+        testFree.java.srcDirs = ['src/testFree/kotlin']
+        testPaid.java.srcDirs = ['src/testPaid/kotlin']
     }
 
     compileOptions {
@@ -99,6 +102,9 @@ dependencies {
     paidImplementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     paidImplementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     paidImplementation 'com.google.code.gson:gson:2.8.6'
+
+    testImplementation 'junit:junit:4.13'
+    testImplementation 'io.mockk:mockk:1.9.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
