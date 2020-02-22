@@ -2,6 +2,7 @@ package com.ukdev.carcadasalborghetti.api.tools
 
 import com.ukdev.carcadasalborghetti.api.DownloadApi
 import com.ukdev.carcadasalborghetti.api.DropboxApi
+import com.ukdev.carcadasalborghetti.api.TIMEOUT
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -40,10 +41,6 @@ class ApiProvider(
         }.readTimeout(TIMEOUT, TimeUnit.SECONDS)
                 .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
                 .build()
-    }
-
-    private companion object {
-        const val TIMEOUT = 20L
     }
 
 }

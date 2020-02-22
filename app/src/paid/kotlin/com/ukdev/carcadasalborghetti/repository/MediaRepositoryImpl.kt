@@ -1,6 +1,7 @@
 package com.ukdev.carcadasalborghetti.repository
 
-import com.ukdev.carcadasalborghetti.api.DropboxApi
+import com.ukdev.carcadasalborghetti.api.DIR_AUDIO
+import com.ukdev.carcadasalborghetti.api.DIR_VIDEO
 import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
 import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
 import com.ukdev.carcadasalborghetti.model.*
@@ -17,9 +18,9 @@ class MediaRepositoryImpl(
 
     override suspend fun getMedia(mediaType: MediaType): Result<List<Media>> {
         val dir = if (mediaType == MediaType.AUDIO)
-            DropboxApi.DIR_AUDIO
+            DIR_AUDIO
         else
-            DropboxApi.DIR_VIDEO
+            DIR_VIDEO
         val request = MediaRequest(dir)
         val api = apiProvider.getDropboxService()
 

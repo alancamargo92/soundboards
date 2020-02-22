@@ -14,9 +14,4 @@ interface DropboxApi {
     @POST("2/files/get_temporary_link")
     suspend fun getStreamLink(@Body body: MediaRequest): StreamLinkResponse
 
-    companion object {
-        const val DIR_AUDIO = "/audios"
-        const val DIR_VIDEO = "/videos"
-    }
-
 }
