@@ -31,7 +31,8 @@ abstract class MediaListFragment(
 ) : Fragment(layoutId), RecyclerViewInteractionListener {
 
     abstract val mediaHandler: MediaHandler
-    abstract val adapter: MediaAdapter
+
+    protected abstract val adapter: MediaAdapter
 
     private val viewModel by viewModel<MediaViewModel>()
 
