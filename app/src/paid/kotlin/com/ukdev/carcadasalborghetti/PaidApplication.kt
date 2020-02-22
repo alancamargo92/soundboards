@@ -1,5 +1,7 @@
 package com.ukdev.carcadasalborghetti
 
+import com.ukdev.carcadasalborghetti.api.BASE_URL
+import com.ukdev.carcadasalborghetti.api.BASE_URL_DOWNLOADS
 import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
 import com.ukdev.carcadasalborghetti.api.tools.TokenHelper
 import com.ukdev.carcadasalborghetti.api.tools.TokenHelperImpl
@@ -15,13 +17,12 @@ import org.koin.dsl.module
 class PaidApplication : CarcadasAlborghettiApplication() {
 
     private val data = module {
-        factory { ApiProvider(BuildConfig.BASE_URL, BuildConfig.BASE_URL_DOWNLOADS, get()) }
+        factory { ApiProvider(BASE_URL, BASE_URL_DOWNLOADS, get()) }
         factory<MediaRepository> { MediaRepositoryImpl(get(), get()) }
     }
 
     private val handlers = module {
         factory { AudioHandler(androidContext(), get(), get()) }
-
         factory { VideoHandler(androidContext(), get(), get()) }
     }
 
