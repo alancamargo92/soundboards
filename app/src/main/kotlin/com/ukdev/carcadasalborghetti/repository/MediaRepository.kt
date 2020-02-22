@@ -10,7 +10,7 @@ abstract class MediaRepository(protected val crashReportManager: CrashReportMana
     abstract suspend fun getMedia(mediaType: MediaType): Result<List<Media>>
 
     protected fun List<Media>.sort(): List<Media> {
-        return this.sortedBy { it.title.split(".").last().trim() }.apply {
+        return this.sortedBy { it.title.split(".").first().trim() }.apply {
             forEachIndexed { index, audio ->
                 audio.position = index + 1
             }
