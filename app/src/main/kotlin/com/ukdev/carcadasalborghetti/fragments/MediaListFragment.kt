@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
@@ -19,6 +17,9 @@ import com.ukdev.carcadasalborghetti.handlers.MediaHandler
 import com.ukdev.carcadasalborghetti.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.*
+import com.ukdev.carcadasalborghetti.utils.hide
+import com.ukdev.carcadasalborghetti.utils.isVisible
+import com.ukdev.carcadasalborghetti.utils.show
 import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
 import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.coroutines.launch
@@ -79,7 +80,7 @@ abstract class MediaListFragment(
     abstract fun onPlaybackStopped()
 
     private fun fetchMedia() {
-        group_error.visibility = GONE
+        group_error.hide()
         showProgressBar()
         lifecycleScope.launch {
             viewModel.getMedia(mediaType).observe(this@MediaListFragment, Observer { result ->
@@ -102,15 +103,18 @@ abstract class MediaListFragment(
     }
 
     private fun displayMedia(media: List<Media>) {
+        if (group_error.isVisible())
+            group_error.hide()
+
         adapter.setData(media)
         searchView?.setOnQueryTextListener(QueryListener(adapter, media))
         hideProgressBar()
     }
 
     private fun onErrorFetchingData(errorType: ErrorType) {
-        progress_bar.visibility = GONE
-        recycler_view.visibility = GONE
-        group_error.visibility = VISIBLE
+        progress_bar.hide()
+        recycler_view.hide()
+        group_error.show()
 
         val icon: Int
         val text: Int
@@ -135,13 +139,13 @@ abstract class MediaListFragment(
     }
 
     private fun showProgressBar() {
-        recycler_view.visibility = GONE
-        progress_bar.visibility = VISIBLE
+        recycler_view.hide()
+        progress_bar.show()
     }
 
     private fun hideProgressBar() {
-        progress_bar.visibility = GONE
-        recycler_view.visibility = VISIBLE
+        progress_bar.hide()
+        recycler_view.show()
     }
 
     companion object {

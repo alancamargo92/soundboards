@@ -2,8 +2,6 @@ package com.ukdev.carcadasalborghetti.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.AudioAdapter
@@ -26,11 +24,11 @@ class AudioFragment : MediaListFragment(R.layout.fragment_audio, MediaType.AUDIO
     }
 
     override fun onPlaybackStarted() {
-        fab?.visibility = VISIBLE
+        fab?.show()
     }
 
     override fun onPlaybackStopped() {
-        fab?.visibility = GONE
+        fab?.hide()
     }
 
 }
