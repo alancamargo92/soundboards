@@ -35,11 +35,9 @@ abstract class PaidMediaHandler(
 
         try {
             withContext(Dispatchers.IO) {
-                withContext(Dispatchers.IO) {
-                    downloadApi.download(request).byteStream()
-                }.use { byteStream ->
-                    FileSharingHelper(context).shareFile(byteStream, media.title, mediaType)
-                }
+                downloadApi.download(request).byteStream()
+            }.use { byteStream ->
+                FileSharingHelper(context).shareFile(byteStream, media.title, mediaType)
             }
         } catch (t: Throwable) {
             crashReportManager.logException(t)
