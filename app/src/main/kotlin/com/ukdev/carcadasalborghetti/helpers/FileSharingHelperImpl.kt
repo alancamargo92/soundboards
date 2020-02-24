@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.utils
+package com.ukdev.carcadasalborghetti.helpers
 
 import android.content.Context
 import android.content.Intent
@@ -34,6 +34,10 @@ class FileSharingHelperImpl(private val context: Context) : FileSharingHelper {
         withContext(Dispatchers.Main) {
             context.startActivity(chooser)
         }
+    }
+
+    override suspend fun getByteStream(uri: Uri): InputStream? {
+        return context.contentResolver.openInputStream(uri)
     }
 
     private suspend fun getFileUri(byteStream: InputStream?, fileName: String): Uri {

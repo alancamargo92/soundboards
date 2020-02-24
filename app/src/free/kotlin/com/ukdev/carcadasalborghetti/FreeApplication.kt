@@ -6,6 +6,8 @@ import com.ukdev.carcadasalborghetti.data.MediaLocalDataSourceImpl
 import com.ukdev.carcadasalborghetti.di.modules
 import com.ukdev.carcadasalborghetti.handlers.AudioHandler
 import com.ukdev.carcadasalborghetti.handlers.VideoHandler
+import com.ukdev.carcadasalborghetti.helpers.VideoHelper
+import com.ukdev.carcadasalborghetti.helpers.VideoHelperImpl
 import com.ukdev.carcadasalborghetti.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.repository.MediaRepositoryImpl
 import org.koin.android.ext.koin.androidContext
@@ -20,8 +22,12 @@ class FreeApplication : CarcadasAlborghettiApplication() {
     }
 
     private val handlers = module {
-        factory { AudioHandler(androidContext(), get(), get()) }
-        factory { VideoHandler(androidContext(), get(), get()) }
+        factory { AudioHandler(get(), get(), get()) }
+        factory { VideoHandler(get(), get(), get()) }
+    }
+
+    private val helpers = module {
+        factory<VideoHelper> { VideoHelperImpl() }
     }
 
     override fun onCreate() {
