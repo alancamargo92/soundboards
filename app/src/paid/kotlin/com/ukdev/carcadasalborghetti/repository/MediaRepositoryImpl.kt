@@ -3,8 +3,6 @@ package com.ukdev.carcadasalborghetti.repository
 import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.model.*
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -15,9 +13,7 @@ class MediaRepositoryImpl(
 
     override suspend fun getMedia(mediaType: MediaType): Result<List<Media>> {
         return try {
-            val media = withContext(Dispatchers.IO) {
-                remoteDataSource.listMedia(mediaType).sort()
-            }
+            val media = remoteDataSource.listMedia(mediaType).sort()
             Success(media)
         } catch (httpException: HttpException) {
             crashReportManager.logException(httpException)

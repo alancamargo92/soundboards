@@ -6,6 +6,9 @@ import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
 import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import java.io.InputStream
 
 class MediaRemoteDataSourceImpl(private val apiProvider: ApiProvider) : MediaRemoteDataSource {
 
@@ -17,7 +20,27 @@ class MediaRemoteDataSourceImpl(private val apiProvider: ApiProvider) : MediaRem
         val request = MediaRequest(dir)
         val api = apiProvider.getDropboxService()
 
-        return api.listMedia(request).entries
+        return withContext(Dispatchers.IO) {
+            api.listMedia(request).entries
+        }
+    }
+
+    override suspend fun getStreamLink(mediaId: String): String {
+        val request = MediaRequest(mediaId)
+        val api = apiProvider.getDropboxService()
+
+        return withContext(Dispatchers.IO) {
+            api.getStreamLink(request).link
+        }
+    }
+
+    override suspend fun download(mediaId: String): InputStream {
+        val request = MediaRequest(mediaId)
+        val api = apiProvider.getDownloadService()
+
+        return withContext(Dispatchers.IO) {
+            api.download(request).byteStream()
+        }
     }
 
 }

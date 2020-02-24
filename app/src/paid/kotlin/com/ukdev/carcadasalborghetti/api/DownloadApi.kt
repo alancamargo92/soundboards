@@ -8,6 +8,6 @@ import retrofit2.http.POST
 interface DownloadApi {
 
     @POST("2/files/download")
-    suspend fun download(@Header("Dropbox-API-Arg") pathJson: MediaRequest): ResponseBody
+    suspend fun download(@Header("Dropbox-API-Arg") mediaRequest: MediaRequest): ResponseBody
 
 }

@@ -3,7 +3,7 @@ package com.ukdev.carcadasalborghetti.handlers
 import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
-import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
+import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import com.ukdev.carcadasalborghetti.utils.FileSharingHelper
 
@@ -11,8 +11,8 @@ class AudioHandler(
         context: Context,
         crashReportManager: CrashReportManager,
         fileSharingHelper: FileSharingHelper,
-        apiProvider: ApiProvider
-) : PaidMediaHandler(context, crashReportManager, fileSharingHelper, apiProvider) {
+        remoteDataSource: MediaRemoteDataSource
+) : PaidMediaHandler(context, crashReportManager, fileSharingHelper, remoteDataSource) {
 
     private var mediaPlayer: MediaPlayer? = null
 
