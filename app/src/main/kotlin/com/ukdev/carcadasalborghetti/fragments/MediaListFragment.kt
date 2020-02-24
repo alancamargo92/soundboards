@@ -22,7 +22,9 @@ import com.ukdev.carcadasalborghetti.utils.isVisible
 import com.ukdev.carcadasalborghetti.utils.show
 import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
 import kotlinx.android.synthetic.main.layout_list.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.viewmodel.ext.android.viewModel
 
 abstract class MediaListFragment(
@@ -59,7 +61,9 @@ abstract class MediaListFragment(
     override fun onItemClick(media: Media) {
         lifecycleScope.launch {
             adapter.notifyItemClicked()
-            mediaHandler.play(media)
+            withContext(Dispatchers.IO) {
+                mediaHandler.play(media)
+            }
             adapter.notifyItemReady()
             onPlaybackStarted()
         }
