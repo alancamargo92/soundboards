@@ -1,6 +1,8 @@
 package com.ukdev.carcadasalborghetti
 
 import com.google.android.gms.ads.MobileAds
+import com.ukdev.carcadasalborghetti.data.MediaLocalDataSource
+import com.ukdev.carcadasalborghetti.data.MediaLocalDataSourceImpl
 import com.ukdev.carcadasalborghetti.di.modules
 import com.ukdev.carcadasalborghetti.handlers.AudioHandler
 import com.ukdev.carcadasalborghetti.handlers.VideoHandler
@@ -13,7 +15,8 @@ import org.koin.dsl.module
 class FreeApplication : CarcadasAlborghettiApplication() {
 
     private val data = module {
-        factory<MediaRepository> { MediaRepositoryImpl(get(), androidContext()) }
+        factory<MediaRepository> { MediaRepositoryImpl(get(), get()) }
+        factory<MediaLocalDataSource> { MediaLocalDataSourceImpl(androidContext()) }
     }
 
     private val handlers = module {
