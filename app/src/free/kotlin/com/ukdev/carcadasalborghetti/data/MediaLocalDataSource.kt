@@ -1,8 +1,7 @@
 package com.ukdev.carcadasalborghetti.data
 
-import android.net.Uri
+import com.ukdev.carcadasalborghetti.model.Media
 
 interface MediaLocalDataSource {
-    fun getTitles(): Array<String>
-    suspend fun getAudioUris(): Array<Uri>
+    suspend fun getMediaList(): List<Media>
 }

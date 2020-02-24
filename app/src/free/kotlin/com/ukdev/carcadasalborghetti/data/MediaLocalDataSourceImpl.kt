@@ -3,14 +3,28 @@ package com.ukdev.carcadasalborghetti.data
 import android.content.Context
 import android.net.Uri
 import com.ukdev.carcadasalborghetti.R
+import com.ukdev.carcadasalborghetti.model.Media
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MediaLocalDataSourceImpl(private val context: Context) : MediaLocalDataSource {
 
-    override fun getTitles(): Array<String> {
+    override suspend fun getMediaList(): List<Media> {
+        val titles = getTitles()
+        val uris = getAudioUris()
+
+        return arrayListOf<Media>().apply {
+            titles.forEachIndexed { index, title ->
+                add(Media(title, uris[index]))
+            }
+        }
+    }
+
+    private fun getTitles(): Array<String> {
         return context.resources.getStringArray(R.array.titles)
     }
 
-    override suspend fun getAudioUris(): Array<Uri> {
+    private suspend fun getAudioUris(): Array<Uri> = withContext(Dispatchers.IO) {
         val typedArray = context.resources.obtainTypedArray(R.array.audios)
         val audios = IntArray(typedArray.length()).also {
             it.forEachIndexed { index, _ ->
@@ -19,7 +33,7 @@ class MediaLocalDataSourceImpl(private val context: Context) : MediaLocalDataSou
         }
         typedArray.recycle()
 
-        return audios.map { resId ->
+        audios.map { resId ->
             Uri.parse("android.resource://${context.packageName}/$resId")
         }.toTypedArray()
     }
