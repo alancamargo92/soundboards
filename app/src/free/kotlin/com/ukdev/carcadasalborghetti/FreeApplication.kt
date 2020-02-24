@@ -36,6 +36,7 @@ class FreeApplication : CarcadasAlborghettiApplication() {
         with(modules) {
             add(data)
             add(handlers)
+            add(helpers)
         }
         startDependencyInjection()
     }
