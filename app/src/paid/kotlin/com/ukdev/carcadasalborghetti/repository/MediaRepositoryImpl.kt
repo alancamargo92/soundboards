@@ -1,9 +1,6 @@
 package com.ukdev.carcadasalborghetti.repository
 
-import com.ukdev.carcadasalborghetti.api.DIR_AUDIO
-import com.ukdev.carcadasalborghetti.api.DIR_VIDEO
-import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
-import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
+import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.model.*
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import kotlinx.coroutines.Dispatchers
@@ -13,20 +10,13 @@ import java.io.IOException
 
 class MediaRepositoryImpl(
         crashReportManager: CrashReportManager,
-        private val apiProvider: ApiProvider
+        private val remoteDataSource: MediaRemoteDataSource
 ) : MediaRepository(crashReportManager) {
 
     override suspend fun getMedia(mediaType: MediaType): Result<List<Media>> {
-        val dir = if (mediaType == MediaType.AUDIO)
-            DIR_AUDIO
-        else
-            DIR_VIDEO
-        val request = MediaRequest(dir)
-        val api = apiProvider.getDropboxService()
-
         return try {
             val media = withContext(Dispatchers.IO) {
-                api.listMedia(request).entries.sort()
+                remoteDataSource.listMedia(mediaType).sort()
             }
             Success(media)
         } catch (httpException: HttpException) {
