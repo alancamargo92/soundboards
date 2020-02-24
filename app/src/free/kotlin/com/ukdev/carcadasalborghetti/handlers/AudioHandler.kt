@@ -11,8 +11,9 @@ import kotlinx.coroutines.withContext
 
 class AudioHandler(
         context: Context,
-        crashReportManager: CrashReportManager
-) : MediaHandler(context, crashReportManager) {
+        crashReportManager: CrashReportManager,
+        fileSharingHelper: FileSharingHelper
+) : MediaHandler(context, crashReportManager, fileSharingHelper) {
 
     private var mediaPlayer: MediaPlayer? = null
 
@@ -35,8 +36,8 @@ class AudioHandler(
             val fileName = "${media.title}.mp3"
             withContext(Dispatchers.IO) {
                 context.contentResolver.openInputStream(media.uri)
-            }.use { byteStream ->
-                FileSharingHelper(context).shareFile(byteStream, fileName, mediaType)
+            }.let { byteStream ->
+                fileSharingHelper.shareFile(byteStream, fileName, mediaType)
             }
         } catch (t: Throwable) {
             crashReportManager.logException(t)

@@ -8,10 +8,12 @@ import androidx.lifecycle.MutableLiveData
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
+import com.ukdev.carcadasalborghetti.utils.FileSharingHelper
 
 abstract class MediaHandler(
         protected val context: Context,
-        protected val crashReportManager: CrashReportManager
+        protected val crashReportManager: CrashReportManager,
+        protected val fileSharingHelper: FileSharingHelper
 ) {
 
     protected val isPlayingLiveData = MutableLiveData<Boolean>()

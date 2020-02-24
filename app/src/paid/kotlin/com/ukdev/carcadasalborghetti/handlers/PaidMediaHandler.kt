@@ -13,8 +13,9 @@ import kotlinx.coroutines.withContext
 abstract class PaidMediaHandler(
         context: Context,
         crashReportManager: CrashReportManager,
+        fileSharingHelper: FileSharingHelper,
         private val apiProvider: ApiProvider
-) : MediaHandler(context, crashReportManager) {
+) : MediaHandler(context, crashReportManager, fileSharingHelper) {
 
     private val api by lazy { apiProvider.getDropboxService() }
     private val downloadApi by lazy { apiProvider.getDownloadService() }
@@ -36,8 +37,8 @@ abstract class PaidMediaHandler(
         try {
             withContext(Dispatchers.IO) {
                 downloadApi.download(request).byteStream()
-            }.use { byteStream ->
-                FileSharingHelper(context).shareFile(byteStream, media.title, mediaType)
+            }.let { byteStream ->
+                fileSharingHelper.shareFile(byteStream, media.title, mediaType)
             }
         } catch (t: Throwable) {
             crashReportManager.logException(t)

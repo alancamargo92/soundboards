@@ -20,9 +20,8 @@ class FreeApplication : CarcadasAlborghettiApplication() {
     }
 
     private val handlers = module {
-        factory { AudioHandler(androidContext(), get()) }
-
-        factory { VideoHandler(androidContext(), get()) }
+        factory { AudioHandler(androidContext(), get(), get()) }
+        factory { VideoHandler(androidContext(), get(), get()) }
     }
 
     override fun onCreate() {

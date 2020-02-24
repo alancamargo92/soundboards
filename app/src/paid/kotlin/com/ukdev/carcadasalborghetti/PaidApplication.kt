@@ -25,11 +25,11 @@ class PaidApplication : CarcadasAlborghettiApplication() {
     }
 
     private val handlers = module {
-        factory { AudioHandler(androidContext(), get(), get()) }
-        factory { VideoHandler(androidContext(), get(), get()) }
+        factory { AudioHandler(androidContext(), get(), get(), get()) }
+        factory { VideoHandler(androidContext(), get(), get(), get()) }
     }
 
-    private val api = module {
+    private val helpers = module {
         factory<TokenHelper> { TokenHelperImpl() }
     }
 
@@ -38,7 +38,7 @@ class PaidApplication : CarcadasAlborghettiApplication() {
         with(modules) {
             add(data)
             add(handlers)
-            add(api)
+            add(helpers)
         }
         startDependencyInjection()
     }

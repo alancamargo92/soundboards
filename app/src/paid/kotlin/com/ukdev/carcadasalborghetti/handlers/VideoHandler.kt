@@ -4,12 +4,14 @@ import android.content.Context
 import com.ukdev.carcadasalborghetti.activities.VideoActivity
 import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
+import com.ukdev.carcadasalborghetti.utils.FileSharingHelper
 
 class VideoHandler(
         context: Context,
         crashReportManager: CrashReportManager,
+        fileSharingHelper: FileSharingHelper,
         apiProvider: ApiProvider
-) : PaidMediaHandler(context, crashReportManager, apiProvider) {
+) : PaidMediaHandler(context, crashReportManager, fileSharingHelper, apiProvider) {
 
     override fun stop() { }
 
