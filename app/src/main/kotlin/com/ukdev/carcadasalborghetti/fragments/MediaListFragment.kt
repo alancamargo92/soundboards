@@ -65,7 +65,6 @@ abstract class MediaListFragment(
                 mediaHandler.play(media)
             }
             adapter.notifyItemReady()
-            onPlaybackStarted()
         }
     }
 
@@ -76,9 +75,9 @@ abstract class MediaListFragment(
         }
     }
 
-    abstract fun onPlaybackStarted()
+    abstract fun showFab()
 
-    abstract fun onPlaybackStopped()
+    abstract fun hideFab()
 
     private fun configureRecyclerView() {
         recycler_view.layoutManager = layoutManager
@@ -103,9 +102,9 @@ abstract class MediaListFragment(
     private fun observePlaybackState() {
         mediaHandler.isPlaying().observe(viewLifecycleOwner, Observer { isPlaying ->
             if (isPlaying)
-                onPlaybackStarted()
+                showFab()
             else
-                onPlaybackStopped()
+                hideFab()
         })
     }
 

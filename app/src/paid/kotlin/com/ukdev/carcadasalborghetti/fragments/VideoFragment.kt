@@ -12,8 +12,8 @@ class VideoFragment : MediaListFragment(R.layout.layout_list, MediaType.VIDEO) {
     override val mediaHandler by inject<VideoHandler>()
     override val adapter: MediaAdapter = VideoAdapter()
 
-    override fun onPlaybackStarted() { }
+    override fun showFab() { }
 
-    override fun onPlaybackStopped() { }
+    override fun hideFab() { }
 
 }

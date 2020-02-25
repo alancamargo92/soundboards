@@ -18,6 +18,7 @@ class MediaHelperImpl(
     override fun playAudio(audioUri: Uri) {
         mediaPlayer?.release()
         mediaPlayer = createMediaPlayer(audioUri)
+        isPlayingLiveData.postValue(true)
     }
 
     override fun playVideo(link: Uri, title: String) {
@@ -26,6 +27,7 @@ class MediaHelperImpl(
 
     override fun stop() {
         mediaPlayer?.stop()
+        isPlayingLiveData.postValue(false)
     }
 
     override fun isPlaying(): LiveData<Boolean> = isPlayingLiveData.apply {

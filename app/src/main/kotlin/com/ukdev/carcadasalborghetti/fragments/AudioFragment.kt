@@ -19,11 +19,11 @@ class AudioFragment : MediaListFragment(R.layout.fragment_audio, MediaType.AUDIO
         fab.setOnClickListener { mediaHandler.stop() }
     }
 
-    override fun onPlaybackStarted() {
+    override fun showFab() {
         fab.show()
     }
 
-    override fun onPlaybackStopped() {
+    override fun hideFab() {
         fab.hide()
     }
 
