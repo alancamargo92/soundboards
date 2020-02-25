@@ -1,34 +1,40 @@
 package com.ukdev.carcadasalborghetti.handlers
 
+import android.net.Uri
+import com.ukdev.carcadasalborghetti.api.tools.IOHelper
 import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
-import com.ukdev.carcadasalborghetti.helpers.FileSharingHelper
+import com.ukdev.carcadasalborghetti.helpers.FileHelper
 import com.ukdev.carcadasalborghetti.helpers.MediaHelper
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
+import com.ukdev.carcadasalborghetti.model.Success
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 
 abstract class PaidMediaHandler(
         mediaHelper: MediaHelper,
         crashReportManager: CrashReportManager,
-        fileSharingHelper: FileSharingHelper,
-        private val remoteDataSource: MediaRemoteDataSource
-) : MediaHandler(mediaHelper, crashReportManager, fileSharingHelper) {
+        fileHelper: FileHelper,
+        private val remoteDataSource: MediaRemoteDataSource,
+        private val ioHelper: IOHelper
+) : MediaHandler(mediaHelper, crashReportManager, fileHelper) {
 
-    protected abstract fun playMedia(link: String, title: String)
+    protected abstract fun playMedia(link: Uri, title: String)
 
     override suspend fun play(media: Media) {
-        try {
-            val link = remoteDataSource.getStreamLink(media.id)
-            playMedia(link, media.title)
-        } catch (t: Throwable) {
-            crashReportManager.logException(t)
-        }
+        val uriResult = ioHelper.safeIOCall(mainCall = {
+            fileHelper.getFileUri(media.title)
+        }, alternative = {
+            remoteDataSource.getStreamLink(media.id)
+        })
+
+        if (uriResult is Success)
+            playMedia(uriResult.body, media.title)
     }
 
     override suspend fun share(media: Media, mediaType: MediaType) {
         try {
             val byteStream = remoteDataSource.download(media.id)
-            fileSharingHelper.shareFile(byteStream, media.title, mediaType)
+            fileHelper.shareFile(byteStream, media.title, mediaType)
         } catch (t: Throwable) {
             crashReportManager.logException(t)
         }

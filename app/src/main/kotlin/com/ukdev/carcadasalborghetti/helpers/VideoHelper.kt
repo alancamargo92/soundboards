@@ -1,5 +1,7 @@
 package com.ukdev.carcadasalborghetti.helpers
 
+import android.net.Uri
+
 interface VideoHelper {
-    fun playVideo(link: String, title: String)
+    fun playVideo(link: Uri, title: String)
 }

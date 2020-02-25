@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.paid.activity_video.*
 
 class VideoActivity : AppCompatActivity(R.layout.activity_video) {
 
-    private val url by lazy { intent.getStringExtra(EXTRA_URL) }
+    private val url by lazy { intent.getParcelableExtra<Uri>(EXTRA_URL) }
     private val title by lazy { intent.getStringExtra(EXTRA_TITLE) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,7 @@ class VideoActivity : AppCompatActivity(R.layout.activity_video) {
 
     private fun startPlayback() {
         video_view.run {
-            setVideoURI(Uri.parse(url))
+            setVideoURI(url)
             setMediaController(MediaController(context).also { it.setAnchorView(this) })
             start()
         }
@@ -40,7 +40,7 @@ class VideoActivity : AppCompatActivity(R.layout.activity_video) {
         private const val EXTRA_TITLE = "EXTRA_TITLE"
         private const val EXTRA_URL = "EXTRA_URL"
 
-        fun getIntent(context: Context, title: String, videoUrl: String): Intent {
+        fun getIntent(context: Context, title: String, videoUrl: Uri): Intent {
             return Intent(context, VideoActivity::class.java)
                     .putExtra(EXTRA_TITLE, title)
                     .putExtra(EXTRA_URL, videoUrl)

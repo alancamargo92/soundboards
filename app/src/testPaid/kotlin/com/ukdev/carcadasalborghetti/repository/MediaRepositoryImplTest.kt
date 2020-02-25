@@ -1,6 +1,8 @@
 package com.ukdev.carcadasalborghetti.repository
 
 import com.google.common.truth.Truth.assertThat
+import com.ukdev.carcadasalborghetti.api.tools.IOHelper
+import com.ukdev.carcadasalborghetti.data.MediaLocalDataSource
 import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.model.*
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
@@ -15,17 +17,24 @@ import org.junit.Test
 import retrofit2.HttpException
 import java.io.IOException
 
+// TODO: write tests for cache
 class MediaRepositoryImplTest {
 
     @MockK lateinit var mockCrashReportManager: CrashReportManager
     @MockK lateinit var mockRemoteDataSource: MediaRemoteDataSource
+    @MockK lateinit var mockLocalDataSource: MediaLocalDataSource
 
     private lateinit var repository: MediaRepository
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this, relaxed = true)
-        repository = MediaRepositoryImpl(mockCrashReportManager, mockRemoteDataSource)
+        repository = MediaRepositoryImpl(
+                mockCrashReportManager,
+                mockRemoteDataSource,
+                mockLocalDataSource,
+                IOHelper(mockCrashReportManager)
+        )
     }
 
     @Test
@@ -60,6 +69,7 @@ class MediaRepositoryImplTest {
         coEvery {
             mockRemoteDataSource.listMedia(any())
         } throws HttpException(mockk(relaxed = true))
+        coEvery { mockLocalDataSource.listMedia(any()) } throws Throwable()
 
         val result = repository.getMedia(MediaType.AUDIO)
 
@@ -78,6 +88,7 @@ class MediaRepositoryImplTest {
     @Test
     fun whenAnIOExceptionIsThrown_shouldReturnNetworkError() = runBlocking {
         coEvery { mockRemoteDataSource.listMedia(any()) } throws IOException()
+        coEvery { mockLocalDataSource.listMedia(any()) } throws Throwable()
 
         val result = repository.getMedia(MediaType.AUDIO)
 
@@ -96,6 +107,7 @@ class MediaRepositoryImplTest {
     @Test
     fun whenARandomExceptionIsThrown_shouldReturnGenericError() = runBlocking {
         coEvery { mockRemoteDataSource.listMedia(any()) } throws Throwable()
+        coEvery { mockLocalDataSource.listMedia(any()) } throws Throwable()
 
         val result = repository.getMedia(MediaType.AUDIO)
 

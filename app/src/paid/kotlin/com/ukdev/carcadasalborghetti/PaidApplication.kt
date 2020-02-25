@@ -3,8 +3,11 @@ package com.ukdev.carcadasalborghetti
 import com.ukdev.carcadasalborghetti.api.BASE_URL
 import com.ukdev.carcadasalborghetti.api.BASE_URL_DOWNLOADS
 import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
+import com.ukdev.carcadasalborghetti.api.tools.IOHelper
 import com.ukdev.carcadasalborghetti.api.tools.TokenHelper
 import com.ukdev.carcadasalborghetti.api.tools.TokenHelperImpl
+import com.ukdev.carcadasalborghetti.data.MediaLocalDataSource
+import com.ukdev.carcadasalborghetti.data.MediaLocalDataSourceImpl
 import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSourceImpl
 import com.ukdev.carcadasalborghetti.di.modules
@@ -22,18 +25,20 @@ class PaidApplication : CarcadasAlborghettiApplication() {
 
     private val data = module {
         factory { ApiProvider(BASE_URL, BASE_URL_DOWNLOADS, get()) }
-        factory<MediaRepository> { MediaRepositoryImpl(get(), get()) }
+        factory<MediaRepository> { MediaRepositoryImpl(get(), get(), get(), get()) }
         factory<MediaRemoteDataSource> { MediaRemoteDataSourceImpl(get()) }
+        factory<MediaLocalDataSource> { MediaLocalDataSourceImpl(get()) }
     }
 
     private val handlers = module {
-        factory { AudioHandler(get(), get(), get(), get()) }
-        factory { VideoHandler(get(), get(), get(), get()) }
+        factory { AudioHandler(get(), get(), get(), get(), get()) }
+        factory { VideoHandler(get(), get(), get(), get(), get()) }
     }
 
     private val helpers = module {
         factory<TokenHelper> { TokenHelperImpl() }
         factory<VideoHelper> { VideoHelperImpl(androidContext()) }
+        factory { IOHelper(get()) }
     }
 
     override fun onCreate() {

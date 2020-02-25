@@ -7,14 +7,30 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.N
 import androidx.core.content.FileProvider
 import com.ukdev.carcadasalborghetti.R
+import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.InputStream
 
-class FileSharingHelperImpl(private val context: Context) : FileSharingHelper {
+class FileHelperImpl(private val context: Context) : FileHelper {
+
+    override suspend fun listFiles(mediaType: MediaType): List<Media> {
+        return emptyList()
+    }
+
+    override suspend fun getFileUri(fileName: String): Uri {
+        val filesDir = context.filesDir
+        val file = filesDir.walk().find { it.name == fileName }
+
+        if (file != null)
+            return getFileUri(file)
+        else
+            throw FileNotFoundException()
+    }
 
     override suspend fun shareFile(
             byteStream: InputStream?,
@@ -40,9 +56,16 @@ class FileSharingHelperImpl(private val context: Context) : FileSharingHelper {
         return context.contentResolver.openInputStream(uri)
     }
 
+    override suspend fun deleteAll() {
+
+    }
+
     private suspend fun getFileUri(byteStream: InputStream?, fileName: String): Uri {
         val file = getFile(byteStream, fileName)
+        return getFileUri(file)
+    }
 
+    private fun getFileUri(file: File): Uri {
         return if (SDK_INT >= N) {
             val authority = "${context.packageName}.provider"
             FileProvider.getUriForFile(context, authority, file)

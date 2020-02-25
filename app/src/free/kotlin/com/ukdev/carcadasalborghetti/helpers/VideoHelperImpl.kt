@@ -1,7 +1,9 @@
 package com.ukdev.carcadasalborghetti.helpers
 
+import android.net.Uri
+
 class VideoHelperImpl : VideoHelper {
 
-    override fun playVideo(link: String, title: String) { }
+    override fun playVideo(link: Uri, title: String) { }
 
 }

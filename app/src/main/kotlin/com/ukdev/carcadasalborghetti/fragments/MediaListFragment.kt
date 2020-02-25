@@ -90,7 +90,7 @@ abstract class MediaListFragment(
         group_error.hide()
         showProgressBar()
         lifecycleScope.launch {
-            viewModel.getMedia(mediaType).observe(this@MediaListFragment, Observer { result ->
+            viewModel.getMedia(mediaType).observe(viewLifecycleOwner, Observer { result ->
                 when (result) {
                     is Success<List<Media>> -> displayMedia(result.body)
                     is GenericError -> showError(ErrorType.UNKNOWN)
@@ -101,7 +101,7 @@ abstract class MediaListFragment(
     }
 
     private fun observePlaybackState() {
-        mediaHandler.isPlaying().observe(this, Observer { isPlaying ->
+        mediaHandler.isPlaying().observe(viewLifecycleOwner, Observer { isPlaying ->
             if (isPlaying)
                 onPlaybackStarted()
             else

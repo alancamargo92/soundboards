@@ -20,7 +20,7 @@ class MediaHelperImpl(
         mediaPlayer = createMediaPlayer(audioUri)
     }
 
-    override fun playVideo(link: String, title: String) {
+    override fun playVideo(link: Uri, title: String) {
         videoHelper.playVideo(link, title)
     }
 

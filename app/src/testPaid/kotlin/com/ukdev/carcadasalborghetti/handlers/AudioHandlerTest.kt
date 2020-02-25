@@ -1,7 +1,8 @@
 package com.ukdev.carcadasalborghetti.handlers
 
+import com.ukdev.carcadasalborghetti.api.tools.IOHelper
 import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
-import com.ukdev.carcadasalborghetti.helpers.FileSharingHelper
+import com.ukdev.carcadasalborghetti.helpers.FileHelper
 import com.ukdev.carcadasalborghetti.helpers.MediaHelper
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
@@ -12,11 +13,12 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
+// TODO: write tests for cache
 class AudioHandlerTest {
 
     @MockK lateinit var mockMediaHelper: MediaHelper
     @MockK lateinit var mockCrashReportManager: CrashReportManager
-    @MockK lateinit var mockFileSharingHelper: FileSharingHelper
+    @MockK lateinit var mockFileHelper: FileHelper
     @MockK lateinit var mockRemoteDataSource: MediaRemoteDataSource
 
     private lateinit var audioHandler: AudioHandler
@@ -27,20 +29,23 @@ class AudioHandlerTest {
         audioHandler = AudioHandler(
                 mockMediaHelper,
                 mockCrashReportManager,
-                mockFileSharingHelper,
-                mockRemoteDataSource
+                mockFileHelper,
+                mockRemoteDataSource,
+                IOHelper(mockCrashReportManager)
         )
     }
 
     @Test
     fun shouldPlayAudio() = runBlocking {
-        coEvery { mockRemoteDataSource.getStreamLink(any()) } returns "mock/link"
+        coEvery { mockFileHelper.getFileUri(any()) } throws Throwable()
+        coEvery { mockRemoteDataSource.getStreamLink(any()) } returns mockk()
 
         audioHandler.play(Media("1", "Media 1"))
     }
 
     @Test
     fun whenAnExceptionIsThrownWhilePlayingAudio_shouldLogToCrashReport() = runBlocking {
+        coEvery { mockFileHelper.getFileUri(any()) } throws Throwable()
         coEvery { mockRemoteDataSource.getStreamLink(any()) } throws Throwable()
 
         audioHandler.play(Media("1", "Media 1"))
@@ -54,7 +59,7 @@ class AudioHandlerTest {
 
         audioHandler.share(Media("1", "Media 1"), MediaType.AUDIO)
 
-        coVerify { mockFileSharingHelper.shareFile(any(), any(), any()) }
+        coVerify { mockFileHelper.shareFile(any(), any(), any()) }
     }
 
     @Test

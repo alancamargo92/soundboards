@@ -1,18 +1,21 @@
 package com.ukdev.carcadasalborghetti.handlers
 
+import android.net.Uri
+import com.ukdev.carcadasalborghetti.api.tools.IOHelper
 import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
-import com.ukdev.carcadasalborghetti.helpers.FileSharingHelper
+import com.ukdev.carcadasalborghetti.helpers.FileHelper
 import com.ukdev.carcadasalborghetti.helpers.MediaHelper
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 
 class VideoHandler(
         mediaHelper: MediaHelper,
         crashReportManager: CrashReportManager,
-        fileSharingHelper: FileSharingHelper,
-        remoteDataSource: MediaRemoteDataSource
-) : PaidMediaHandler(mediaHelper, crashReportManager, fileSharingHelper, remoteDataSource) {
+        fileHelper: FileHelper,
+        remoteDataSource: MediaRemoteDataSource,
+        ioHelper: IOHelper
+) : PaidMediaHandler(mediaHelper, crashReportManager, fileHelper, remoteDataSource, ioHelper) {
 
-    override fun playMedia(link: String, title: String) {
+    override fun playMedia(link: Uri, title: String) {
         mediaHelper.playVideo(link, title)
     }
 

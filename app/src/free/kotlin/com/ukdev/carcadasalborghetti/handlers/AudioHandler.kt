@@ -1,6 +1,6 @@
 package com.ukdev.carcadasalborghetti.handlers
 
-import com.ukdev.carcadasalborghetti.helpers.FileSharingHelper
+import com.ukdev.carcadasalborghetti.helpers.FileHelper
 import com.ukdev.carcadasalborghetti.helpers.MediaHelper
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
@@ -11,7 +11,7 @@ import kotlinx.coroutines.withContext
 class AudioHandler(
         mediaHelper: MediaHelper,
         crashReportManager: CrashReportManager,
-        fileSharingHelper: FileSharingHelper
+        fileSharingHelper: FileHelper
 ) : MediaHandler(mediaHelper, crashReportManager, fileSharingHelper) {
 
     override suspend fun play(media: Media) {
@@ -26,9 +26,9 @@ class AudioHandler(
         try {
             val fileName = "${media.title}.mp3"
             withContext(Dispatchers.IO) {
-                fileSharingHelper.getByteStream(media.uri)
+                fileHelper.getByteStream(media.uri)
             }.let { byteStream ->
-                fileSharingHelper.shareFile(byteStream, fileName, mediaType)
+                fileHelper.shareFile(byteStream, fileName, mediaType)
             }
         } catch (t: Throwable) {
             crashReportManager.logException(t)

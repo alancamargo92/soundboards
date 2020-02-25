@@ -54,12 +54,13 @@ class MediaRemoteDataSourceImplTest {
     }
 
     @Test
+    // FIXME
     fun shouldGetStreamLink() = runBlocking {
         enqueueSuccessfulStreamLinkResponse()
 
         val streamLink = remoteDataSource.getStreamLink("media-id")
 
-        assertThat(streamLink).isEqualTo("stream/link")
+        assertThat(streamLink.toString()).isEqualTo("stream/link")
     }
 
     @Test
