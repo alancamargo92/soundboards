@@ -28,7 +28,7 @@ class AudioHandler(
             withContext(Dispatchers.IO) {
                 fileHelper.getByteStream(media.uri)
             }.let { byteStream ->
-                fileHelper.shareFile(byteStream, fileName, mediaType)
+                fileHelper.shareFile(byteStream, media, mediaType)
             }
         } catch (t: Throwable) {
             crashReportManager.logException(t)

@@ -18,13 +18,20 @@ import java.io.InputStream
 
 class FileHelperImpl(private val context: Context) : FileHelper {
 
+    private val baseDir by lazy { context.filesDir.absolutePath }
+
     override suspend fun listFiles(mediaType: MediaType): List<Media> {
-        return emptyList()
+        val files = getDir(mediaType).listFiles()
+
+        return files?.map { file ->
+            buildMedia(file.name)
+        }?.toList() ?: throw FileNotFoundException()
     }
 
     override suspend fun getFileUri(fileName: String): Uri {
-        val filesDir = context.filesDir
-        val file = filesDir.walk().find { it.name == fileName }
+        val mediaType = getMediaType(fileName)
+        val dir = getDir(mediaType)
+        val file = dir.listFiles()?.find { it.name.contains(fileName) }
 
         if (file != null)
             return getFileUri(file)
@@ -34,10 +41,10 @@ class FileHelperImpl(private val context: Context) : FileHelper {
 
     override suspend fun shareFile(
             byteStream: InputStream?,
-            fileName: String,
+            media: Media,
             mediaType: MediaType
     ) {
-        val uri = getFileUri(byteStream, fileName)
+        val uri = getFileUri(byteStream, media, mediaType)
         val type = if (mediaType == MediaType.AUDIO) "audio/*" else "video/*"
         val shareIntent = Intent(Intent.ACTION_SEND).setType(type)
                 .putExtra(Intent.EXTRA_STREAM, uri)
@@ -57,25 +64,30 @@ class FileHelperImpl(private val context: Context) : FileHelper {
     }
 
     override suspend fun deleteAll() {
-
+        val dir = File(baseDir)
+        dir.deleteRecursively()
     }
 
-    private suspend fun getFileUri(byteStream: InputStream?, fileName: String): Uri {
-        val file = getFile(byteStream, fileName)
+    private suspend fun getFileUri(
+            byteStream: InputStream?,
+            media: Media,
+            mediaType: MediaType
+    ): Uri {
+        val file = saveFile(byteStream, media, mediaType)
         return getFileUri(file)
     }
 
-    private fun getFileUri(file: File): Uri {
-        return if (SDK_INT >= N) {
-            val authority = "${context.packageName}.provider"
-            FileProvider.getUriForFile(context, authority, file)
-        } else {
-            Uri.fromFile(file)
-        }
-    }
+    private suspend fun saveFile(
+            byteStream: InputStream?,
+            media: Media,
+            mediaType: MediaType
+    ): File {
+        val dir = getDir(mediaType)
 
-    private suspend fun getFile(byteStream: InputStream?, fileName: String): File {
-        val dir = context.filesDir
+        if (!dir.exists())
+            dir.mkdirs()
+
+        val fileName = composeFileName(media)
         val file = File(dir, fileName)
 
         withContext(Dispatchers.IO) {
@@ -95,6 +107,55 @@ class FileHelperImpl(private val context: Context) : FileHelper {
         }
 
         return file
+    }
+
+    private fun getFileUri(file: File): Uri {
+        return if (SDK_INT >= N) {
+            val authority = "${context.packageName}.provider"
+            FileProvider.getUriForFile(context, authority, file)
+        } else {
+            Uri.fromFile(file)
+        }
+    }
+
+    private fun getMediaType(fileName: String): MediaType {
+        return if (fileName.endsWith(EXTENSION_AUDIO))
+            MediaType.AUDIO
+        else
+            MediaType.VIDEO
+    }
+
+    private fun getDir(mediaType: MediaType): File {
+        val subDir = if (mediaType == MediaType.AUDIO)
+            DIR_AUDIOS
+        else
+            DIR_VIDEOS
+
+        return File("$baseDir/$subDir")
+    }
+
+    // FIXME: adapt to free flavour
+    private fun composeFileName(media: Media): String {
+        return "${media.id}$FILE_NAME_SEPARATOR${media.position}$FILE_NAME_SEPARATOR${media.title}"
+    }
+
+    // FIXME: adapt to free flavour
+    private fun buildMedia(fileName: String): Media {
+        val parts = fileName.split(FILE_NAME_SEPARATOR)
+        val id = parts[0]
+        val position = parts[1].toInt()
+        val title = parts[2]
+        return Media(id, title).also {
+            it.position = position
+        }
+    }
+
+    private companion object {
+        const val DIR_MEDIA = "media"
+        const val DIR_AUDIOS = "$DIR_MEDIA/audios"
+        const val DIR_VIDEOS = "$DIR_MEDIA/videos"
+        const val EXTENSION_AUDIO = "mp3"
+        const val FILE_NAME_SEPARATOR = '#'
     }
 
 }

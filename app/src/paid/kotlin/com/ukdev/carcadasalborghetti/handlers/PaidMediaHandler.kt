@@ -24,6 +24,7 @@ abstract class PaidMediaHandler(
         val uriResult = ioHelper.safeIOCall(mainCall = {
             fileHelper.getFileUri(media.title)
         }, alternative = {
+            // TODO: download instead of stream
             remoteDataSource.getStreamLink(media.id)
         })
 
@@ -34,7 +35,7 @@ abstract class PaidMediaHandler(
     override suspend fun share(media: Media, mediaType: MediaType) {
         try {
             val byteStream = remoteDataSource.download(media.id)
-            fileHelper.shareFile(byteStream, media.title, mediaType)
+            fileHelper.shareFile(byteStream, media, mediaType)
         } catch (t: Throwable) {
             crashReportManager.logException(t)
         }
