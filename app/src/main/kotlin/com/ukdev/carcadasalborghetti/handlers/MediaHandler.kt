@@ -13,7 +13,7 @@ abstract class MediaHandler(
         protected val fileHelper: FileHelper
 ) {
 
-    abstract suspend fun play(media: Media)
+    abstract suspend fun play(media: Media, mediaType: MediaType)
 
     abstract suspend fun share(media: Media, mediaType: MediaType)
 

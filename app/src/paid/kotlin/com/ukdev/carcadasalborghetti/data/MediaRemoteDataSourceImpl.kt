@@ -1,6 +1,5 @@
 package com.ukdev.carcadasalborghetti.data
 
-import android.net.Uri
 import com.ukdev.carcadasalborghetti.api.DIR_AUDIO
 import com.ukdev.carcadasalborghetti.api.DIR_VIDEO
 import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
@@ -23,16 +22,6 @@ class MediaRemoteDataSourceImpl(private val apiProvider: ApiProvider) : MediaRem
 
         return withContext(Dispatchers.IO) {
             api.listMedia(request).entries
-        }
-    }
-
-    override suspend fun getStreamLink(mediaId: String): Uri {
-        val request = MediaRequest(mediaId)
-        val api = apiProvider.getDropboxService()
-
-        return withContext(Dispatchers.IO) {
-            val link = api.getStreamLink(request).link
-            Uri.parse(link)
         }
     }
 

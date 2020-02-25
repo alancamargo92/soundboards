@@ -39,6 +39,15 @@ class FileHelperImpl(private val context: Context) : FileHelper {
             throw FileNotFoundException()
     }
 
+    override suspend fun getFileUri(
+            byteStream: InputStream?,
+            media: Media,
+            mediaType: MediaType
+    ): Uri {
+        val file = saveFile(byteStream, media, mediaType)
+        return getFileUri(file)
+    }
+
     override suspend fun shareFile(
             byteStream: InputStream?,
             media: Media,
@@ -66,15 +75,6 @@ class FileHelperImpl(private val context: Context) : FileHelper {
     override suspend fun deleteAll() {
         val dir = File(baseDir)
         dir.deleteRecursively()
-    }
-
-    private suspend fun getFileUri(
-            byteStream: InputStream?,
-            media: Media,
-            mediaType: MediaType
-    ): Uri {
-        val file = saveFile(byteStream, media, mediaType)
-        return getFileUri(file)
     }
 
     private suspend fun saveFile(

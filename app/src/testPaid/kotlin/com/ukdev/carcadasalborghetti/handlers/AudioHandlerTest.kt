@@ -36,24 +36,6 @@ class AudioHandlerTest {
     }
 
     @Test
-    fun shouldPlayAudio() = runBlocking {
-        coEvery { mockFileHelper.getFileUri(any()) } throws Throwable()
-        coEvery { mockRemoteDataSource.getStreamLink(any()) } returns mockk()
-
-        audioHandler.play(Media("1", "Media 1"))
-    }
-
-    @Test
-    fun whenAnExceptionIsThrownWhilePlayingAudio_shouldLogToCrashReport() = runBlocking {
-        coEvery { mockFileHelper.getFileUri(any()) } throws Throwable()
-        coEvery { mockRemoteDataSource.getStreamLink(any()) } throws Throwable()
-
-        audioHandler.play(Media("1", "Media 1"))
-
-        verify { mockCrashReportManager.logException(any()) }
-    }
-
-    @Test
     fun shouldShareAudio() = runBlocking {
         coEvery { mockRemoteDataSource.download(any()) } returns mockk()
 

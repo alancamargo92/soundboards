@@ -3,7 +3,6 @@ package com.ukdev.carcadasalborghetti.data
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
 import com.ukdev.carcadasalborghetti.api.responses.MediaResponse
-import com.ukdev.carcadasalborghetti.api.responses.StreamLinkResponse
 import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
 import com.ukdev.carcadasalborghetti.api.tools.TokenHelper
 import com.ukdev.carcadasalborghetti.model.Media
@@ -17,7 +16,6 @@ import okhttp3.ResponseBody
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import retrofit2.HttpException
 
@@ -55,16 +53,6 @@ class MediaRemoteDataSourceImplTest {
     }
 
     @Test
-    @Ignore("Streaming will be replaced with download soon")
-    fun shouldGetStreamLink() = runBlocking {
-        enqueueSuccessfulStreamLinkResponse()
-
-        val streamLink = remoteDataSource.getStreamLink("media-id")
-
-        assertThat(streamLink.toString()).isEqualTo("stream/link")
-    }
-
-    @Test
     fun shouldDownloadMedia() = runBlocking {
         enqueueSuccessfulDownloadResponse()
 
@@ -83,15 +71,6 @@ class MediaRemoteDataSourceImplTest {
     }
 
     @Test(expected = HttpException::class)
-    fun whenStreamLinkRequestFails_shouldThrowException() {
-        enqueueDropboxApiErrorResponse()
-
-        runBlocking {
-            remoteDataSource.getStreamLink("media-id")
-        }
-    }
-
-    @Test(expected = HttpException::class)
     fun whenDownloadRequestFails_shouldThrowException() {
         enqueueDownloadApiErrorResponse()
 
@@ -104,14 +83,6 @@ class MediaRemoteDataSourceImplTest {
         val entries = listOf<Media>(mockk(), mockk(), mockk())
         val mediaResponse = MediaResponse(entries)
         val json = Gson().toJson(mediaResponse)
-        val response = MockResponse().setResponseCode(200).setBody(json)
-        mockDropboxApi.enqueue(response)
-    }
-
-    private fun enqueueSuccessfulStreamLinkResponse() {
-        val streamLink = "stream/link"
-        val streamLinkResponse = StreamLinkResponse(streamLink)
-        val json = Gson().toJson(streamLinkResponse)
         val response = MockResponse().setResponseCode(200).setBody(json)
         mockDropboxApi.enqueue(response)
     }

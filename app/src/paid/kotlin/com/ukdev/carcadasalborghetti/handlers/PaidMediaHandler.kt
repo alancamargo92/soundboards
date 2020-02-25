@@ -20,12 +20,12 @@ abstract class PaidMediaHandler(
 
     protected abstract fun playMedia(link: Uri, title: String)
 
-    override suspend fun play(media: Media) {
+    override suspend fun play(media: Media, mediaType: MediaType) {
         val uriResult = ioHelper.safeIOCall(mainCall = {
             fileHelper.getFileUri(media.title)
         }, alternative = {
-            // TODO: download instead of stream
-            remoteDataSource.getStreamLink(media.id)
+            val byteStream = remoteDataSource.download(media.id)
+            fileHelper.getFileUri(byteStream, media, mediaType)
         })
 
         if (uriResult is Success)

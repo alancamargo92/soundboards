@@ -62,7 +62,7 @@ abstract class MediaListFragment(
         lifecycleScope.launch {
             adapter.notifyItemClicked()
             withContext(Dispatchers.IO) {
-                mediaHandler.play(media)
+                mediaHandler.play(media, mediaType)
             }
             adapter.notifyItemReady()
         }
