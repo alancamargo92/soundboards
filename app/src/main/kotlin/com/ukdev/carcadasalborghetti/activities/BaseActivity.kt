@@ -11,7 +11,6 @@ import com.ukdev.carcadasalborghetti.fragments.MediaListFragment
 import com.ukdev.carcadasalborghetti.handlers.MediaHandler
 import com.ukdev.carcadasalborghetti.utils.MenuProvider
 import com.ukdev.carcadasalborghetti.utils.PreferenceUtils
-import com.ukdev.carcadasalborghetti.utils.getFragments
 import kotlinx.android.synthetic.main.activity_base.*
 import org.koin.android.ext.android.inject
 
@@ -26,7 +25,6 @@ open class BaseActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(toolbar)
-        configureTabLayout()
         configureViewPager()
 
         if (preferenceUtils.shouldShowTip())
@@ -43,15 +41,6 @@ open class BaseActivity : AppCompatActivity(R.layout.activity_main) {
             menuProvider.getMenuItemsAndActions()[it]?.invoke()
         }
         return true
-    }
-
-    private fun configureTabLayout() {
-        tab_layout.run {
-            getFragments().forEach {
-                addTab(newTab().setText(it.key))
-            }
-            tabGravity = TabLayout.GRAVITY_FILL
-        }
     }
 
     private fun configureViewPager() {
