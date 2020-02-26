@@ -9,13 +9,15 @@ import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.PagerAdapter
 import com.ukdev.carcadasalborghetti.fragments.MediaListFragment
 import com.ukdev.carcadasalborghetti.handlers.MediaHandler
+import com.ukdev.carcadasalborghetti.utils.MenuProvider
 import com.ukdev.carcadasalborghetti.utils.PreferenceUtils
-import com.ukdev.carcadasalborghetti.utils.getAppName
-import com.ukdev.carcadasalborghetti.utils.getAppVersion
 import com.ukdev.carcadasalborghetti.utils.getFragments
 import kotlinx.android.synthetic.main.activity_base.*
+import org.koin.android.ext.android.inject
 
 open class BaseActivity : AppCompatActivity(R.layout.activity_main) {
+
+    private val menuProvider by inject<MenuProvider>()
 
     private val preferenceUtils by lazy { PreferenceUtils(this) }
 
@@ -37,11 +39,10 @@ open class BaseActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
-            R.id.item_privacy -> showPrivacyPolicy()
-            R.id.item_about -> showAppInfo()
-            else -> false
+        item?.itemId?.let {
+            menuProvider.getMenuItemsAndActions()[it]?.invoke()
         }
+        return true
     }
 
     private fun configureTabLayout() {
@@ -71,23 +72,6 @@ open class BaseActivity : AppCompatActivity(R.layout.activity_main) {
                 override fun onTabReselected(tab: TabLayout.Tab) { }
             })
         }
-    }
-
-    private fun showPrivacyPolicy(): Boolean {
-        AlertDialog.Builder(this).setView(R.layout.dialogue_privacy_terms)
-                .setNeutralButton(R.string.ok, null)
-                .show()
-        return true
-    }
-
-    private fun showAppInfo(): Boolean {
-        val title = getString(R.string.app_info, getAppName(), getAppVersion())
-        AlertDialog.Builder(this).setTitle(title)
-                .setMessage(R.string.developer_info)
-                .setNeutralButton(R.string.ok, null)
-                .setIcon(R.mipmap.ic_launcher)
-                .show()
-        return true
     }
 
     private fun showTip() {

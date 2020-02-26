@@ -17,6 +17,8 @@ import com.ukdev.carcadasalborghetti.helpers.VideoHelper
 import com.ukdev.carcadasalborghetti.helpers.VideoHelperImpl
 import com.ukdev.carcadasalborghetti.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.repository.MediaRepositoryImpl
+import com.ukdev.carcadasalborghetti.utils.MenuProvider
+import com.ukdev.carcadasalborghetti.utils.MenuProviderImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -39,6 +41,7 @@ class PaidApplication : CarcadasAlborghettiApplication() {
         factory<TokenHelper> { TokenHelperImpl() }
         factory<VideoHelper> { VideoHelperImpl(androidContext()) }
         factory { IOHelper(get()) }
+        factory<MenuProvider> { MenuProviderImpl(androidContext(), get()) }
     }
 
     override fun onCreate() {

@@ -10,10 +10,6 @@ class MediaLocalDataSourceImpl(private val fileHelper: FileHelper) : MediaLocalD
         return fileHelper.listFiles(mediaType)
     }
 
-    override suspend fun load(mediaId: String): Media {
-        return Media("", "")
-    }
-
     override suspend fun clearCache() {
         fileHelper.deleteAll()
     }
