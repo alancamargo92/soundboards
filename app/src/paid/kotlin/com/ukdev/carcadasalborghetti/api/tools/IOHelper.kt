@@ -11,10 +11,6 @@ import java.io.IOException
 
 class IOHelper(private val crashReportManager: CrashReportManager) {
 
-    suspend fun <T> safeIOCall(mainCall: suspend () -> T): Result<T> {
-        return safeIOCall(mainCall, null)
-    }
-
     suspend fun <T> safeIOCall(
             mainCall: suspend () -> T,
             alternative: (suspend () -> T)? = null

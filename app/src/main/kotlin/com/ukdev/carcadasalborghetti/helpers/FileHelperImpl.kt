@@ -48,12 +48,7 @@ class FileHelperImpl(private val context: Context) : FileHelper {
         return getFileUri(file)
     }
 
-    override suspend fun shareFile(
-            byteStream: InputStream?,
-            media: Media,
-            mediaType: MediaType
-    ) {
-        val uri = getFileUri(byteStream, media, mediaType)
+    override suspend fun shareFile(uri: Uri, title: String, mediaType: MediaType) {
         val type = if (mediaType == MediaType.AUDIO) "audio/*" else "video/*"
         val shareIntent = Intent(Intent.ACTION_SEND).setType(type)
                 .putExtra(Intent.EXTRA_STREAM, uri)
@@ -66,6 +61,15 @@ class FileHelperImpl(private val context: Context) : FileHelper {
         withContext(Dispatchers.Main) {
             context.startActivity(chooser)
         }
+    }
+
+    override suspend fun shareFile(
+            byteStream: InputStream?,
+            media: Media,
+            mediaType: MediaType
+    ) {
+        val uri = getFileUri(byteStream, media, mediaType)
+        shareFile(uri, media.title, mediaType)
     }
 
     override suspend fun getByteStream(uri: Uri): InputStream? {

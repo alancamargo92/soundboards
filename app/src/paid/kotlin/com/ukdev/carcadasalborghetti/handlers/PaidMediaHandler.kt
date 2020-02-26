@@ -33,12 +33,13 @@ abstract class PaidMediaHandler(
     }
 
     override suspend fun share(media: Media, mediaType: MediaType) {
-        try {
+        ioHelper.safeIOCall(mainCall = {
+            val uri = fileHelper.getFileUri(media.title)
+            fileHelper.shareFile(uri, media.title, mediaType)
+        }, alternative = {
             val byteStream = remoteDataSource.download(media.id)
             fileHelper.shareFile(byteStream, media, mediaType)
-        } catch (t: Throwable) {
-            crashReportManager.logException(t)
-        }
+        })
     }
 
 }
