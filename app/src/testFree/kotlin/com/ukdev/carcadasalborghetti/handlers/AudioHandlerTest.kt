@@ -10,6 +10,7 @@ import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
+import java.io.InputStream
 
 class AudioHandlerTest {
 
@@ -27,14 +28,16 @@ class AudioHandlerTest {
 
     @Test
     fun shouldPlayAudio() = runBlocking {
-        audioHandler.play(mockk())
+        audioHandler.play(Media("Title", mockk()), MediaType.AUDIO)
+
+        verify(exactly = 0) { mockCrashReportManager.logException(any()) }
     }
 
     @Test
     fun whenAnExceptionIsThrownWhilePlayingAudio_shouldLogToCrashReport() = runBlocking {
         every { mockMediaHelper.playAudio(any()) } throws Throwable()
 
-        audioHandler.play(mockk())
+        audioHandler.play(mockk(), MediaType.AUDIO)
 
         verify { mockCrashReportManager.logException(any()) }
     }
@@ -45,7 +48,7 @@ class AudioHandlerTest {
 
         audioHandler.share(Media("1", mockk()), MediaType.AUDIO)
 
-        coVerify { mockFileHelper.shareFile(any(), any(), any()) }
+        coVerify { mockFileHelper.shareFile(any<InputStream>(), any(), any()) }
     }
 
     @Test

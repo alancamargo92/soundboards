@@ -75,6 +75,10 @@ android {
         targetCompatibility 1.8
     }
 
+    androidExtensions {
+        experimental true
+    }
+
     testOptions {
         unitTests.returnDefaultValues true
     }

@@ -14,7 +14,7 @@ class AudioHandler(
         fileSharingHelper: FileHelper
 ) : MediaHandler(mediaHelper, crashReportManager, fileSharingHelper) {
 
-    override suspend fun play(media: Media) {
+    override suspend fun play(media: Media, mediaType: MediaType) {
         try {
             mediaHelper.playAudio(media.uri)
         } catch (t: Throwable) {
@@ -24,7 +24,6 @@ class AudioHandler(
 
     override suspend fun share(media: Media, mediaType: MediaType) {
         try {
-            val fileName = "${media.title}.mp3"
             withContext(Dispatchers.IO) {
                 fileHelper.getByteStream(media.uri)
             }.let { byteStream ->

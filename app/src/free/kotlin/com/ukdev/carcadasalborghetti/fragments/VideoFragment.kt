@@ -24,9 +24,9 @@ class VideoFragment : MediaListFragment(R.layout.fragment_video, MediaType.VIDEO
         }
     }
 
-    override fun onPlaybackStarted() { }
+    override fun showFab() { }
 
-    override fun onPlaybackStopped() { }
+    override fun hideFab() { }
 
     private fun showPaidVersion() {
         val url = "https://play.google.com/store/apps/details?id=com.ukdev.carcadasalborghetti.paid"

@@ -138,20 +138,12 @@ class FileHelperImpl(private val context: Context) : FileHelper {
         return File("$baseDir/$subDir")
     }
 
-    // FIXME: adapt to free flavour
     private fun composeFileName(media: Media): String {
-        return "${media.id}$FILE_NAME_SEPARATOR${media.position}$FILE_NAME_SEPARATOR${media.title}"
+        return Media.composeFileName(media)
     }
 
-    // FIXME: adapt to free flavour
     private fun buildMedia(fileName: String): Media {
-        val parts = fileName.split(FILE_NAME_SEPARATOR)
-        val id = parts[0]
-        val position = parts[1].toInt()
-        val title = parts[2]
-        return Media(id, title).also {
-            it.position = position
-        }
+        return Media.fromFileName(fileName)
     }
 
     private companion object {
@@ -159,7 +151,6 @@ class FileHelperImpl(private val context: Context) : FileHelper {
         const val DIR_AUDIOS = "$DIR_MEDIA/audios"
         const val DIR_VIDEOS = "$DIR_MEDIA/videos"
         const val EXTENSION_AUDIO = "mp3"
-        const val FILE_NAME_SEPARATOR = '#'
     }
 
 }

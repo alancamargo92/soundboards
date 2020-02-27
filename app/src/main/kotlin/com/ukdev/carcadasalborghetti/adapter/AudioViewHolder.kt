@@ -1,16 +1,17 @@
 package com.ukdev.carcadasalborghetti.adapter
 
 import android.view.View
-import android.widget.TextView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.model.Media
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_audio.*
 
-class AudioViewHolder(itemView: View) : MediaViewHolder(itemView) {
+class AudioViewHolder(itemView: View) : MediaViewHolder(itemView), LayoutContainer {
 
-    private val txtTitle = itemView.findViewById<TextView>(R.id.txt_title)
+    override val containerView: View? = itemView
 
     override fun bindTo(media: Media) {
-        txtTitle.text = itemView.context.getString(
+        txt_title.text = itemView.context.getString(
                 R.string.title_format, media.position, media.title
         ).removeSuffix(".mp3")
     }

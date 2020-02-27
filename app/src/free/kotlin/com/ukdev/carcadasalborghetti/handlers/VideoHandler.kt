@@ -12,7 +12,7 @@ class VideoHandler(
         fileSharingHelper: FileHelper
 ) : MediaHandler(mediaHelper, crashReportManager, fileSharingHelper) {
 
-    override suspend fun play(media: Media) { }
+    override suspend fun play(media: Media, mediaType: MediaType) { }
 
     override suspend fun share(media: Media, mediaType: MediaType) { }
 
