@@ -12,6 +12,7 @@ import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
+import java.io.InputStream
 
 // TODO: write tests for cache
 class AudioHandlerTest {
@@ -41,7 +42,7 @@ class AudioHandlerTest {
 
         audioHandler.share(Media("1", "Media 1"), MediaType.AUDIO)
 
-        coVerify { mockFileHelper.shareFile(any(), any(), any()) }
+        coVerify { mockFileHelper.shareFile(any<InputStream>(), any(), any()) }
     }
 
     @Test
