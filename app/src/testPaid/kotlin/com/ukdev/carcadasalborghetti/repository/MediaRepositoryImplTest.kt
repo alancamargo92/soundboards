@@ -6,18 +6,14 @@ import com.ukdev.carcadasalborghetti.data.MediaLocalDataSource
 import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.model.*
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
-import io.mockk.MockKAnnotations
-import io.mockk.coEvery
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import retrofit2.HttpException
 import java.io.IOException
 
-// TODO: write tests for cache
 class MediaRepositoryImplTest {
 
     @MockK lateinit var mockCrashReportManager: CrashReportManager
@@ -112,6 +108,22 @@ class MediaRepositoryImplTest {
         val result = repository.getMedia(MediaType.AUDIO)
 
         assertThat(result).isInstanceOf(GenericError::class.java)
+    }
+
+    @Test
+    fun whenRemoteDataSourceThrowsAnException_shouldGetMediaListFromCache() = runBlocking {
+        val expected = listOf(
+                Media("1", "media 1"),
+                Media("2", "media 2"),
+                Media("3", "media 3")
+        )
+        coEvery { mockRemoteDataSource.listMedia(any()) } throws IOException()
+        coEvery { mockLocalDataSource.listMedia(any()) } returns expected
+
+        repository.getMedia(MediaType.AUDIO)
+
+        coVerify { mockRemoteDataSource.listMedia(any()) }
+        coVerify { mockLocalDataSource.listMedia(any()) }
     }
 
 }

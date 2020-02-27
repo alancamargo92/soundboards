@@ -12,9 +12,9 @@ import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
+import java.io.FileNotFoundException
 import java.io.InputStream
 
-// TODO: write tests for cache
 class AudioHandlerTest {
 
     @MockK lateinit var mockMediaHelper: MediaHelper
@@ -37,12 +37,51 @@ class AudioHandlerTest {
     }
 
     @Test
+    fun whenPlaying_shouldPrioritiseCache() = runBlocking {
+        coEvery { mockFileHelper.getFileUri(any()) } returns mockk()
+
+        audioHandler.play(Media("id", "Title"), MediaType.AUDIO)
+
+        coVerify(exactly = 0) { mockRemoteDataSource.download(any()) }
+    }
+
+    @Test
+    fun whenAudioIsNotInCache_shouldDownloadBeforePlaying() = runBlocking {
+        coEvery { mockFileHelper.getFileUri(any()) } throws FileNotFoundException()
+        coEvery { mockRemoteDataSource.download(any()) } returns mockk()
+        coEvery { mockFileHelper.getFileUri(any(), any(), any()) } returns mockk()
+
+        audioHandler.play(Media("id", "Title"), MediaType.AUDIO)
+
+        coVerify { mockRemoteDataSource.download(any()) }
+    }
+
+    @Test
     fun shouldShareAudio() = runBlocking {
         coEvery { mockRemoteDataSource.download(any()) } returns mockk()
 
         audioHandler.share(Media("1", "Media 1"), MediaType.AUDIO)
 
         coVerify { mockFileHelper.shareFile(any<InputStream>(), any(), any()) }
+    }
+
+    @Test
+    fun whenSharing_shouldPrioritiseCache() = runBlocking {
+        coEvery { mockFileHelper.getFileUri(any()) } returns mockk()
+
+        audioHandler.share(Media("id", "Title"), MediaType.AUDIO)
+
+        coVerify(exactly = 0) { mockRemoteDataSource.download(any()) }
+    }
+
+    @Test
+    fun whenAudioIsNotInCache_shouldDownloadBeforeSharing() = runBlocking {
+        coEvery { mockFileHelper.getFileUri(any()) } throws FileNotFoundException()
+        coEvery { mockRemoteDataSource.download(any()) } returns mockk()
+
+        audioHandler.share(Media("id", "Title"), MediaType.AUDIO)
+
+        coVerify { mockRemoteDataSource.download(any()) }
     }
 
     @Test
