@@ -1,9 +1,6 @@
 package com.ukdev.carcadasalborghetti.di
 
-import com.ukdev.carcadasalborghetti.helpers.FileHelper
-import com.ukdev.carcadasalborghetti.helpers.FileHelperImpl
-import com.ukdev.carcadasalborghetti.helpers.MediaHelper
-import com.ukdev.carcadasalborghetti.helpers.MediaHelperImpl
+import com.ukdev.carcadasalborghetti.helpers.*
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import com.ukdev.carcadasalborghetti.utils.CrashReportManagerImpl
 import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
@@ -18,4 +15,5 @@ private fun core() = module {
     factory<CrashReportManager> { CrashReportManagerImpl() }
     factory<FileHelper> { FileHelperImpl(androidContext()) }
     factory<MediaHelper> { MediaHelperImpl(get(), androidContext()) }
+    factory<PreferencesHelper> { PreferencesHelperImpl(androidContext()) }
 }

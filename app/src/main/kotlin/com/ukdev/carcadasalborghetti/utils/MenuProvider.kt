@@ -1,7 +1,7 @@
 package com.ukdev.carcadasalborghetti.utils
 
 import android.content.Context
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ukdev.carcadasalborghetti.R
 
 abstract class MenuProvider(protected val context: Context) {
@@ -17,7 +17,7 @@ abstract class MenuProvider(protected val context: Context) {
         val appName = context.getAppName()
         val appVersion = context.getAppVersion()
         val title = context.getString(R.string.app_info, appName, appVersion)
-        AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder(context)
                 .setTitle(title)
                 .setMessage(R.string.developer_info)
                 .setNeutralButton(R.string.ok, null)
@@ -26,7 +26,7 @@ abstract class MenuProvider(protected val context: Context) {
     }
 
     private fun showPrivacyPolicy() {
-        AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder(context)
                 .setView(R.layout.dialogue_privacy_terms)
                 .setNeutralButton(R.string.ok, null)
                 .show()
