@@ -108,16 +108,26 @@ abstract class MediaListFragment(
     }
 
     private fun displayMedia(media: List<Media>) {
-        if (group_error.isVisible())
-            group_error.hide()
+        hideErrorIfVisible()
 
         if (media.isEmpty()) {
             showError(ErrorType.NO_FAVOURITES)
-            bt_try_again.hide()
         } else {
             adapter.submitData(media)
             searchView?.setOnQueryTextListener(QueryListener(adapter, media))
             hideProgressBar()
+        }
+    }
+
+    private fun hideErrorIfVisible() {
+        with(group_error) {
+            if (isVisible())
+                hide()
+        }
+
+        with(bt_try_again) {
+            if (isVisible())
+                hide()
         }
     }
 
@@ -126,12 +136,18 @@ abstract class MediaListFragment(
         recycler_view.hide()
         group_error.show()
 
+        if (errorType != ErrorType.NO_FAVOURITES) {
+            with(bt_try_again) {
+                show()
+                setOnClickListener { fetchMedia() }
+            }
+        }
+
         val icon = errorType.iconRes
         val text = errorType.textRes
 
         img_error.setImageResource(icon)
         txt_error.setText(text)
-        bt_try_again.setOnClickListener { fetchMedia() }
     }
 
     private fun hideProgressBar() {
