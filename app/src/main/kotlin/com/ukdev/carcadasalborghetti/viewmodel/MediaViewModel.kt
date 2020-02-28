@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
+import com.ukdev.carcadasalborghetti.model.Operation
 import com.ukdev.carcadasalborghetti.model.Result
-import com.ukdev.carcadasalborghetti.model.Success
 import com.ukdev.carcadasalborghetti.repository.MediaRepository
 import kotlinx.coroutines.launch
 
@@ -25,14 +25,9 @@ class MediaViewModel(private val repository: MediaRepository) : ViewModel() {
             postValue(media)
         }
     }
-    
-    suspend fun isSavedToFavourites(media: Media): Boolean {
-        val result = repository.isSavedToFavourites(media)
 
-        return if (result is Success)
-            result.body
-        else
-            false
+    suspend fun getAvailableOperations(media: Media): List<Operation> {
+        return repository.getAvailableOperations(media)
     }
 
     fun saveToFavourites(media: Media) {

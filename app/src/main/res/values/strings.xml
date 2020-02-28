@@ -20,4 +20,8 @@
     <string name="error_media_unknown">Não foi possível reproduzir a mídia. Fica tranquilo que o desenvolvedor vai ficar sabendo.</string>
     <string name="favourites">Favoritos</string>
     <string name="error_no_favourites">Você ainda não adicionou nada aos favoritos. Para fazer isso, segure no item que quiser adicionar.</string>
+    <string name="add_to_favourites">Adicionar aos favoritos</string>
+    <string name="remove_from_favourites">Remover dos favoritos</string>
+    <string name="share">Compartilhar</string>
+    <string name="what_do_you_want_to_do">O que você quer fazer?</string>
 </resources>

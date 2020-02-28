@@ -70,8 +70,11 @@ abstract class MediaListFragment(
 
     override fun onItemLongClick(media: Media) {
         lifecycleScope.launch {
-            mediaHandler.share(media)
-            adapter.notifyItemReady()
+            val operations = viewModel.getAvailableOperations(media)
+            if (operations.isOnlyShare())
+                share(media)
+            else
+                showOperationsDialogue(operations, media)
         }
     }
 
@@ -153,6 +156,19 @@ abstract class MediaListFragment(
     private fun hideProgressBar() {
         progress_bar.hide()
         recycler_view.show()
+    }
+
+    private suspend fun showOperationsDialogue(operations: List<Operation>, media: Media) {
+
+    }
+
+    private fun List<Operation>.isOnlyShare(): Boolean {
+        return size == 1 && first() == Operation.SHARE
+    }
+
+    private suspend fun share(media: Media) {
+        mediaHandler.share(media)
+        adapter.notifyItemReady()
     }
 
 }
