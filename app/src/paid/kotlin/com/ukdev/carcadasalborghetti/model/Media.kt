@@ -1,10 +1,9 @@
 package com.ukdev.carcadasalborghetti.model
 
-import com.google.gson.annotations.SerializedName
-
 data class Media(
         val id: String,
-        @SerializedName("name") val title: String
+        val title: String,
+        val type: MediaType
 ) {
 
     var position: Int = 0
@@ -15,15 +14,23 @@ data class Media(
         private const val FILE_NAME_SEPARATOR = '#'
 
         fun composeFileName(media: Media): String {
-            return "${media.id}$FILE_NAME_SEPARATOR${media.position}$FILE_NAME_SEPARATOR${media.title}"
+            val sb = StringBuilder(media.type.toString())
+                    .append(FILE_NAME_SEPARATOR)
+                    .append(media.id)
+                    .append(FILE_NAME_SEPARATOR)
+                    .append(media.position)
+                    .append(FILE_NAME_SEPARATOR)
+                    .append(media.title)
+            return sb.toString()
         }
 
         fun fromFileName(fileName: String): Media {
             val parts = fileName.split(FILE_NAME_SEPARATOR)
-            val id = parts[0]
-            val position = parts[1].toInt()
-            val title = parts[2]
-            return Media(id, title).also {
+            val type = MediaType.valueOf(parts[0])
+            val id = parts[1]
+            val position = parts[2].toInt()
+            val title = parts[3]
+            return Media(id, title, type).also {
                 it.position = position
             }
         }

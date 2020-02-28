@@ -13,7 +13,7 @@ class IOHelper(private val crashReportManager: CrashReportManager) {
 
     suspend fun <T> safeIOCall(
             mainCall: suspend () -> T,
-            alternative: (suspend () -> T)? = null
+            alternative: (suspend () -> T)
     ): Result<T> {
         return withContext(Dispatchers.IO) {
             try {
@@ -21,11 +21,7 @@ class IOHelper(private val crashReportManager: CrashReportManager) {
             } catch (t: Throwable) {
                 crashReportManager.logException(t)
                 val apiError = getError(t)
-
-                if (alternative != null)
-                    tryRunAlternative(apiError, alternative)
-                else
-                    apiError
+                tryRunAlternative(apiError, alternative)
             }
         }
     }

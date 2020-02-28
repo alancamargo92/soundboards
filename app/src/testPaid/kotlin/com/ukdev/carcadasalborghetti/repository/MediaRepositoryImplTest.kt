@@ -36,9 +36,9 @@ class MediaRepositoryImplTest {
     @Test
     fun shouldGetMediaList() = runBlocking {
         val expected = listOf(
-                Media("1", "media 1"),
-                Media("2", "media 2"),
-                Media("3", "media 3")
+                Media("1", "media 1", MediaType.AUDIO),
+                Media("2", "media 2", MediaType.AUDIO),
+                Media("3", "media 3", MediaType.AUDIO)
         )
         coEvery { mockRemoteDataSource.listMedia(any()) } returns expected
 
@@ -113,9 +113,9 @@ class MediaRepositoryImplTest {
     @Test
     fun whenRemoteDataSourceThrowsAnException_shouldGetMediaListFromCache() = runBlocking {
         val expected = listOf(
-                Media("1", "media 1"),
-                Media("2", "media 2"),
-                Media("3", "media 3")
+                Media("1", "media 1", MediaType.AUDIO),
+                Media("2", "media 2", MediaType.AUDIO),
+                Media("3", "media 3", MediaType.AUDIO)
         )
         coEvery { mockRemoteDataSource.listMedia(any()) } throws IOException()
         coEvery { mockLocalDataSource.listMedia(any()) } returns expected

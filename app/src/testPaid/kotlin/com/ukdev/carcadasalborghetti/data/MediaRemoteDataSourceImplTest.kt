@@ -2,10 +2,10 @@ package com.ukdev.carcadasalborghetti.data
 
 import com.google.common.truth.Truth.assertThat
 import com.google.gson.Gson
+import com.ukdev.carcadasalborghetti.api.responses.MediaListResponse
 import com.ukdev.carcadasalborghetti.api.responses.MediaResponse
 import com.ukdev.carcadasalborghetti.api.tools.ApiProvider
 import com.ukdev.carcadasalborghetti.api.tools.TokenHelper
-import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -80,8 +80,12 @@ class MediaRemoteDataSourceImplTest {
     }
 
     private fun enqueueSuccessfulMediaListResponse() {
-        val entries = listOf<Media>(mockk(), mockk(), mockk())
-        val mediaResponse = MediaResponse(entries)
+        val entries = listOf<MediaResponse>(
+                MediaResponse("id 1", "Media 1.mp3"),
+                MediaResponse("id 2", "Media 2.mp3"),
+                MediaResponse("id 3", "Media 3.mp3")
+        )
+        val mediaResponse = MediaListResponse(entries)
         val json = Gson().toJson(mediaResponse)
         val response = MockResponse().setResponseCode(200).setBody(json)
         mockDropboxApi.enqueue(response)

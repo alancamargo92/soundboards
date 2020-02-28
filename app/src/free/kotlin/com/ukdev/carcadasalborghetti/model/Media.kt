@@ -2,7 +2,7 @@ package com.ukdev.carcadasalborghetti.model
 
 import android.net.Uri
 
-data class Media(val title: String, val uri: Uri) {
+data class Media(val title: String, val uri: Uri, val type: MediaType = MediaType.AUDIO) {
 
     var position: Int = 0
 

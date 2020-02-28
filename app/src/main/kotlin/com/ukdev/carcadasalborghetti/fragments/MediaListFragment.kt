@@ -64,7 +64,7 @@ abstract class MediaListFragment(
         lifecycleScope.launch {
             adapter.notifyItemClicked()
             withContext(Dispatchers.IO) {
-                mediaHandler.play(media, mediaType)
+                mediaHandler.play(media)
             }
             adapter.notifyItemReady()
         }
@@ -72,7 +72,7 @@ abstract class MediaListFragment(
 
     override fun onItemLongClick(media: Media) {
         lifecycleScope.launch {
-            mediaHandler.share(media, mediaType)
+            mediaHandler.share(media)
             adapter.notifyItemReady()
         }
     }

@@ -39,17 +39,13 @@ class FileHelperImpl(private val context: Context) : FileHelper {
             throw FileNotFoundException()
     }
 
-    override suspend fun getFileUri(
-            byteStream: InputStream?,
-            media: Media,
-            mediaType: MediaType
-    ): Uri {
-        val file = saveFile(byteStream, media, mediaType)
+    override suspend fun getFileUri(byteStream: InputStream?, media: Media): Uri {
+        val file = saveFile(byteStream, media)
         return getFileUri(file)
     }
 
-    override suspend fun shareFile(uri: Uri, title: String, mediaType: MediaType) {
-        val type = if (mediaType == MediaType.AUDIO) "audio/*" else "video/*"
+    override suspend fun shareFile(uri: Uri, media: Media) {
+        val type = if (media.type == MediaType.AUDIO) "audio/*" else "video/*"
         val shareIntent = Intent(Intent.ACTION_SEND).setType(type)
                 .putExtra(Intent.EXTRA_STREAM, uri)
                 .putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.subject_share))
@@ -63,13 +59,9 @@ class FileHelperImpl(private val context: Context) : FileHelper {
         }
     }
 
-    override suspend fun shareFile(
-            byteStream: InputStream?,
-            media: Media,
-            mediaType: MediaType
-    ) {
-        val uri = getFileUri(byteStream, media, mediaType)
-        shareFile(uri, media.title, mediaType)
+    override suspend fun shareFile(byteStream: InputStream?, media: Media) {
+        val uri = getFileUri(byteStream, media)
+        shareFile(uri, media)
     }
 
     override suspend fun getByteStream(uri: Uri): InputStream? {
@@ -81,12 +73,8 @@ class FileHelperImpl(private val context: Context) : FileHelper {
         dir.deleteRecursively()
     }
 
-    private suspend fun saveFile(
-            byteStream: InputStream?,
-            media: Media,
-            mediaType: MediaType
-    ): File {
-        val dir = getDir(mediaType)
+    private suspend fun saveFile(byteStream: InputStream?, media: Media): File {
+        val dir = getDir(media.type)
 
         if (!dir.exists())
             dir.mkdirs()

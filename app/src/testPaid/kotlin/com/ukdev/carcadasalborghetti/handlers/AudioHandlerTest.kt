@@ -40,7 +40,7 @@ class AudioHandlerTest {
     fun whenPlaying_shouldPrioritiseCache() = runBlocking {
         coEvery { mockFileHelper.getFileUri(any()) } returns mockk()
 
-        audioHandler.play(Media("id", "Title"), MediaType.AUDIO)
+        audioHandler.play(Media("id", "Title", MediaType.AUDIO))
 
         coVerify(exactly = 0) { mockRemoteDataSource.download(any()) }
     }
@@ -49,9 +49,9 @@ class AudioHandlerTest {
     fun whenAudioIsNotInCache_shouldDownloadBeforePlaying() = runBlocking {
         coEvery { mockFileHelper.getFileUri(any()) } throws FileNotFoundException()
         coEvery { mockRemoteDataSource.download(any()) } returns mockk()
-        coEvery { mockFileHelper.getFileUri(any(), any(), any()) } returns mockk()
+        coEvery { mockFileHelper.getFileUri(any(), any()) } returns mockk()
 
-        audioHandler.play(Media("id", "Title"), MediaType.AUDIO)
+        audioHandler.play(Media("id", "Title", MediaType.AUDIO))
 
         coVerify { mockRemoteDataSource.download(any()) }
     }
@@ -60,16 +60,16 @@ class AudioHandlerTest {
     fun shouldShareAudio() = runBlocking {
         coEvery { mockRemoteDataSource.download(any()) } returns mockk()
 
-        audioHandler.share(Media("1", "Media 1"), MediaType.AUDIO)
+        audioHandler.share(Media("1", "Media 1", MediaType.AUDIO))
 
-        coVerify { mockFileHelper.shareFile(any<InputStream>(), any(), any()) }
+        coVerify { mockFileHelper.shareFile(any<InputStream>(), any()) }
     }
 
     @Test
     fun whenSharing_shouldPrioritiseCache() = runBlocking {
         coEvery { mockFileHelper.getFileUri(any()) } returns mockk()
 
-        audioHandler.share(Media("id", "Title"), MediaType.AUDIO)
+        audioHandler.share(Media("id", "Title", MediaType.AUDIO))
 
         coVerify(exactly = 0) { mockRemoteDataSource.download(any()) }
     }
@@ -79,7 +79,7 @@ class AudioHandlerTest {
         coEvery { mockFileHelper.getFileUri(any()) } throws FileNotFoundException()
         coEvery { mockRemoteDataSource.download(any()) } returns mockk()
 
-        audioHandler.share(Media("id", "Title"), MediaType.AUDIO)
+        audioHandler.share(Media("id", "Title", MediaType.AUDIO))
 
         coVerify { mockRemoteDataSource.download(any()) }
     }
@@ -88,7 +88,7 @@ class AudioHandlerTest {
     fun whenAnExceptionIsThrownWhileSharingAudio_shouldLogToCrashReport() = runBlocking {
         coEvery { mockRemoteDataSource.download(any()) } throws Throwable()
 
-        audioHandler.share(Media("1", "Media 1"), MediaType.AUDIO)
+        audioHandler.share(Media("1", "Media 1", MediaType.AUDIO))
 
         verify { mockCrashReportManager.logException(any()) }
     }

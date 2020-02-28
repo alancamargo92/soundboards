@@ -3,7 +3,6 @@ package com.ukdev.carcadasalborghetti.handlers
 import com.ukdev.carcadasalborghetti.helpers.FileHelper
 import com.ukdev.carcadasalborghetti.helpers.MediaHelper
 import com.ukdev.carcadasalborghetti.model.Media
-import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
@@ -28,7 +27,7 @@ class AudioHandlerTest {
 
     @Test
     fun shouldPlayAudio() = runBlocking {
-        audioHandler.play(Media("Title", mockk()), MediaType.AUDIO)
+        audioHandler.play(Media("Title", mockk()))
 
         verify(exactly = 0) { mockCrashReportManager.logException(any()) }
     }
@@ -37,7 +36,7 @@ class AudioHandlerTest {
     fun whenAnExceptionIsThrownWhilePlayingAudio_shouldLogToCrashReport() = runBlocking {
         every { mockMediaHelper.playAudio(any()) } throws Throwable()
 
-        audioHandler.play(mockk(), MediaType.AUDIO)
+        audioHandler.play(mockk())
 
         verify { mockCrashReportManager.logException(any()) }
     }
@@ -46,16 +45,16 @@ class AudioHandlerTest {
     fun shouldShareAudio() = runBlocking {
         coEvery { mockFileHelper.getByteStream(any()) } returns mockk()
 
-        audioHandler.share(Media("1", mockk()), MediaType.AUDIO)
+        audioHandler.share(Media("1", mockk()))
 
-        coVerify { mockFileHelper.shareFile(any<InputStream>(), any(), any()) }
+        coVerify { mockFileHelper.shareFile(any<InputStream>(), any()) }
     }
 
     @Test
     fun whenAnExceptionIsThrownWhileSharingAudio_shouldLogToCrashReport() = runBlocking {
         coEvery { mockFileHelper.getByteStream(any()) } throws Throwable()
 
-        audioHandler.share(mockk(), MediaType.AUDIO)
+        audioHandler.share(mockk())
 
         verify { mockCrashReportManager.logException(any()) }
     }

@@ -21,7 +21,14 @@ class MediaRemoteDataSourceImpl(private val apiProvider: ApiProvider) : MediaRem
         val api = apiProvider.getDropboxService()
 
         return withContext(Dispatchers.IO) {
-            api.listMedia(request).entries
+            api.listMedia(request).entries.map {
+                val type = if (it.name.endsWith("mp3"))
+                    MediaType.AUDIO
+                else
+                    MediaType.VIDEO
+
+                Media(it.id, it.name, type)
+            }
         }
     }
 
