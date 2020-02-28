@@ -5,6 +5,7 @@ import com.ukdev.carcadasalborghetti.api.tools.IOHelper
 import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.helpers.FileHelper
 import com.ukdev.carcadasalborghetti.helpers.MediaHelper
+import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 
 class AudioHandler(
@@ -15,7 +16,7 @@ class AudioHandler(
         ioHelper: IOHelper
 ) : PaidMediaHandler(mediaHelper, crashReportManager, fileHelper, remoteDataSource, ioHelper) {
 
-    override fun playMedia(link: Uri, title: String) {
+    override fun playMedia(link: Uri, media: Media) {
         mediaHelper.playAudio(link)
     }
 

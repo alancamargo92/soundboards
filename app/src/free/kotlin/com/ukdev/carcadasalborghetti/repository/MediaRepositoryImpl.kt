@@ -19,4 +19,9 @@ class MediaRepositoryImpl(
         }
     }
 
+    override suspend fun getFavourites(): Result<List<Media>> = GenericError
+
+    override suspend fun saveToFavourites(media: Media) { }
+
+    override suspend fun removeFromFavourites(media: Media) { }
 }

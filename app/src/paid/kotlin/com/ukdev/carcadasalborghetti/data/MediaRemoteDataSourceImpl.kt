@@ -13,10 +13,12 @@ import java.io.InputStream
 class MediaRemoteDataSourceImpl(private val apiProvider: ApiProvider) : MediaRemoteDataSource {
 
     override suspend fun listMedia(mediaType: MediaType): List<Media> {
-        val dir = if (mediaType == MediaType.AUDIO)
-            DIR_AUDIO
-        else
-            DIR_VIDEO
+        val dir = when (mediaType) {
+            MediaType.AUDIO -> DIR_AUDIO
+            MediaType.VIDEO -> DIR_VIDEO
+            else -> throw IllegalArgumentException("Must be either audio or video")
+        }
+
         val request = MediaRequest(dir)
         val api = apiProvider.getDropboxService()
 

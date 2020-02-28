@@ -6,9 +6,10 @@ import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.helpers.FileHelper
 import com.ukdev.carcadasalborghetti.helpers.MediaHelper
 import com.ukdev.carcadasalborghetti.model.Media
+import com.ukdev.carcadasalborghetti.model.MediaType
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 
-class VideoHandler(
+class FavouritesHandler(
         mediaHelper: MediaHelper,
         crashReportManager: CrashReportManager,
         fileHelper: FileHelper,
@@ -17,7 +18,11 @@ class VideoHandler(
 ) : PaidMediaHandler(mediaHelper, crashReportManager, fileHelper, remoteDataSource, ioHelper) {
 
     override fun playMedia(link: Uri, media: Media) {
-        mediaHelper.playVideo(link, media.title)
+        when (media.type) {
+            MediaType.AUDIO -> mediaHelper.playAudio(link)
+            MediaType.VIDEO -> mediaHelper.playVideo(link, media.title)
+            else -> return
+        }
     }
 
 }

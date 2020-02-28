@@ -9,8 +9,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.handlers.MediaHandler
@@ -38,11 +36,11 @@ abstract class MediaListFragment(
 
     private val viewModel by viewModel<MediaViewModel>()
 
-    private val layoutManager by lazy {
-        GridLayoutManager(requireContext(), ITEM_SPAN, RecyclerView.VERTICAL, false)
-    }
-
     private var searchView: SearchView? = null
+
+    abstract fun showFab()
+
+    abstract fun hideFab()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -77,13 +75,7 @@ abstract class MediaListFragment(
         }
     }
 
-    abstract fun showFab()
-
-    abstract fun hideFab()
-
     private fun configureRecyclerView() {
-        recycler_view.layoutManager = layoutManager
-        recycler_view.setHasFixedSize(true)
         recycler_view.adapter = adapter.apply { setListener(this@MediaListFragment) }
     }
 
@@ -119,9 +111,14 @@ abstract class MediaListFragment(
         if (group_error.isVisible())
             group_error.hide()
 
-        adapter.setData(media)
-        searchView?.setOnQueryTextListener(QueryListener(adapter, media))
-        hideProgressBar()
+        if (media.isEmpty()) {
+            showError(ErrorType.NO_FAVOURITES)
+            bt_try_again.hide()
+        } else {
+            adapter.submitData(media)
+            searchView?.setOnQueryTextListener(QueryListener(adapter, media))
+            hideProgressBar()
+        }
     }
 
     private fun showError(errorType: ErrorType) {
@@ -129,16 +126,8 @@ abstract class MediaListFragment(
         recycler_view.hide()
         group_error.show()
 
-        val icon: Int
-        val text: Int
-
-        if (errorType == ErrorType.CONNECTION) {
-            icon = R.drawable.ic_disconnected
-            text = R.string.error_connection
-        } else {
-            icon = R.drawable.ic_error
-            text = R.string.error_unknown
-        }
+        val icon = errorType.iconRes
+        val text = errorType.textRes
 
         img_error.setImageResource(icon)
         txt_error.setText(text)
@@ -148,10 +137,6 @@ abstract class MediaListFragment(
     private fun hideProgressBar() {
         progress_bar.hide()
         recycler_view.show()
-    }
-
-    private companion object {
-        const val ITEM_SPAN = 3
     }
 
 }

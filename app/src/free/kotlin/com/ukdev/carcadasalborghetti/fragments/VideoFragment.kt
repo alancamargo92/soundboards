@@ -11,7 +11,7 @@ import com.ukdev.carcadasalborghetti.model.MediaType
 import kotlinx.android.synthetic.free.fragment_video.*
 import org.koin.android.ext.android.inject
 
-class VideoFragment : MediaListFragment(R.layout.fragment_video, MediaType.VIDEO) {
+open class VideoFragment : MediaListFragment(R.layout.fragment_video, MediaType.VIDEO) {
 
     override val mediaHandler by inject<VideoHandler>()
     override val adapter = VideoAdapter()

@@ -1,7 +1,14 @@
 package com.ukdev.carcadasalborghetti.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
+
+@Entity
+@TypeConverters(Media.MediaTypeConverter::class)
 data class Media(
-        val id: String,
+        @PrimaryKey val id: String,
         val title: String,
         val type: MediaType,
         var position: Int = 0
@@ -31,6 +38,16 @@ data class Media(
             val title = parts[3]
             return Media(id, title, type, position)
         }
+    }
+
+    class MediaTypeConverter {
+
+        @TypeConverter
+        fun mediaTypeToString(mediaType: MediaType) = mediaType.toString()
+
+        @TypeConverter
+        fun stringToMediaType(string: String) = MediaType.valueOf(string)
+
     }
 
 }

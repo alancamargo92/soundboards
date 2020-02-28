@@ -7,12 +7,13 @@ import java.util.*
 
 abstract class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
 
+    protected var data: List<Media>? = null
+
     private lateinit var holder: MediaViewHolder
 
-    private var data: List<Media>? = null
     private var listener: RecyclerViewInteractionListener? = null
 
-    fun setData(data: List<Media>) {
+    fun submitData(data: List<Media>) {
         this.data = data
         notifyDataSetChanged()
     }

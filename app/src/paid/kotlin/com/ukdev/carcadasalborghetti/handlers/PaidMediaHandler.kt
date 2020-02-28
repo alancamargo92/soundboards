@@ -17,7 +17,7 @@ abstract class PaidMediaHandler(
         private val ioHelper: IOHelper
 ) : MediaHandler(mediaHelper, crashReportManager, fileHelper) {
 
-    protected abstract fun playMedia(link: Uri, title: String)
+    protected abstract fun playMedia(link: Uri, media: Media)
 
     override suspend fun play(media: Media) {
         val uriResult = ioHelper.safeIOCall(mainCall = {
@@ -28,7 +28,7 @@ abstract class PaidMediaHandler(
         })
 
         if (uriResult is Success)
-            playMedia(uriResult.body, media.title)
+            playMedia(uriResult.body, media)
     }
 
     override suspend fun share(media: Media) {

@@ -11,17 +11,25 @@ import java.io.IOException
 
 class IOHelper(private val crashReportManager: CrashReportManager) {
 
+    suspend fun <T> safeIOCall(block: suspend() -> T): Result<T> {
+        return safeIOCall(block, null)
+    }
+
     suspend fun <T> safeIOCall(
             mainCall: suspend () -> T,
-            alternative: (suspend () -> T)
+            alternative: (suspend () -> T)? = null
     ): Result<T> {
         return withContext(Dispatchers.IO) {
             try {
                 Success(mainCall.invoke())
             } catch (t: Throwable) {
                 crashReportManager.logException(t)
-                val apiError = getError(t)
-                tryRunAlternative(apiError, alternative)
+                val originalError = getError(t)
+
+                if (alternative != null)
+                    tryRunAlternative(originalError, alternative)
+                else
+                    originalError
             }
         }
     }
