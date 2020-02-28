@@ -27,7 +27,7 @@ class MediaRepositoryImpl(
 
     override suspend fun getFavourites(): Result<List<Media>> {
         return ioHelper.safeIOCall {
-            favouritesDatabase.getFavourites()
+            favouritesDatabase.getFavourites().sort()
         }
     }
 

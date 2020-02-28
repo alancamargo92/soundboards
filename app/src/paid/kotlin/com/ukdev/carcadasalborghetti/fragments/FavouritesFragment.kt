@@ -1,5 +1,7 @@
 package com.ukdev.carcadasalborghetti.fragments
 
+import android.os.Bundle
+import android.view.View
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.FavouritesAdapter
 import com.ukdev.carcadasalborghetti.adapter.MediaAdapter
@@ -12,6 +14,11 @@ class FavouritesFragment : MediaListFragment(R.layout.fragment_audio, MediaType.
 
     override val mediaHandler by inject<FavouritesHandler>()
     override val adapter: MediaAdapter = FavouritesAdapter()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        fab.setOnClickListener { mediaHandler.stop() }
+    }
 
     override fun showFab() {
         fab.show()
