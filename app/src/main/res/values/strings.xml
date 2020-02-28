@@ -18,4 +18,5 @@
     <string name="try_again">Tentar de novo</string>
     <string name="error_media_disconnected">Não foi possível reproduzir a mídia. Verifique sua conexão.</string>
     <string name="error_media_unknown">Não foi possível reproduzir a mídia. Fica tranquilo que o desenvolvedor vai ficar sabendo.</string>
+    <string name="favourites">Favoritos</string>
 </resources>
