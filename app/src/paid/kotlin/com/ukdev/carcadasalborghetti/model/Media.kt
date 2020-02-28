@@ -3,10 +3,9 @@ package com.ukdev.carcadasalborghetti.model
 data class Media(
         val id: String,
         val title: String,
-        val type: MediaType
+        val type: MediaType,
+        var position: Int = 0
 ) {
-
-    var position: Int = 0
 
     override fun toString() = title
 
@@ -30,9 +29,7 @@ data class Media(
             val id = parts[1]
             val position = parts[2].toInt()
             val title = parts[3]
-            return Media(id, title, type).also {
-                it.position = position
-            }
+            return Media(id, title, type, position)
         }
     }
 

@@ -2,9 +2,12 @@ package com.ukdev.carcadasalborghetti.model
 
 import android.net.Uri
 
-data class Media(val title: String, val uri: Uri, val type: MediaType = MediaType.AUDIO) {
-
-    var position: Int = 0
+data class Media(
+        val title: String,
+        val uri: Uri,
+        val type: MediaType = MediaType.AUDIO,
+        var position: Int = 0
+) {
 
     companion object {
         private const val FILE_NAME_SEPARATOR = '#'
@@ -17,9 +20,7 @@ data class Media(val title: String, val uri: Uri, val type: MediaType = MediaTyp
             val parts = fileName.split(FILE_NAME_SEPARATOR)
             val position = parts[0].toInt()
             val title = parts[1]
-            return Media(title, Uri.EMPTY).also {
-                it.position = position
-            }
+            return Media(title, Uri.EMPTY, position = position)
         }
     }
 
