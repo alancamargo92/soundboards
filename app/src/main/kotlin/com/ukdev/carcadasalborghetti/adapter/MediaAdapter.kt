@@ -38,7 +38,7 @@ abstract class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
 
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
         data?.get(position)?.let { media ->
-            holder.run {
+            with(holder) {
                 bindTo(media)
 
                 itemView.setOnClickListener {

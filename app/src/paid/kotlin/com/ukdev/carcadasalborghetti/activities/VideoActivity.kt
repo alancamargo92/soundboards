@@ -29,7 +29,7 @@ class VideoActivity : AppCompatActivity(R.layout.activity_video) {
     }
 
     private fun startPlayback() {
-        video_view.run {
+        with(video_view) {
             setVideoURI(url)
             setMediaController(MediaController(context).also { it.setAnchorView(this) })
             start()
