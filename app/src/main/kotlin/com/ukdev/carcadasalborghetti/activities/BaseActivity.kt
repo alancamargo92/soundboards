@@ -37,7 +37,7 @@ open class BaseActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         item?.itemId?.let {
-            menuProvider.getMenuItemsAndActions()[it]?.invoke()
+            menuProvider.getMenuItemsAndActions()[it]?.invoke(this)
         }
         return true
     }

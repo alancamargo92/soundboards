@@ -30,7 +30,7 @@ class FreeApplication : CarcadasAlborghettiApplication() {
 
     private val helpers = module {
         factory<VideoHelper> { VideoHelperImpl() }
-        factory<MenuProvider> { MenuProviderImpl(androidContext()) }
+        factory<MenuProvider> { MenuProviderImpl() }
     }
 
     override fun onCreate() {

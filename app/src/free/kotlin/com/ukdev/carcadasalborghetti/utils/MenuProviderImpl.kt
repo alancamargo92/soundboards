@@ -1,10 +1,10 @@
 package com.ukdev.carcadasalborghetti.utils
 
-import android.content.Context
+import android.app.Activity
 
-class MenuProviderImpl(context: Context) : MenuProvider(context) {
+class MenuProviderImpl : MenuProvider() {
 
-    override fun getMenuItemsAndActions(): Map<Int, () -> Unit> {
+    override fun getMenuItemsAndActions(): Map<Int, (activity: Activity) -> Unit> {
         return defaultItemsAndActions
     }
 

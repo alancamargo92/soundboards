@@ -41,7 +41,7 @@ class PaidApplication : CarcadasAlborghettiApplication() {
         factory<TokenHelper> { TokenHelperImpl() }
         factory<VideoHelper> { VideoHelperImpl(androidContext()) }
         factory { IOHelper(get()) }
-        factory<MenuProvider> { MenuProviderImpl(androidContext(), get()) }
+        factory<MenuProvider> { MenuProviderImpl(get()) }
     }
 
     override fun onCreate() {
