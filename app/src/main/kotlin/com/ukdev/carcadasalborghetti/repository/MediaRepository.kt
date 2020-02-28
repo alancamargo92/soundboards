@@ -11,6 +11,7 @@ abstract class MediaRepository(protected val crashReportManager: CrashReportMana
     abstract suspend fun getFavourites(): Result<List<Media>>
     abstract suspend fun saveToFavourites(media: Media)
     abstract suspend fun removeFromFavourites(media: Media)
+    abstract suspend fun isSavedToFavourites(media: Media): Result<Boolean>
 
     protected fun List<Media>.sort(): List<Media> {
         return this.sortedBy { it.title.split(".").first().trim() }.apply {

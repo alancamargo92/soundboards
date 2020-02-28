@@ -43,4 +43,10 @@ class MediaRepositoryImpl(
         }
     }
 
+    override suspend fun isSavedToFavourites(media: Media): Result<Boolean> {
+        return ioHelper.safeIOCall {
+            favouritesDatabase.count(media.id) > 0
+        }
+    }
+
 }

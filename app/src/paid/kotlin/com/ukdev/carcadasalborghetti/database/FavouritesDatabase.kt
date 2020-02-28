@@ -12,6 +12,9 @@ interface FavouritesDatabase {
     @Insert
     suspend fun insert(media: Media)
 
+    @Query("SELECT COUNT() FROM Media WHERE id = :mediaId")
+    suspend fun count(mediaId: String): Int
+
     @Query("SELECT * FROM Media")
     suspend fun getFavourites(): List<Media>
 
