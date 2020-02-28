@@ -54,7 +54,9 @@ abstract class MediaListFragment(
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
-        searchView = menu.findItem(R.id.item_search)?.actionView as SearchView
+        searchView = (menu.findItem(R.id.item_search)?.actionView as SearchView).apply {
+            queryHint = getString(R.string.search)
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 
