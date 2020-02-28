@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.MediaController
 import androidx.appcompat.app.AppCompatActivity
 import com.ukdev.carcadasalborghetti.R
@@ -18,6 +19,12 @@ class VideoActivity : AppCompatActivity(R.layout.activity_video) {
         super.onCreate(savedInstanceState)
         configureActionBar()
         startPlayback()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home)
+            onBackPressed()
+        return true
     }
 
     private fun configureActionBar() {
