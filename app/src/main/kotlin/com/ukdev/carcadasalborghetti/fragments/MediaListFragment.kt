@@ -28,7 +28,9 @@ import org.koin.android.viewmodel.ext.android.viewModel
 abstract class MediaListFragment(
         @LayoutRes layoutId: Int,
         private val mediaType: MediaType
-) : Fragment(layoutId), RecyclerViewInteractionListener {
+) : Fragment(layoutId),
+        RecyclerViewInteractionListener,
+        OperationsDialogue.OnOperationSelectedListener {
 
     abstract val mediaHandler: MediaHandler
 
@@ -37,6 +39,8 @@ abstract class MediaListFragment(
     private val viewModel by viewModel<MediaViewModel>()
 
     private var searchView: SearchView? = null
+
+    private lateinit var selectedMedia: Media
 
     abstract fun showFab()
 
@@ -71,10 +75,22 @@ abstract class MediaListFragment(
     override fun onItemLongClick(media: Media) {
         lifecycleScope.launch {
             val operations = viewModel.getAvailableOperations(media)
-            if (operations.isOnlyShare())
+            if (operations.isOnlyShare()) {
                 share(media)
-            else
-                showOperationsDialogue(operations, media)
+            } else {
+                selectedMedia = media
+                showOperationsDialogue(operations)
+            }
+        }
+    }
+
+    override fun onOperationSelected(operation: Operation) {
+        when (operation) {
+            Operation.ADD_TO_FAVOURITES -> viewModel.saveToFavourites(selectedMedia)
+            Operation.REMOVE_FROM_FAVOURITES -> viewModel.removeFromFavourites(selectedMedia)
+            Operation.SHARE -> lifecycleScope.launch {
+                share(selectedMedia)
+            }
         }
     }
 
@@ -158,8 +174,10 @@ abstract class MediaListFragment(
         recycler_view.show()
     }
 
-    private suspend fun showOperationsDialogue(operations: List<Operation>, media: Media) {
-
+    private fun showOperationsDialogue(operations: List<Operation>) {
+        val dialogue = OperationsDialogue.newInstance(operations).apply {
+            setOnOperationSelectedListener(this@MediaListFragment)
+        }
     }
 
     private fun List<Operation>.isOnlyShare(): Boolean {
