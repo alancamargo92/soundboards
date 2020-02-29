@@ -175,9 +175,9 @@ abstract class MediaListFragment(
     }
 
     private fun showOperationsDialogue(operations: List<Operation>) {
-        val dialogue = OperationsDialogue.newInstance(operations).apply {
+        OperationsDialogue.newInstance(operations).apply {
             setOnOperationSelectedListener(this@MediaListFragment)
-        }
+        }.show(childFragmentManager, null)
     }
 
     private fun List<Operation>.isOnlyShare(): Boolean {
