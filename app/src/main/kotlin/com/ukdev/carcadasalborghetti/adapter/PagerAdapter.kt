@@ -14,14 +14,14 @@ class PagerAdapter(
         private val tabCount: Int
 ) : FragmentStatePagerAdapter(fragmentManager, tabCount) {
 
-    override fun getItem(position: Int): Fragment = getFragments().values.toList()[position]
-
-    override fun getCount() = tabCount
-
-    private fun getFragments(): Map<Int, MediaListFragment> = mapOf(
+    private val fragments: Map<Int, MediaListFragment> = mapOf(
             R.string.audios to AudioFragment(),
             R.string.videos to VideoFragment(),
             R.string.favourites to FavouritesFragment()
     )
+
+    override fun getItem(position: Int): Fragment = fragments.values.toList()[position]
+
+    override fun getCount() = tabCount
 
 }
