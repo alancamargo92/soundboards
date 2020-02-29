@@ -75,12 +75,15 @@ abstract class MediaListFragment(
     override fun onItemLongClick(media: Media) {
         lifecycleScope.launch {
             val operations = viewModel.getAvailableOperations(media)
+
             if (operations.isOnlyShare()) {
-                share(media)
+                mediaHandler.share(media)
             } else {
                 selectedMedia = media
                 showOperationsDialogue(operations)
             }
+
+            adapter.notifyItemReady()
         }
     }
 
@@ -89,7 +92,7 @@ abstract class MediaListFragment(
             Operation.ADD_TO_FAVOURITES -> viewModel.saveToFavourites(selectedMedia)
             Operation.REMOVE_FROM_FAVOURITES -> viewModel.removeFromFavourites(selectedMedia)
             Operation.SHARE -> lifecycleScope.launch {
-                share(selectedMedia)
+                mediaHandler.share(selectedMedia)
             }
         }
     }
@@ -182,11 +185,6 @@ abstract class MediaListFragment(
 
     private fun List<Operation>.isOnlyShare(): Boolean {
         return size == 1 && first() == Operation.SHARE
-    }
-
-    private suspend fun share(media: Media) {
-        mediaHandler.share(media)
-        adapter.notifyItemReady()
     }
 
 }
