@@ -21,9 +21,9 @@ class OperationsDialogue : DialogFragment(), OperationAdapter.ItemClickListener 
     }
 
     private val adapter = OperationAdapter(this)
-    private var listener: OnOperationSelectedListener? = null
+    private var listener: Listener? = null
 
-    fun setOnOperationSelectedListener(listener: OnOperationSelectedListener) {
+    fun setOnOperationSelectedListener(listener: Listener) {
         this.listener = listener
     }
 
@@ -40,6 +40,7 @@ class OperationsDialogue : DialogFragment(), OperationAdapter.ItemClickListener 
 
         val cancelButton = view.findViewById<MaterialButton>(R.id.bt_cancel)
         cancelButton.setOnClickListener {
+            listener?.onNoOperationsSelected()
             dismiss()
         }
 
@@ -65,8 +66,9 @@ class OperationsDialogue : DialogFragment(), OperationAdapter.ItemClickListener 
         }
     }
 
-    interface OnOperationSelectedListener {
+    interface Listener {
         fun onOperationSelected(operation: Operation)
+        fun onNoOperationsSelected()
     }
 
 }

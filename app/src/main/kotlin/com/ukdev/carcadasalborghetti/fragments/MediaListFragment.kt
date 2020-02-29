@@ -28,9 +28,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 abstract class MediaListFragment(
         @LayoutRes layoutId: Int,
         private val mediaType: MediaType
-) : Fragment(layoutId),
-        RecyclerViewInteractionListener,
-        OperationsDialogue.OnOperationSelectedListener {
+) : Fragment(layoutId), RecyclerViewInteractionListener, OperationsDialogue.Listener {
 
     abstract val mediaHandler: MediaHandler
 
@@ -78,12 +76,11 @@ abstract class MediaListFragment(
 
             if (operations.isOnlyShare()) {
                 mediaHandler.share(media)
+                adapter.notifyItemReady()
             } else {
                 selectedMedia = media
                 showOperationsDialogue(operations)
             }
-
-            adapter.notifyItemReady()
         }
     }
 
@@ -95,6 +92,12 @@ abstract class MediaListFragment(
                 mediaHandler.share(selectedMedia)
             }
         }
+
+        adapter.notifyItemReady()
+    }
+
+    override fun onNoOperationsSelected() {
+        adapter.notifyItemReady()
     }
 
     private fun configureRecyclerView() {
