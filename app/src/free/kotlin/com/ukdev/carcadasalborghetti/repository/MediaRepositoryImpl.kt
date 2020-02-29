@@ -25,8 +25,6 @@ class MediaRepositoryImpl(
 
     override suspend fun removeFromFavourites(media: Media) { }
 
-    override suspend fun isSavedToFavourites(media: Media): Result<Boolean> = GenericError
-
     override suspend fun getAvailableOperations(media: Media): List<Operation> {
         return listOf(Operation.SHARE)
     }
