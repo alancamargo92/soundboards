@@ -4,6 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import com.ukdev.carcadasalborghetti.api.tools.IOHelper
 import com.ukdev.carcadasalborghetti.data.MediaLocalDataSource
 import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
+import com.ukdev.carcadasalborghetti.database.FavouritesDatabase
 import com.ukdev.carcadasalborghetti.model.*
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import io.mockk.*
@@ -19,6 +20,7 @@ class MediaRepositoryImplTest {
     @MockK lateinit var mockCrashReportManager: CrashReportManager
     @MockK lateinit var mockRemoteDataSource: MediaRemoteDataSource
     @MockK lateinit var mockLocalDataSource: MediaLocalDataSource
+    @MockK lateinit var mockFavouritesDatabase: FavouritesDatabase
 
     private lateinit var repository: MediaRepository
 
@@ -29,6 +31,7 @@ class MediaRepositoryImplTest {
                 mockCrashReportManager,
                 mockRemoteDataSource,
                 mockLocalDataSource,
+                mockFavouritesDatabase,
                 IOHelper(mockCrashReportManager)
         )
     }
@@ -124,6 +127,50 @@ class MediaRepositoryImplTest {
 
         coVerify { mockRemoteDataSource.listMedia(any()) }
         coVerify { mockLocalDataSource.listMedia(any()) }
+    }
+
+    @Test
+    fun shouldSaveMediaToFavourites() = runBlocking {
+        val media = Media("1", "media 1", MediaType.AUDIO)
+
+        repository.saveToFavourites(media)
+
+        coVerify { mockFavouritesDatabase.insert(media) }
+    }
+
+    @Test
+    fun shouldRemoveMediaFromFavourites() = runBlocking {
+        val media = Media("1", "media 1", MediaType.AUDIO)
+
+        repository.removeFromFavourites(media)
+
+        coVerify { mockFavouritesDatabase.delete(media) }
+    }
+
+    @Test
+    fun whenMediaIsInFavourites_availableOperationsShouldBeShareAndRemoveFromFavourites() {
+        val media = Media("1", "media 1", MediaType.AUDIO)
+
+        coEvery { mockFavouritesDatabase.count(media.id) } returns 1
+
+        val operations = runBlocking {
+            repository.getAvailableOperations(media)
+        }
+
+        assertThat(operations).containsExactly(Operation.SHARE, Operation.REMOVE_FROM_FAVOURITES)
+    }
+
+    @Test
+    fun whenMediaIsNotInFavourites_availableOperationsShouldBeShareAndAddToFavourites() {
+        val media = Media("1", "media 1", MediaType.AUDIO)
+
+        coEvery { mockFavouritesDatabase.count(media.id) } returns 0
+
+        val operations = runBlocking {
+            repository.getAvailableOperations(media)
+        }
+
+        assertThat(operations).containsExactly(Operation.SHARE, Operation.ADD_TO_FAVOURITES)
     }
 
 }

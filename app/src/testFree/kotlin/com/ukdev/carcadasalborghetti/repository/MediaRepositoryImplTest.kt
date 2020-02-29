@@ -2,10 +2,7 @@ package com.ukdev.carcadasalborghetti.repository
 
 import com.google.common.truth.Truth.assertThat
 import com.ukdev.carcadasalborghetti.data.MediaLocalDataSource
-import com.ukdev.carcadasalborghetti.model.GenericError
-import com.ukdev.carcadasalborghetti.model.Media
-import com.ukdev.carcadasalborghetti.model.MediaType
-import com.ukdev.carcadasalborghetti.model.Success
+import com.ukdev.carcadasalborghetti.model.*
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -60,6 +57,17 @@ class MediaRepositoryImplTest {
         val result = repository.getMedia(MediaType.AUDIO)
 
         assertThat(result).isInstanceOf(GenericError::class.java)
+    }
+
+    @Test
+    fun availableOperationsShouldOnlyBeShare() {
+        val media = Media("Media 1", mockk())
+
+        val operations = runBlocking {
+            repository.getAvailableOperations(media)
+        }
+
+        assertThat(operations).containsExactly(Operation.SHARE)
     }
 
 }
