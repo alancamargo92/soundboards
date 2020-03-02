@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.handlers.MediaHandler
@@ -32,7 +33,8 @@ abstract class MediaListFragment(
 ) : Fragment(layoutId),
         RecyclerViewInteractionListener,
         OperationsDialogue.Listener,
-        DialogInterface.OnDismissListener {
+        DialogInterface.OnDismissListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
     abstract val mediaHandler: MediaHandler
 
@@ -50,6 +52,7 @@ abstract class MediaListFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        configureSwipeRefreshLayout()
         configureRecyclerView()
         fetchMedia()
         setHasOptionsMenu(true)
@@ -102,6 +105,16 @@ abstract class MediaListFragment(
 
     override fun onDismiss(dialogue: DialogInterface?) {
         adapter.notifyItemReady()
+    }
+
+    override fun onRefresh() {
+        swipe_refresh_layout.isRefreshing = true
+        fetchMedia()
+    }
+
+    private fun configureSwipeRefreshLayout() = with(swipe_refresh_layout) {
+        setOnRefreshListener(this@MediaListFragment)
+        setColorSchemeResources(R.color.red, R.color.black)
     }
 
     private fun configureRecyclerView() {
@@ -168,7 +181,10 @@ abstract class MediaListFragment(
         if (errorType != ErrorType.NO_FAVOURITES) {
             with(bt_try_again) {
                 show()
-                setOnClickListener { fetchMedia() }
+                setOnClickListener {
+                    it.hide()
+                    fetchMedia()
+                }
             }
         }
 
@@ -182,6 +198,8 @@ abstract class MediaListFragment(
     private fun hideProgressBar() {
         progress_bar.hide()
         recycler_view.show()
+        if (swipe_refresh_layout.isRefreshing)
+            swipe_refresh_layout.isRefreshing = false
     }
 
     private fun showOperationsDialogue(operations: List<Operation>) {
