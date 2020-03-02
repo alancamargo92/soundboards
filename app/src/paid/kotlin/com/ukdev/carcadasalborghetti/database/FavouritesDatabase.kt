@@ -1,5 +1,6 @@
 package com.ukdev.carcadasalborghetti.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -15,8 +16,8 @@ interface FavouritesDatabase {
     @Query("SELECT COUNT() FROM Media WHERE id = :mediaId")
     suspend fun count(mediaId: String): Int
 
-    @Query("SELECT * FROM Media")
-    suspend fun getFavourites(): List<Media>
+    @Query("SELECT * FROM Media ORDER BY title")
+    fun getFavourites(): LiveData<List<Media>>
 
     @Delete
     suspend fun delete(media: Media)

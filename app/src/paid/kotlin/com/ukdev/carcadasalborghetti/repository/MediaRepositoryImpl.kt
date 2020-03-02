@@ -1,5 +1,6 @@
 package com.ukdev.carcadasalborghetti.repository
 
+import androidx.lifecycle.LiveData
 import com.ukdev.carcadasalborghetti.api.tools.IOHelper
 import com.ukdev.carcadasalborghetti.data.MediaLocalDataSource
 import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
@@ -23,9 +24,9 @@ class MediaRepositoryImpl(
         })
     }
 
-    override suspend fun getFavourites(): Result<List<Media>> {
+    override suspend fun getFavourites(): Result<LiveData<List<Media>>> {
         return ioHelper.safeIOCall {
-            favouritesDatabase.getFavourites().sort()
+            favouritesDatabase.getFavourites()
         }
     }
 

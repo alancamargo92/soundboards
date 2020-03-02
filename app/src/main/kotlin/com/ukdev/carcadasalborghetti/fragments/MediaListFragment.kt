@@ -8,6 +8,7 @@ import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -54,7 +55,10 @@ abstract class MediaListFragment(
         super.onViewCreated(view, savedInstanceState)
         configureSwipeRefreshLayout()
         configureRecyclerView()
-        fetchMedia()
+        if (mediaType == MediaType.BOTH)
+            fetchFavourites()
+        else
+            fetchMedia()
         setHasOptionsMenu(true)
         observePlaybackState()
     }
@@ -121,9 +125,22 @@ abstract class MediaListFragment(
         recycler_view.adapter = adapter.apply { setListener(this@MediaListFragment) }
     }
 
+    private fun fetchFavourites() {
+        group_error.hide()
+        showProgressBar()
+
+        lifecycleScope.launch {
+            when (val result = viewModel.getFavourites()) {
+                is Success<LiveData<List<Media>>> -> observeFavourites(result.body)
+                is GenericError -> showError(ErrorType.UNKNOWN)
+            }
+        }
+    }
+
     private fun fetchMedia() {
         group_error.hide()
         showProgressBar()
+
         lifecycleScope.launch {
             viewModel.getMedia(mediaType).observe(viewLifecycleOwner, Observer { result ->
                 when (result) {
@@ -133,6 +150,12 @@ abstract class MediaListFragment(
                 }
             })
         }
+    }
+
+    private fun observeFavourites(favouritesLiveData: LiveData<List<Media>>) {
+        favouritesLiveData.observe(viewLifecycleOwner, Observer { favourites ->
+            displayMedia(favourites)
+        })
     }
 
     private fun observePlaybackState() {

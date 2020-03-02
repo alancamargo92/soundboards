@@ -16,14 +16,15 @@ class MediaViewModel(private val repository: MediaRepository) : ViewModel() {
     private val mediaLiveData = MutableLiveData<Result<List<Media>>>()
 
     suspend fun getMedia(mediaType: MediaType): LiveData<Result<List<Media>>> {
-        val media = if (mediaType == MediaType.BOTH)
-            repository.getFavourites()
-        else
-            repository.getMedia(mediaType)
+        val media = repository.getMedia(mediaType)
 
         return mediaLiveData.apply {
             postValue(media)
         }
+    }
+
+    suspend fun getFavourites(): Result<LiveData<List<Media>>> {
+        return repository.getFavourites()
     }
 
     suspend fun getAvailableOperations(media: Media): List<Operation> {
