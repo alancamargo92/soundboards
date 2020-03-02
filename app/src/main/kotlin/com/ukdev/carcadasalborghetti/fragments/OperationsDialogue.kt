@@ -1,12 +1,12 @@
 package com.ukdev.carcadasalborghetti.fragments
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.button.MaterialButton
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.adapter.OperationAdapter
 import com.ukdev.carcadasalborghetti.model.Operation
@@ -38,13 +38,16 @@ class OperationsDialogue : DialogFragment(), OperationAdapter.ItemClickListener 
         recyclerView.adapter = adapter
         adapter.submitData(operations)
 
-        val cancelButton = view.findViewById<MaterialButton>(R.id.bt_cancel)
-        cancelButton.setOnClickListener {
-            listener?.onNoOperationsSelected()
-            dismiss()
-        }
-
         return view
+    }
+
+    override fun onDismiss(dialogue: DialogInterface) {
+        val parent = requireParentFragment()
+
+        if (parent is DialogInterface.OnDismissListener)
+            parent.onDismiss(dialogue)
+
+        super.onDismiss(dialogue)
     }
 
     override fun onItemClick(operation: Operation) {
@@ -68,7 +71,6 @@ class OperationsDialogue : DialogFragment(), OperationAdapter.ItemClickListener 
 
     interface Listener {
         fun onOperationSelected(operation: Operation)
-        fun onNoOperationsSelected()
     }
 
 }

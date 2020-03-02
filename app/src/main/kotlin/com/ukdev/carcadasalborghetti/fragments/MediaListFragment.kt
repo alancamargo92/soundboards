@@ -1,5 +1,6 @@
 package com.ukdev.carcadasalborghetti.fragments
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -28,7 +29,10 @@ import org.koin.android.viewmodel.ext.android.viewModel
 abstract class MediaListFragment(
         @LayoutRes layoutId: Int,
         private val mediaType: MediaType
-) : Fragment(layoutId), RecyclerViewInteractionListener, OperationsDialogue.Listener {
+) : Fragment(layoutId),
+        RecyclerViewInteractionListener,
+        OperationsDialogue.Listener,
+        DialogInterface.OnDismissListener {
 
     abstract val mediaHandler: MediaHandler
 
@@ -96,7 +100,7 @@ abstract class MediaListFragment(
         adapter.notifyItemReady()
     }
 
-    override fun onNoOperationsSelected() {
+    override fun onDismiss(dialogue: DialogInterface?) {
         adapter.notifyItemReady()
     }
 
