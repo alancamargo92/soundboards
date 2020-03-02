@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/grey"
+        app:tabTextAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
         app:tabIconTint="@color/tint_tab_icon"
         app:tabRippleColor="@color/red"
         app:tabSelectedTextColor="@color/red">
