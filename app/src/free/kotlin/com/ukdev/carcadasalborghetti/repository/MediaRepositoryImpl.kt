@@ -1,5 +1,6 @@
 package com.ukdev.carcadasalborghetti.repository
 
+import androidx.lifecycle.LiveData
 import com.ukdev.carcadasalborghetti.data.MediaLocalDataSource
 import com.ukdev.carcadasalborghetti.model.*
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
@@ -19,7 +20,7 @@ class MediaRepositoryImpl(
         }
     }
 
-    override suspend fun getFavourites(): Result<List<Media>> = GenericError
+    override suspend fun getFavourites(): Result<LiveData<List<Media>>> = GenericError
 
     override suspend fun saveToFavourites(media: Media) { }
 
