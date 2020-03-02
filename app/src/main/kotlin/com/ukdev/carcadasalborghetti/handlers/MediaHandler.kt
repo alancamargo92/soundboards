@@ -1,41 +1,27 @@
 package com.ukdev.carcadasalborghetti.handlers
 
-import android.content.Context
-import android.media.MediaPlayer
-import android.net.Uri
-import com.ukdev.carcadasalborghetti.listeners.MediaCallback
+import androidx.lifecycle.LiveData
+import com.ukdev.carcadasalborghetti.helpers.FileHelper
+import com.ukdev.carcadasalborghetti.helpers.MediaHelper
 import com.ukdev.carcadasalborghetti.model.Media
-import com.ukdev.carcadasalborghetti.model.MediaType
-import com.ukdev.carcadasalborghetti.view.ViewLayer
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 
 abstract class MediaHandler(
-        protected val callback: MediaCallback,
-        protected val view: ViewLayer
-) : KoinComponent {
+        protected val mediaHelper: MediaHelper,
+        protected val crashReportManager: CrashReportManager,
+        protected val fileHelper: FileHelper
+) {
 
-    protected val context by inject<Context>()
+    abstract suspend fun play(media: Media)
 
-    abstract fun play(media: Media)
-    abstract fun stop()
-    abstract fun share(media: Media, mediaType: MediaType)
-    abstract fun isPlaying(): Boolean
+    abstract suspend fun share(media: Media)
 
-    protected fun createMediaPlayer(uri: Uri): MediaPlayer {
-        return MediaPlayer.create(context, uri).apply {
-            if (isPlaying) {
-                stop()
-                callback.onStopPlayback()
-                start()
-                callback.onStartPlayback()
-            } else {
-                start()
-                callback.onStartPlayback()
-            }
+    fun stop() {
+        mediaHelper.stop()
+    }
 
-            setOnCompletionListener { callback.onStopPlayback() }
-        }
+    fun isPlaying(): LiveData<Boolean> {
+        return mediaHelper.isPlaying()
     }
 
 }

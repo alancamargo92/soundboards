@@ -2,6 +2,13 @@
 <resources>
     <string name="app_name">Carcadas Alborghetti (Grátis)</string>
     <string name="get_paid_version">Adquira a versão paga</string>
-    <string name="get_paid_version_rationale">Com ela você pode:\n\n🎥 Assistir e compartilhar vídeos\n📱️ Ter um aplicativo mais leve\n⬇️ Receber conteúdo novo sem precisar atualizar️\n🚫 Se livrar das propagandas irritantes\n😀 Deixar mais feliz o cara que desenvolveu o aplicativo</string>
+    <string name="get_paid_version_rationale">
+        Com ela você pode:
+        \n\n🎥 Assistir e compartilhar vídeos
+        \n📱️ Ter um aplicativo mais leve
+        \n⬇️ Receber conteúdo novo sem precisar atualizar
+        \n⭐ Salvar seus áudios e vídeos favoritos
+        ️\n🚫 Se livrar das propagandas irritantes
+        \n😀 Deixar mais feliz o cara que desenvolveu o aplicativo</string>
     <string name="purchase">Adquirir</string>
 </resources>

@@ -3,15 +3,17 @@ package com.ukdev.carcadasalborghetti.adapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.model.Media
+import java.util.*
 
 abstract class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
 
+    protected var data: List<Media>? = null
+
     private lateinit var holder: MediaViewHolder
 
-    private var data: List<Media>? = null
     private var listener: RecyclerViewInteractionListener? = null
 
-    fun setData(data: List<Media>) {
+    fun submitData(data: List<Media>) {
         this.data = data
         notifyDataSetChanged()
     }
@@ -21,8 +23,8 @@ abstract class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
     }
 
     fun filter(media: List<Media>, searchTerm: String?) {
-        searchTerm?.toLowerCase()?.let { query ->
-            data = media.filter { it.title.toLowerCase().contains(query) }
+        searchTerm?.toLowerCase(Locale.getDefault())?.let { query ->
+            data = media.filter { it.title.toLowerCase(Locale.getDefault()).contains(query) }
             notifyDataSetChanged()
         }
     }
@@ -37,7 +39,7 @@ abstract class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
 
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
         data?.get(position)?.let { media ->
-            holder.run {
+            with(holder) {
                 bindTo(media)
 
                 itemView.setOnClickListener {

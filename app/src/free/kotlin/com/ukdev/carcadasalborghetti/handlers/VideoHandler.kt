@@ -1,13 +1,18 @@
 package com.ukdev.carcadasalborghetti.handlers
 
-import com.ukdev.carcadasalborghetti.listeners.MediaCallback
+import com.ukdev.carcadasalborghetti.helpers.FileHelper
+import com.ukdev.carcadasalborghetti.helpers.MediaHelper
 import com.ukdev.carcadasalborghetti.model.Media
-import com.ukdev.carcadasalborghetti.model.MediaType
-import com.ukdev.carcadasalborghetti.view.ViewLayer
+import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 
-class VideoHandler(callback: MediaCallback, view: ViewLayer) : MediaHandler(callback, view) {
-    override fun play(media: Media) { }
-    override fun stop() { }
-    override fun share(media: Media, mediaType: MediaType) { }
-    override fun isPlaying() = false
+class VideoHandler(
+        mediaHelper: MediaHelper,
+        crashReportManager: CrashReportManager,
+        fileSharingHelper: FileHelper
+) : MediaHandler(mediaHelper, crashReportManager, fileSharingHelper) {
+
+    override suspend fun play(media: Media) { }
+
+    override suspend fun share(media: Media) { }
+
 }

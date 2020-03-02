@@ -1,45 +1,74 @@
 package com.ukdev.carcadasalborghetti.repository
 
-import com.crashlytics.android.Crashlytics
-import com.ukdev.carcadasalborghetti.BuildConfig
-import com.ukdev.carcadasalborghetti.api.DropboxApi
-import com.ukdev.carcadasalborghetti.api.requests.MediaRequest
-import com.ukdev.carcadasalborghetti.api.responses.MediaResponse
-import com.ukdev.carcadasalborghetti.model.ErrorType
-import com.ukdev.carcadasalborghetti.model.MediaType
-import com.ukdev.carcadasalborghetti.utils.getService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.lifecycle.LiveData
+import com.ukdev.carcadasalborghetti.api.tools.IOHelper
+import com.ukdev.carcadasalborghetti.data.MediaLocalDataSource
+import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
+import com.ukdev.carcadasalborghetti.database.FavouritesDatabase
+import com.ukdev.carcadasalborghetti.model.*
+import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 
-class MediaRepositoryImpl : MediaRepository() {
+class MediaRepositoryImpl(
+        crashReportManager: CrashReportManager,
+        private val remoteDataSource: MediaRemoteDataSource,
+        private val localDataSource: MediaLocalDataSource,
+        private val favouritesDatabase: FavouritesDatabase,
+        private val ioHelper: IOHelper
+) : MediaRepository(crashReportManager) {
 
-    private val api by lazy { getService(DropboxApi::class, BuildConfig.BASE_URL) }
-
-    override fun getMedia(mediaType: MediaType, resultCallback: ResultCallback) {
-        val dir = if (mediaType == MediaType.AUDIO)
-            DropboxApi.DIR_AUDIO
-        else
-            DropboxApi.DIR_VIDEO
-        val request = MediaRequest(dir)
-        api.listMedia(request).enqueue(object : Callback<MediaResponse> {
-            override fun onResponse(call: Call<MediaResponse>, response: Response<MediaResponse>) {
-                if (response.isSuccessful) {
-                    response.body()?.let { responseBody ->
-                        val media = responseBody.entries.sortedBy { it.title }
-                        resultCallback.onMediaFound(media)
-                    }
-                } else {
-                    Crashlytics.log("Error fetching media. Response code: ${response.code()} Error body: ${response.errorBody()?.string()}")
-                    resultCallback.onError(ErrorType.UNKNOWN)
-                }
-            }
-
-            override fun onFailure(call: Call<MediaResponse>, t: Throwable) {
-                Crashlytics.log("Error fetching media. ${t.message}")
-                resultCallback.onError(ErrorType.CONNECTION)
-            }
+    override suspend fun getMedia(mediaType: MediaType): Result<List<Media>> {
+        return ioHelper.safeIOCall(mainCall = {
+            remoteDataSource.listMedia(mediaType).sort()
+        }, alternative = {
+            localDataSource.listMedia(mediaType)
         })
+    }
+
+    override suspend fun getFavourites(): Result<LiveData<List<Media>>> {
+        return ioHelper.safeIOCall {
+            favouritesDatabase.getFavourites()
+        }
+    }
+
+    override suspend fun saveToFavourites(media: Media) {
+        ioHelper.safeIOCall {
+            favouritesDatabase.insert(media)
+        }
+    }
+
+    override suspend fun removeFromFavourites(media: Media) {
+        ioHelper.safeIOCall {
+            favouritesDatabase.delete(media)
+        }
+    }
+
+    override suspend fun getAvailableOperations(media: Media): List<Operation> {
+        val operations = arrayListOf(Operation.SHARE)
+
+        if (media.type != MediaType.BOTH) {
+            val result = isSavedToFavourites(media)
+
+            if (result is Success) {
+                val isSavedToFavourites = result.body
+
+                val operation = if (isSavedToFavourites)
+                    Operation.REMOVE_FROM_FAVOURITES
+                else
+                    Operation.ADD_TO_FAVOURITES
+
+                operations.add(operation)
+            }
+        } else {
+            operations.add(Operation.REMOVE_FROM_FAVOURITES)
+        }
+
+        return operations
+    }
+
+    private suspend fun isSavedToFavourites(media: Media): Result<Boolean> {
+        return ioHelper.safeIOCall {
+            favouritesDatabase.count(media.id) > 0
+        }
     }
 
 }

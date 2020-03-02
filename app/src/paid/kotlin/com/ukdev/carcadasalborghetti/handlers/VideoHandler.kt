@@ -1,18 +1,23 @@
 package com.ukdev.carcadasalborghetti.handlers
 
-import com.ukdev.carcadasalborghetti.activities.VideoActivity
-import com.ukdev.carcadasalborghetti.listeners.MediaCallback
-import com.ukdev.carcadasalborghetti.view.ViewLayer
+import android.net.Uri
+import com.ukdev.carcadasalborghetti.api.tools.IOHelper
+import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
+import com.ukdev.carcadasalborghetti.helpers.FileHelper
+import com.ukdev.carcadasalborghetti.helpers.MediaHelper
+import com.ukdev.carcadasalborghetti.model.Media
+import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 
-class VideoHandler(callback: MediaCallback, view: ViewLayer) : PaidMediaHandler(callback, view) {
+class VideoHandler(
+        mediaHelper: MediaHelper,
+        crashReportManager: CrashReportManager,
+        fileHelper: FileHelper,
+        remoteDataSource: MediaRemoteDataSource,
+        ioHelper: IOHelper
+) : PaidMediaHandler(mediaHelper, crashReportManager, fileHelper, remoteDataSource, ioHelper) {
 
-    override fun stop() { }
-
-    override fun isPlaying() = false
-
-    override fun onLinkReady(link: String, title: String) {
-        val intent = VideoActivity.getIntent(context, title, link)
-        context.startActivity(intent)
+    override fun playMedia(link: Uri, media: Media) {
+        mediaHelper.playVideo(link, media.title)
     }
 
 }

@@ -1,0 +1,12 @@
+{
+  "data": [
+    {
+      "icon": "@drawable/ic_add_to_favourites",
+      "text": "@string/add_to_favourites"
+    },
+    {
+      "icon": "@drawable/ic_share",
+      "text": "@string/share"
+    }
+  ]
+}

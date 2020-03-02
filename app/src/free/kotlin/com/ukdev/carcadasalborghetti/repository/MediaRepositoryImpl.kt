@@ -1,42 +1,33 @@
 package com.ukdev.carcadasalborghetti.repository
 
-import android.content.res.Resources
-import android.net.Uri
-import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.model.Media
-import com.ukdev.carcadasalborghetti.model.MediaType
+import androidx.lifecycle.LiveData
+import com.ukdev.carcadasalborghetti.data.MediaLocalDataSource
+import com.ukdev.carcadasalborghetti.model.*
+import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 
-class MediaRepositoryImpl : MediaRepository() {
+class MediaRepositoryImpl(
+        crashReportManager: CrashReportManager,
+        private val localDataSource: MediaLocalDataSource
+) : MediaRepository(crashReportManager) {
 
-    override fun getMedia(mediaType: MediaType, resultCallback: ResultCallback) {
-        val media = fetchData()
-        resultCallback.onMediaFound(media)
-    }
-
-    private fun fetchData(): ArrayList<Media> {
-        val res = context.resources
-        val titles = res.getStringArray(R.array.titles)
-        val audioUris = getAudioUris(res)
-
-        return arrayListOf<Media>().apply {
-            titles.forEachIndexed { index, title ->
-                add(Media(title, index + 1, audioUris[index]))
-            }
+    override suspend fun getMedia(mediaType: MediaType): Result<List<Media>> {
+        return try {
+            val media = localDataSource.getMediaList().sort()
+            Success(media)
+        } catch (t: Throwable) {
+            crashReportManager.logException(t)
+            GenericError
         }
     }
 
-    private fun getAudioUris(resources: Resources): Array<Uri> {
-        val typedArray = resources.obtainTypedArray(R.array.audios)
-        val audios = IntArray(typedArray.length()).also {
-            it.forEachIndexed { index, _ ->
-                it[index] = typedArray.getResourceId(index, 0)
-            }
-        }
-        typedArray.recycle()
+    override suspend fun getFavourites(): Result<LiveData<List<Media>>> = GenericError
 
-        return audios.map { resId ->
-            Uri.parse("android.resource://${context.packageName}/$resId")
-        }.toTypedArray()
+    override suspend fun saveToFavourites(media: Media) { }
+
+    override suspend fun removeFromFavourites(media: Media) { }
+
+    override suspend fun getAvailableOperations(media: Media): List<Operation> {
+        return listOf(Operation.SHARE)
     }
 
 }

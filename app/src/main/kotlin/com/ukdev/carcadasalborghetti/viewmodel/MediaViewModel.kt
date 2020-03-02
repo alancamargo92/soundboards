@@ -1,47 +1,46 @@
 package com.ukdev.carcadasalborghetti.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.ukdev.carcadasalborghetti.model.ErrorType
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ukdev.carcadasalborghetti.model.Media
 import com.ukdev.carcadasalborghetti.model.MediaType
+import com.ukdev.carcadasalborghetti.model.Operation
+import com.ukdev.carcadasalborghetti.model.Result
 import com.ukdev.carcadasalborghetti.repository.MediaRepository
-import com.ukdev.carcadasalborghetti.repository.MediaRepositoryImpl
-import com.ukdev.carcadasalborghetti.view.ViewLayer
+import kotlinx.coroutines.launch
 
-class MediaViewModel(
-        application: Application
-) : AndroidViewModel(application), MediaRepository.ResultCallback {
+class MediaViewModel(private val repository: MediaRepository) : ViewModel() {
 
-    private val repository: MediaRepository = MediaRepositoryImpl()
+    private val mediaLiveData = MutableLiveData<Result<List<Media>>>()
 
-    private lateinit var view: ViewLayer
+    suspend fun getMedia(mediaType: MediaType): LiveData<Result<List<Media>>> {
+        val media = repository.getMedia(mediaType)
 
-    fun getMedia(mediaType: MediaType, view: ViewLayer) {
-        this.view = view
-        repository.getMedia(mediaType, resultCallback = this@MediaViewModel)
-    }
-
-    override fun onMediaFound(media: List<Media>) {
-        val liveData = MutableLiveData<List<Media>>().apply {
-            val sortedData = sort(media)
-            value = sortedData
+        return mediaLiveData.apply {
+            postValue(media)
         }
-        view.displayMedia(liveData)
     }
 
-    override fun onError(errorType: ErrorType) {
-        view.onErrorFetchingData(errorType)
+    suspend fun getFavourites(): Result<LiveData<List<Media>>> {
+        return repository.getFavourites()
     }
 
-    private fun sort(rawList: List<Media>): List<Media> {
-        return rawList.sortedBy { it.title.split(".").last().trim() }
-                .apply {
-                    forEachIndexed { index, audio ->
-                        audio.position = index + 1
-                    }
-                }
+    suspend fun getAvailableOperations(media: Media): List<Operation> {
+        return repository.getAvailableOperations(media)
+    }
+
+    fun saveToFavourites(media: Media) {
+        viewModelScope.launch {
+            repository.saveToFavourites(media)
+        }
+    }
+
+    fun removeFromFavourites(media: Media) {
+        viewModelScope.launch {
+            repository.removeFromFavourites(media)
+        }
     }
 
 }

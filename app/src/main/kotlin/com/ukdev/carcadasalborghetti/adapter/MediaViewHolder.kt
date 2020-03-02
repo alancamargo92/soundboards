@@ -1,13 +1,13 @@
 package com.ukdev.carcadasalborghetti.adapter
 
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.model.Media
+import com.ukdev.carcadasalborghetti.utils.hide
+import com.ukdev.carcadasalborghetti.utils.show
 
 abstract class MediaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -17,12 +17,13 @@ abstract class MediaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
     abstract fun bindTo(media: Media)
 
     fun notifyItemClicked() {
-        icon.visibility = GONE
-        progressBar.visibility = VISIBLE
+        icon.hide()
+        progressBar.show()
     }
 
     fun notifyItemReady() {
-        progressBar.visibility = GONE
-        icon.visibility = VISIBLE
+        progressBar.hide()
+        icon.show()
     }
+
 }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="@dimen/width_card_view"
     android:layout_height="@dimen/height_card_view"
     app:cardUseCompatPadding="true"
@@ -14,7 +15,7 @@
 
         <TextView
             android:id="@+id/txt_title"
-            style="@style/TextAppearance.AppCompat.Body2"
+            style="@style/TextAppearance.MaterialComponents.Body2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:maxLines="3"
@@ -22,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="1. O que tem de tubarão passando fome"/>
+            tools:text="@sample/media.json/data/title"/>
 
         <ImageView
             android:id="@+id/icon_media"
@@ -46,4 +47,4 @@
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

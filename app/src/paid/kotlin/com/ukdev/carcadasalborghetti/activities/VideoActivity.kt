@@ -4,21 +4,27 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.MediaController
 import androidx.appcompat.app.AppCompatActivity
 import com.ukdev.carcadasalborghetti.R
 import kotlinx.android.synthetic.paid.activity_video.*
 
-class VideoActivity : AppCompatActivity() {
+class VideoActivity : AppCompatActivity(R.layout.activity_video) {
 
-    private val url by lazy { intent.getStringExtra(EXTRA_URL) }
+    private val url by lazy { intent.getParcelableExtra<Uri>(EXTRA_URL) }
     private val title by lazy { intent.getStringExtra(EXTRA_TITLE) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_video)
         configureActionBar()
         startPlayback()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home)
+            onBackPressed()
+        return true
     }
 
     private fun configureActionBar() {
@@ -30,8 +36,8 @@ class VideoActivity : AppCompatActivity() {
     }
 
     private fun startPlayback() {
-        video_view.run {
-            setVideoURI(Uri.parse(url))
+        with(video_view) {
+            setVideoURI(url)
             setMediaController(MediaController(context).also { it.setAnchorView(this) })
             start()
         }
@@ -41,7 +47,7 @@ class VideoActivity : AppCompatActivity() {
         private const val EXTRA_TITLE = "EXTRA_TITLE"
         private const val EXTRA_URL = "EXTRA_URL"
 
-        fun getIntent(context: Context, title: String, videoUrl: String): Intent {
+        fun getIntent(context: Context, title: String, videoUrl: Uri): Intent {
             return Intent(context, VideoActivity::class.java)
                     .putExtra(EXTRA_TITLE, title)
                     .putExtra(EXTRA_URL, videoUrl)

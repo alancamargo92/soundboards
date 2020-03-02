@@ -1,28 +1,23 @@
 package com.ukdev.carcadasalborghetti.handlers
 
-import android.media.MediaPlayer
 import android.net.Uri
-import com.ukdev.carcadasalborghetti.listeners.MediaCallback
-import com.ukdev.carcadasalborghetti.view.ViewLayer
+import com.ukdev.carcadasalborghetti.api.tools.IOHelper
+import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
+import com.ukdev.carcadasalborghetti.helpers.FileHelper
+import com.ukdev.carcadasalborghetti.helpers.MediaHelper
+import com.ukdev.carcadasalborghetti.model.Media
+import com.ukdev.carcadasalborghetti.utils.CrashReportManager
 
-class AudioHandler(callback: MediaCallback, view: ViewLayer) : PaidMediaHandler(callback, view) {
+class AudioHandler(
+        mediaHelper: MediaHelper,
+        crashReportManager: CrashReportManager,
+        fileHelper: FileHelper,
+        remoteDataSource: MediaRemoteDataSource,
+        ioHelper: IOHelper
+) : PaidMediaHandler(mediaHelper, crashReportManager, fileHelper, remoteDataSource, ioHelper) {
 
-    private var mediaPlayer: MediaPlayer? = null
-
-    override fun stop() {
-        mediaPlayer?.stop()
-        callback.onStopPlayback()
-    }
-
-    override fun isPlaying() = mediaPlayer?.isPlaying ?: false
-
-    override fun onLinkReady(link: String, title: String) {
-        initialiseMediaPlayer(link)
-    }
-
-    private fun initialiseMediaPlayer(mediaLink: String) {
-        mediaPlayer?.release()
-        mediaPlayer = createMediaPlayer(Uri.parse(mediaLink))
+    override fun playMedia(link: Uri, media: Media) {
+        mediaHelper.playAudio(link)
     }
 
 }
