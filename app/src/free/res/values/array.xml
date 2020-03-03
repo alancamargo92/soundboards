@@ -104,6 +104,8 @@
         <item>Sua vagabunda capivara</item>
         <item>A senhora ta transformando seu filho num marginal</item>
         <item>Gazela do satanás</item>
+        <item>Muda de canal seu idiota</item>
+        <item>Não tenho rabo preso com vagabundo</item>
     </string-array>
 
     <!-- Audios -->
@@ -209,6 +211,8 @@
         <item>@raw/aud99</item>
         <item>@raw/aud100</item>
         <item>@raw/aud101</item>
+        <item>@raw/aud102</item>
+        <item>@raw/aud103</item>
     </array>
 
 </resources>
