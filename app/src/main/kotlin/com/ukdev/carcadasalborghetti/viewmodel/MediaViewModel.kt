@@ -13,12 +13,19 @@ import kotlinx.coroutines.launch
 
 class MediaViewModel(private val repository: MediaRepository) : ViewModel() {
 
-    private val mediaLiveData = MutableLiveData<Result<List<Media>>>()
+    private val audioLiveData = MutableLiveData<Result<List<Media>>>()
+    private val videoLiveData = MutableLiveData<Result<List<Media>>>()
 
     suspend fun getMedia(mediaType: MediaType): LiveData<Result<List<Media>>> {
         val media = repository.getMedia(mediaType)
 
-        return mediaLiveData.apply {
+        val liveData = when (mediaType) {
+            MediaType.AUDIO -> audioLiveData
+            MediaType.VIDEO -> videoLiveData
+            MediaType.BOTH -> throw IllegalArgumentException("Must be either audio or video")
+        }
+
+        return liveData.apply {
             postValue(media)
         }
     }

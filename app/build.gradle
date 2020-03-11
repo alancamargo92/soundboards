@@ -50,8 +50,8 @@ android {
         }
 
         paid {
-            versionCode 46
-            versionName "2020.1.1"
+            versionCode 47
+            versionName "2020.1.2"
             dimension "version"
             applicationIdSuffix ".paid"
             buildConfigField "String", "BASE_URL", '"https://api.dropboxapi.com/"'
@@ -96,7 +96,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     implementation 'com.google.android.material:material:1.1.0'
-    implementation 'com.google.firebase:firebase-core:17.2.2'
+    implementation 'com.google.firebase:firebase-core:17.2.3'
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.koin:koin-core:$koin_version"
@@ -107,7 +107,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
-    freeImplementation 'com.google.firebase:firebase-ads:18.3.0'
+    freeImplementation 'com.google.firebase:firebase-ads:19.0.0'
 
     paidImplementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     paidImplementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
