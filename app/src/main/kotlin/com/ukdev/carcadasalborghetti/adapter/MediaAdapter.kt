@@ -50,12 +50,9 @@ abstract class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
 
                 itemView.setOnLongClickListener {
                     this@MediaAdapter.holder = holder
-                    listener?.run {
-                        notifyItemClicked()
-                        onItemLongClick(media)
-                        return@setOnLongClickListener true
-                    }
-                    false
+                    notifyItemClicked()
+                    listener?.onItemLongClick(media)
+                    true
                 }
             }
         }

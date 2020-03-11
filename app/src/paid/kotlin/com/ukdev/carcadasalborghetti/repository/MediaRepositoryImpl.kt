@@ -7,6 +7,8 @@ import com.ukdev.carcadasalborghetti.data.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.database.FavouritesDatabase
 import com.ukdev.carcadasalborghetti.model.*
 import com.ukdev.carcadasalborghetti.utils.CrashReportManager
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class MediaRepositoryImpl(
         crashReportManager: CrashReportManager,
@@ -46,7 +48,9 @@ class MediaRepositoryImpl(
         val operations = arrayListOf(Operation.SHARE)
 
         if (media.type != MediaType.BOTH) {
-            val result = isSavedToFavourites(media)
+            val result = withContext(Dispatchers.IO) {
+                isSavedToFavourites(media)
+            }
 
             if (result is Success) {
                 val isSavedToFavourites = result.body

@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ukdev.carcadasalborghetti.R
@@ -22,11 +23,12 @@ import com.ukdev.carcadasalborghetti.utils.hide
 import com.ukdev.carcadasalborghetti.utils.isVisible
 import com.ukdev.carcadasalborghetti.utils.show
 import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModel
+import com.ukdev.carcadasalborghetti.viewmodel.MediaViewModelFactory
 import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.inject
 
 abstract class MediaListFragment(
         @LayoutRes layoutId: Int,
@@ -41,7 +43,11 @@ abstract class MediaListFragment(
 
     protected abstract val adapter: MediaAdapter
 
-    private val viewModel by viewModel<MediaViewModel>()
+    private val viewModelFactory by inject<MediaViewModelFactory>()
+
+    private val viewModel by lazy {
+        ViewModelProvider(requireActivity(), viewModelFactory).get(MediaViewModel::class.java)
+    }
 
     private var searchView: SearchView? = null
 
@@ -55,10 +61,7 @@ abstract class MediaListFragment(
         super.onViewCreated(view, savedInstanceState)
         configureSwipeRefreshLayout()
         configureRecyclerView()
-        if (mediaType == MediaType.BOTH)
-            fetchFavourites()
-        else
-            fetchMedia()
+        fetchMedia(mediaType)
         setHasOptionsMenu(true)
         observePlaybackState()
     }
@@ -113,7 +116,7 @@ abstract class MediaListFragment(
 
     override fun onRefresh() {
         swipe_refresh_layout.isRefreshing = true
-        fetchMedia()
+        fetchMedia(mediaType)
     }
 
     private fun configureSwipeRefreshLayout() = with(swipe_refresh_layout) {
@@ -125,10 +128,15 @@ abstract class MediaListFragment(
         recycler_view.adapter = adapter.apply { setListener(this@MediaListFragment) }
     }
 
-    private fun fetchFavourites() {
+    private fun fetchMedia(mediaType: MediaType) {
         group_error.hide()
         showProgressBar()
 
+        if (mediaType == MediaType.BOTH) fetchFavourites()
+        else fetchAudiosOrVideos()
+    }
+
+    private fun fetchFavourites() {
         lifecycleScope.launch {
             when (val result = viewModel.getFavourites()) {
                 is Success<LiveData<List<Media>>> -> observeFavourites(result.body)
@@ -137,10 +145,7 @@ abstract class MediaListFragment(
         }
     }
 
-    private fun fetchMedia() {
-        group_error.hide()
-        showProgressBar()
-
+    private fun fetchAudiosOrVideos() {
         lifecycleScope.launch {
             viewModel.getMedia(mediaType).observe(viewLifecycleOwner, Observer { result ->
                 when (result) {
@@ -206,7 +211,7 @@ abstract class MediaListFragment(
                 show()
                 setOnClickListener {
                     it.hide()
-                    fetchMedia()
+                    fetchAudiosOrVideos()
                 }
             }
         }
