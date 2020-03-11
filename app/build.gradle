@@ -50,8 +50,8 @@ android {
         }
 
         paid {
-            versionCode 46
-            versionName "2020.1.1"
+            versionCode 47
+            versionName "2020.1.2"
             dimension "version"
             applicationIdSuffix ".paid"
             buildConfigField "String", "BASE_URL", '"https://api.dropboxapi.com/"'
