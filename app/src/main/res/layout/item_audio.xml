@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="@dimen/width_card_view"
     android:layout_height="@dimen/height_card_view"
     app:cardUseCompatPadding="true"
@@ -13,7 +12,7 @@
         android:layout_height="match_parent"
         android:padding="@dimen/padding_small">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/txt_title"
             style="@style/TextAppearance.MaterialComponents.Body2"
             android:layout_width="0dp"
