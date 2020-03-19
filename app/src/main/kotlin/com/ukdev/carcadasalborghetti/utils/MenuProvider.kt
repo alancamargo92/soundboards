@@ -17,6 +17,7 @@ abstract class MenuProvider {
         val appName = activity.getAppName()
         val appVersion = activity.getAppVersion()
         val title = activity.getString(R.string.app_info, appName, appVersion)
+
         MaterialAlertDialogBuilder(activity)
                 .setTitle(title)
                 .setMessage(R.string.developer_info)
@@ -27,7 +28,8 @@ abstract class MenuProvider {
 
     private fun showPrivacyPolicy(activity: Activity) {
         MaterialAlertDialogBuilder(activity)
-                .setView(R.layout.dialogue_privacy_terms)
+                .setTitle(R.string.privacy_terms_title)
+                .setMessage(R.string.privacy_terms)
                 .setNeutralButton(R.string.ok, null)
                 .show()
     }

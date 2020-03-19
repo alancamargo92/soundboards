@@ -17,6 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/black"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="@string/app_name"/>
     </com.google.android.material.appbar.AppBarLayout>
@@ -26,7 +27,9 @@
         style="@style/Widget.MaterialComponents.TabLayout.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/grey"
+        android:background="@color/black"
+        app:tabBackground="@color/black"
+        app:tabTextColor="@color/white"
         app:tabTextAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
         app:tabIconTint="@color/tint_tab_icon"
         app:tabRippleColor="@color/red"
