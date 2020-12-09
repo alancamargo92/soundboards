@@ -35,10 +35,8 @@ open class BaseActivity : AppCompatActivity(R.layout.activity_main) {
         super.onBackPressed()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        item?.itemId?.let {
-            menuProvider.getMenuItemsAndActions()[it]?.invoke(this)
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        menuProvider.getMenuItemsAndActions()[item.itemId]?.invoke(this)
         return true
     }
 
