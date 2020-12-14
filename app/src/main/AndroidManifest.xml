@@ -18,10 +18,10 @@
 
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
 
-        <activity android:name=".activities.BaseActivity"
+        <activity android:name=".ui.activities.BaseActivity"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".activities.MainActivity"
+        <activity android:name=".ui.activities.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

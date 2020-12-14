@@ -4,16 +4,16 @@
     <application android:name="com.ukdev.carcadasalborghetti.PaidApplication"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name="com.ukdev.carcadasalborghetti.activities.VideoActivity"
-            android:parentActivityName="com.ukdev.carcadasalborghetti.activities.MainActivity">
+        <activity android:name="com.ukdev.carcadasalborghetti.ui.activities.VideoActivity"
+            android:parentActivityName="com.ukdev.carcadasalborghetti.ui.activities.MainActivity">
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.ukdev.carcadasalborghetti.activities.MainActivity"/>
+            android:value="com.ukdev.carcadasalborghetti.ui.activities.MainActivity"/>
         </activity>
 
         <provider
             android:authorities="com.ukdev.carcadasalborghetti.paid.provider"
-            android:name="com.ukdev.carcadasalborghetti.provider.PaidFileProvider"
+            android:name="com.ukdev.carcadasalborghetti.framework.tools.PaidFileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

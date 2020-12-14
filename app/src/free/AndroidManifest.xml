@@ -9,7 +9,7 @@
 
         <provider
             android:authorities="com.ukdev.carcadasalborghetti.provider"
-            android:name="com.ukdev.carcadasalborghetti.provider.FreeFileProvider"
+            android:name="com.ukdev.carcadasalborghetti.framework.tools.FreeFileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
