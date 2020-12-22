@@ -22,6 +22,7 @@ import com.ukdev.carcadasalborghetti.domain.entities.Operation
 import com.ukdev.carcadasalborghetti.framework.media.MediaHandler
 import com.ukdev.carcadasalborghetti.model.*
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
+import com.ukdev.carcadasalborghetti.ui.entities.ErrorType
 import com.ukdev.carcadasalborghetti.ui.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.ui.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaViewModel

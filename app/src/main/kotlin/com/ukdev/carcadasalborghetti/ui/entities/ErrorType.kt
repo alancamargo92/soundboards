@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.model
+package com.ukdev.carcadasalborghetti.ui.entities
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

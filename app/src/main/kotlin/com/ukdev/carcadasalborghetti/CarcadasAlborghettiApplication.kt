@@ -2,8 +2,7 @@ package com.ukdev.carcadasalborghetti
 
 import android.app.Application
 import com.google.firebase.FirebaseApp
-import com.ukdev.carcadasalborghetti.di.modules
-import org.koin.android.ext.koin.androidContext
+import com.ukdev.carcadasalborghetti.di.KoinAppDeclarationProviderImpl
 import org.koin.core.context.startKoin
 
 @Suppress("registered")
@@ -15,10 +14,8 @@ open class CarcadasAlborghettiApplication : Application() {
     }
 
     protected fun startDependencyInjection() {
-        startKoin {
-            androidContext(this@CarcadasAlborghettiApplication)
-            modules(modules)
-        }
+        val provider = KoinAppDeclarationProviderImpl()
+        startKoin(appDeclaration = provider.provideAppDeclaration(this))
     }
 
 }
