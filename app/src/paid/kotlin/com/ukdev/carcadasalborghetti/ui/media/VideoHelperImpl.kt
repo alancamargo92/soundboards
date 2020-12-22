@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.framework.media
+package com.ukdev.carcadasalborghetti.ui.media
 
 import android.content.Context
 import android.net.Uri

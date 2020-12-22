@@ -6,6 +6,7 @@ import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import com.ukdev.carcadasalborghetti.framework.remote.api.tools.IOHelper
 import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
+import com.ukdev.carcadasalborghetti.ui.media.AudioHandler
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking

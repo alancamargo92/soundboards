@@ -8,7 +8,6 @@ class FreeApplication : CarcadasAlborghettiApplication() {
     override fun onCreate() {
         super.onCreate()
         MobileAds.initialize(this)
-        startDependencyInjection()
     }
 
 }

@@ -5,7 +5,7 @@ import android.view.View
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.ui.adapter.FavouritesAdapter
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
-import com.ukdev.carcadasalborghetti.framework.media.FavouritesHandler
+import com.ukdev.carcadasalborghetti.ui.media.FavouritesHandler
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
 import kotlinx.android.synthetic.main.fragment_audio.*
 import org.koin.android.ext.android.inject

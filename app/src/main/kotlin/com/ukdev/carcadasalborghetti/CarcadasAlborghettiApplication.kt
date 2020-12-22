@@ -5,15 +5,16 @@ import com.google.firebase.FirebaseApp
 import com.ukdev.carcadasalborghetti.di.KoinAppDeclarationProviderImpl
 import org.koin.core.context.startKoin
 
-@Suppress("registered")
+@Suppress("registered", "unused")
 open class CarcadasAlborghettiApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
+        startDependencyInjection()
     }
 
-    protected fun startDependencyInjection() {
+    private fun startDependencyInjection() {
         val provider = KoinAppDeclarationProviderImpl()
         startKoin(appDeclaration = provider.provideAppDeclaration(this))
     }
