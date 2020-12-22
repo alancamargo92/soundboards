@@ -112,7 +112,7 @@ dependencies {
     paidImplementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     paidImplementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     paidImplementation 'com.google.code.gson:gson:2.8.6'
-    paidImplementation 'androidx.room:room-runtime:2.2.5'
+    paidImplementation 'androidx.room:room-runtime:2.2.6'
     paidImplementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
