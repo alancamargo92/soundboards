@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.framework.media
+package com.ukdev.carcadasalborghetti.ui.media
 
 import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
 import com.ukdev.carcadasalborghetti.domain.entities.Media

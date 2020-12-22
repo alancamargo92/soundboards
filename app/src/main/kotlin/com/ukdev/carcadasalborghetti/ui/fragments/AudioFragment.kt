@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.ui.adapter.AudioAdapter
-import com.ukdev.carcadasalborghetti.framework.media.AudioHandler
+import com.ukdev.carcadasalborghetti.ui.media.AudioHandler
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import kotlinx.android.synthetic.main.fragment_audio.*
 import org.koin.android.ext.android.inject

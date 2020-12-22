@@ -1,9 +1,9 @@
-package com.ukdev.carcadasalborghetti.framework.media
+package com.ukdev.carcadasalborghetti.ui.media
 
 import androidx.lifecycle.LiveData
-import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
-import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.data.tools.CrashReportManager
+import com.ukdev.carcadasalborghetti.domain.entities.Media
+import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
 
 abstract class MediaHandler(
         protected val mediaHelper: MediaHelper,

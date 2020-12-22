@@ -3,6 +3,8 @@ package com.ukdev.carcadasalborghetti.framework.media
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.data.tools.CrashReportManager
 import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
+import com.ukdev.carcadasalborghetti.ui.media.AudioHandler
+import com.ukdev.carcadasalborghetti.ui.media.MediaHelper
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.runBlocking

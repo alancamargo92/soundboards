@@ -1,8 +1,7 @@
-package com.ukdev.carcadasalborghetti.adapter
+package com.ukdev.carcadasalborghetti.ui.adapter.viewholder
 
 import android.view.View
 import com.ukdev.carcadasalborghetti.domain.entities.Media
-import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.MediaViewHolder
 
 class VideoViewHolder(itemView: View) : MediaViewHolder(itemView) {
 

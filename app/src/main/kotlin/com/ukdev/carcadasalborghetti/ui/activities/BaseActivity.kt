@@ -7,7 +7,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.ui.adapter.PagerAdapter
-import com.ukdev.carcadasalborghetti.framework.media.MediaHandler
+import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import com.ukdev.carcadasalborghetti.data.tools.PreferencesHelper
 import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragment
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider

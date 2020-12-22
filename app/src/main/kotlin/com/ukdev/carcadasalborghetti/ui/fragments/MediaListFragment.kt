@@ -9,7 +9,6 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ukdev.carcadasalborghetti.R
@@ -19,14 +18,12 @@ import com.ukdev.carcadasalborghetti.data.entities.Success
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import com.ukdev.carcadasalborghetti.domain.entities.Operation
-import com.ukdev.carcadasalborghetti.framework.media.MediaHandler
-import com.ukdev.carcadasalborghetti.model.*
+import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.ui.entities.ErrorType
 import com.ukdev.carcadasalborghetti.ui.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.ui.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaViewModel
-import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaViewModelFactory
 import com.ukdev.carcadasalborghetti.utils.hide
 import com.ukdev.carcadasalborghetti.utils.isVisible
 import com.ukdev.carcadasalborghetti.utils.show
@@ -34,7 +31,7 @@ import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.android.ext.android.inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 abstract class MediaListFragment(
         @LayoutRes layoutId: Int,
@@ -49,11 +46,7 @@ abstract class MediaListFragment(
 
     protected abstract val adapter: MediaAdapter
 
-    private val viewModelFactory by inject<MediaViewModelFactory>()
-
-    private val viewModel by lazy {
-        ViewModelProvider(requireActivity(), viewModelFactory).get(MediaViewModel::class.java)
-    }
+    private val viewModel by viewModel<MediaViewModel>()
 
     private var searchView: SearchView? = null
 

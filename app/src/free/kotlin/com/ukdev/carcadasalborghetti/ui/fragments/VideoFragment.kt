@@ -5,8 +5,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.adapter.VideoAdapter
-import com.ukdev.carcadasalborghetti.framework.media.VideoHandler
+import com.ukdev.carcadasalborghetti.ui.adapter.VideoAdapter
+import com.ukdev.carcadasalborghetti.ui.media.VideoHandler
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import kotlinx.android.synthetic.free.fragment_video.*
 import org.koin.android.ext.android.inject

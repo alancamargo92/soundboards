@@ -1,10 +1,8 @@
-package com.ukdev.carcadasalborghetti.framework.media
+package com.ukdev.carcadasalborghetti.ui.media
 
-import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
-import com.ukdev.carcadasalborghetti.framework.media.MediaHelper
-import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.data.tools.CrashReportManager
-import com.ukdev.carcadasalborghetti.framework.media.MediaHandler
+import com.ukdev.carcadasalborghetti.domain.entities.Media
+import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
 
 class VideoHandler(
         mediaHelper: MediaHelper,
