@@ -107,7 +107,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 
-    freeImplementation 'com.google.firebase:firebase-ads:19.6.0'
+    freeImplementation "com.smaato.android.sdk:smaato-sdk-banner:$smaato_version"
+    freeImplementation "com.smaato.android.sdk:smaato-sdk-native:$smaato_version"
 
     paidImplementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     paidImplementation "com.squareup.retrofit2:converter-gson:$retrofit_version"

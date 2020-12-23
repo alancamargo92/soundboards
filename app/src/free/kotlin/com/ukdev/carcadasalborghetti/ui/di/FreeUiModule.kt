@@ -1,6 +1,8 @@
 package com.ukdev.carcadasalborghetti.ui.di
 
 import com.ukdev.carcadasalborghetti.di.LayerModule
+import com.ukdev.carcadasalborghetti.ui.ads.AdLoader
+import com.ukdev.carcadasalborghetti.ui.ads.AdLoaderImpl
 import com.ukdev.carcadasalborghetti.ui.media.AudioHandler
 import com.ukdev.carcadasalborghetti.ui.media.VideoHandler
 import com.ukdev.carcadasalborghetti.ui.media.VideoHelper
@@ -28,6 +30,7 @@ object FreeUiModule : LayerModule() {
                     fileSharingHelper = get()
             )
         }
+        factory<AdLoader> { AdLoaderImpl() }
     }
 
 }
