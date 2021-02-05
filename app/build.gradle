@@ -43,8 +43,8 @@ android {
 
     productFlavors {
         free {
-            versionCode 50
-            versionName "2021.1.0"
+            versionCode 51
+            versionName "2021.1.1"
             dimension "version"
             signingConfig signingConfigs.free
         }
