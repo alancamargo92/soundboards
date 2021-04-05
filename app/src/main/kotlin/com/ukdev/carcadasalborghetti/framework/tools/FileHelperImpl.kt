@@ -64,6 +64,7 @@ class FileHelperImpl(private val context: Context) : FileHelper {
         shareFile(uri, media)
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     override suspend fun getByteStream(uri: Uri): InputStream? {
         return context.contentResolver.openInputStream(uri)
     }
@@ -73,6 +74,7 @@ class FileHelperImpl(private val context: Context) : FileHelper {
         dir.deleteRecursively()
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun saveFile(byteStream: InputStream?, media: Media): File {
         val dir = getDir(media.type)
 
