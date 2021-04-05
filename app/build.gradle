@@ -71,8 +71,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
     androidExtensions {
@@ -112,6 +116,7 @@ dependencies {
 
     paidImplementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     paidImplementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    paidImplementation 'com.squareup.okhttp3:okhttp:4.9.0'
     paidImplementation 'com.google.code.gson:gson:2.8.6'
     paidImplementation "androidx.room:room-runtime:$room_version"
     paidImplementation "androidx.room:room-ktx:$room_version"
