@@ -5,6 +5,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.ukdev.carcadasalborghetti.data.tools.orFalse
 
 class MediaHelperImpl(
         videoHelper: VideoHelper,
@@ -31,12 +32,12 @@ class MediaHelperImpl(
     }
 
     override fun isPlaying(): LiveData<Boolean> = isPlayingLiveData.apply {
-        value = mediaPlayer?.isPlaying ?: false
+        value = mediaPlayer?.isPlaying.orFalse()
     }
 
     private fun createMediaPlayer(uri: Uri): MediaPlayer {
         return MediaPlayer.create(context, uri).apply {
-            if (isPlaying) {
+            if (this?.isPlaying.orFalse()) {
                 stop()
                 start()
             } else {

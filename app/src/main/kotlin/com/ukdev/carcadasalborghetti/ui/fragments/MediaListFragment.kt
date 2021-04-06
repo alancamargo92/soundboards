@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.View
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
@@ -18,15 +19,12 @@ import com.ukdev.carcadasalborghetti.data.entities.Success
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import com.ukdev.carcadasalborghetti.domain.entities.Operation
-import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.ui.entities.ErrorType
 import com.ukdev.carcadasalborghetti.ui.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.ui.listeners.RecyclerViewInteractionListener
+import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaViewModel
-import com.ukdev.carcadasalborghetti.utils.hide
-import com.ukdev.carcadasalborghetti.utils.isVisible
-import com.ukdev.carcadasalborghetti.utils.show
 import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -128,7 +126,7 @@ abstract class MediaListFragment(
     }
 
     private fun fetchMedia(mediaType: MediaType) {
-        group_error.hide()
+        group_error.isVisible = false
         showProgressBar()
 
         if (mediaType == MediaType.BOTH) fetchFavourites()
@@ -172,8 +170,8 @@ abstract class MediaListFragment(
     }
 
     private fun showProgressBar() {
-        recycler_view.hide()
-        progress_bar.show()
+        recycler_view.isVisible = false
+        progress_bar.isVisible = true
     }
 
     private fun displayMedia(media: List<Media>) {
@@ -190,26 +188,26 @@ abstract class MediaListFragment(
 
     private fun hideErrorIfVisible() {
         with(group_error) {
-            if (isVisible())
-                hide()
+            if (isVisible)
+                isVisible = false
         }
 
         with(bt_try_again) {
-            if (isVisible())
-                hide()
+            if (isVisible)
+                isVisible = false
         }
     }
 
     private fun showError(errorType: ErrorType) {
-        progress_bar.hide()
-        recycler_view.hide()
-        group_error.show()
+        progress_bar.isVisible = false
+        recycler_view.isVisible = false
+        group_error.isVisible = true
 
         if (errorType != ErrorType.NO_FAVOURITES) {
             with(bt_try_again) {
-                show()
+                isVisible = true
                 setOnClickListener {
-                    it.hide()
+                    it.isVisible = false
                     fetchAudiosOrVideos()
                 }
             }
@@ -223,8 +221,8 @@ abstract class MediaListFragment(
     }
 
     private fun hideProgressBar() {
-        progress_bar.hide()
-        recycler_view.show()
+        progress_bar.isVisible = false
+        recycler_view.isVisible = true
         if (swipe_refresh_layout.isRefreshing)
             swipe_refresh_layout.isRefreshing = false
     }
