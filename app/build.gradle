@@ -43,15 +43,15 @@ android {
 
     productFlavors {
         free {
-            versionCode 52
-            versionName "2021.2.0"
+            versionCode 53
+            versionName "2021.2.1"
             dimension "version"
             signingConfig signingConfigs.free
         }
 
         paid {
-            versionCode 52
-            versionName "2021.2.0"
+            versionCode 53
+            versionName "2021.2.1"
             dimension "version"
             applicationIdSuffix ".paid"
             buildConfigField "String", "BASE_URL", '"https://api.dropboxapi.com/"'
