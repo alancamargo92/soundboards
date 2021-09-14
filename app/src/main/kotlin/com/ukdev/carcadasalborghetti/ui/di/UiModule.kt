@@ -5,7 +5,7 @@ import com.ukdev.carcadasalborghetti.ui.media.MediaHelper
 import com.ukdev.carcadasalborghetti.ui.media.MediaHelperImpl
 import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaViewModel
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.viewmodel.dsl.viewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 object UiModule : LayerModule() {

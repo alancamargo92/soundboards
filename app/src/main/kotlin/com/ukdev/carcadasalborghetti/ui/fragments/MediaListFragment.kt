@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 abstract class MediaListFragment(
         @LayoutRes layoutId: Int,
