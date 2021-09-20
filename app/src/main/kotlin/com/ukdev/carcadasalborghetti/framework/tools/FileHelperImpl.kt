@@ -6,8 +6,6 @@ import android.net.Uri
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.N
 import androidx.core.content.FileProvider
-import com.dropbox.core.DbxDownloader
-import com.dropbox.core.v2.files.FileMetadata
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
@@ -23,7 +21,7 @@ private const val DIR_AUDIOS = "$DIR_MEDIA/audios"
 private const val DIR_VIDEOS = "$DIR_MEDIA/videos"
 private const val EXTENSION_AUDIO = "mp3"
 
-class FileHelperImpl(private val context: Context) : FileHelper {
+open class FileHelperImpl(private val context: Context) : FileHelper {
 
     private val baseDir by lazy { context.filesDir.absolutePath }
 
@@ -46,8 +44,8 @@ class FileHelperImpl(private val context: Context) : FileHelper {
             throw FileNotFoundException()
     }
 
-    override suspend fun getFileUri(downloader: DbxDownloader<FileMetadata>, media: Media): Uri {
-        val file = saveFile(downloader, media)
+    override suspend fun getFileUri(inputStream: InputStream?, media: Media): Uri {
+        val file = saveFile(inputStream, media)
         return getFileUri(file)
     }
 
@@ -67,8 +65,8 @@ class FileHelperImpl(private val context: Context) : FileHelper {
         }
     }
 
-    override suspend fun shareFile(downloader: DbxDownloader<FileMetadata>, media: Media) {
-        val uri = getFileUri(downloader, media)
+    override suspend fun shareFile(inputStream: InputStream?, media: Media) {
+        val uri = getFileUri(inputStream, media)
         shareFile(uri, media)
     }
 
@@ -82,22 +80,7 @@ class FileHelperImpl(private val context: Context) : FileHelper {
         dir.deleteRecursively()
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
-    private fun saveFile(downloader: DbxDownloader<FileMetadata>, media: Media): File {
-        val dir = getDir(media.type)
-
-        if (!dir.exists())
-            dir.mkdirs()
-
-        val fileName = composeFileName(media)
-        val file = File(dir, fileName)
-
-        downloader.download(FileOutputStream(file))
-
-        return file
-    }
-
-    private fun getFileUri(file: File): Uri {
+    protected fun getFileUri(file: File): Uri {
         return if (SDK_INT >= N) {
             val authority = "${context.packageName}.provider"
             FileProvider.getUriForFile(context, authority, file)
@@ -106,14 +89,7 @@ class FileHelperImpl(private val context: Context) : FileHelper {
         }
     }
 
-    private fun getMediaType(fileName: String): MediaType {
-        return if (fileName.endsWith(EXTENSION_AUDIO))
-            MediaType.AUDIO
-        else
-            MediaType.VIDEO
-    }
-
-    private fun getDir(mediaType: MediaType): File {
+    protected fun getDir(mediaType: MediaType): File {
         val subDir = if (mediaType == MediaType.AUDIO)
             DIR_AUDIOS
         else
@@ -122,8 +98,44 @@ class FileHelperImpl(private val context: Context) : FileHelper {
         return File("$baseDir/$subDir")
     }
 
-    private fun composeFileName(media: Media): String {
+    protected fun composeFileName(media: Media): String {
         return Media.composeFileName(media)
+    }
+
+    @Suppress("BlockingMethodInNonBlockingContext")
+    private suspend fun saveFile(inputStream: InputStream?, media: Media): File {
+        val dir = getDir(media.type)
+
+        if (!dir.exists())
+            dir.mkdirs()
+
+        val fileName = composeFileName(media)
+        val file = File(dir, fileName)
+
+        withContext(Dispatchers.IO) {
+            inputStream?.let { inputStream ->
+                FileOutputStream(file).use { out ->
+                    val buffer = ByteArray(inputStream.available())
+                    var content = inputStream.read(buffer)
+
+                    while (content != -1) {
+                        out.write(buffer, 0, content)
+                        content = inputStream.read(buffer)
+                    }
+
+                    out.flush()
+                }
+            }
+        }
+
+        return file
+    }
+
+    private fun getMediaType(fileName: String): MediaType {
+        return if (fileName.endsWith(EXTENSION_AUDIO))
+            MediaType.AUDIO
+        else
+            MediaType.VIDEO
     }
 
     private fun buildMedia(fileName: String): Media {

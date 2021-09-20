@@ -5,15 +5,21 @@ import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.data.tools.CrashReportManager
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.framework.remote.api.tools.IOHelper
-import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
+import com.ukdev.carcadasalborghetti.framework.tools.PaidFileHelper
 
 class VideoHandler(
-        mediaHelper: MediaHelper,
-        crashReportManager: CrashReportManager,
-        fileHelper: FileHelper,
-        remoteDataSource: MediaRemoteDataSource,
-        ioHelper: IOHelper
-) : PaidMediaHandler(mediaHelper, crashReportManager, fileHelper, remoteDataSource, ioHelper) {
+    mediaHelper: MediaHelper,
+    crashReportManager: CrashReportManager,
+    remoteDataSource: MediaRemoteDataSource,
+    ioHelper: IOHelper,
+    paidFileHelper: PaidFileHelper
+) : PaidMediaHandler(
+    mediaHelper,
+    crashReportManager,
+    remoteDataSource,
+    ioHelper,
+    paidFileHelper
+) {
 
     override fun playMedia(link: Uri, media: Media) {
         mediaHelper.playVideo(link, media.title)

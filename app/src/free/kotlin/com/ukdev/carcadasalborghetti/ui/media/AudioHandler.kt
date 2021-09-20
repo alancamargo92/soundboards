@@ -1,15 +1,15 @@
 package com.ukdev.carcadasalborghetti.ui.media
 
-import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
-import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.data.tools.CrashReportManager
+import com.ukdev.carcadasalborghetti.domain.entities.Media
+import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class AudioHandler(
-        mediaHelper: MediaHelper,
-        crashReportManager: CrashReportManager,
-        fileSharingHelper: FileHelper
+    mediaHelper: MediaHelper,
+    crashReportManager: CrashReportManager,
+    fileSharingHelper: FileHelper
 ) : MediaHandler(mediaHelper, crashReportManager, fileSharingHelper) {
 
     override suspend fun play(media: Media) {

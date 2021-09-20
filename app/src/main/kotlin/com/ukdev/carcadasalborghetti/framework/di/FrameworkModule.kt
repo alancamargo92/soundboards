@@ -9,7 +9,7 @@ import org.koin.dsl.module
 class FrameworkModule : LayerModule() {
 
     override val module = module {
-        factory<FileHelper> { FileHelperImpl(context = androidContext()) }
+        factory<FileHelper> { FileHelperImpl(androidContext()) }
     }
 
 }

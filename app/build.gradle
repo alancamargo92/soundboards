@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 android {
@@ -98,7 +99,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
-    implementation 'com.dropbox.core:dropbox-core-sdk:4.0.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.google.firebase:firebase-core:19.0.1'
     implementation 'com.google.firebase:firebase-crashlytics:18.2.1'
@@ -111,10 +111,7 @@ dependencies {
     freeImplementation "com.smaato.android.sdk:smaato-sdk-banner:$smaato_version"
     freeImplementation "com.smaato.android.sdk:smaato-sdk-native:$smaato_version"
 
-    paidImplementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    paidImplementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    paidImplementation 'com.squareup.okhttp3:okhttp:4.9.0'
-    paidImplementation 'com.google.code.gson:gson:2.8.6'
+    paidImplementation 'com.dropbox.core:dropbox-core-sdk:4.0.1'
     paidImplementation "androidx.room:room-runtime:$room_version"
     paidImplementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"

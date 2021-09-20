@@ -12,29 +12,29 @@ class PaidUiModule : LayerModule() {
     override val module = module {
         factory {
             AudioHandler(
-                    mediaHelper = get(),
-                    crashReportManager = get(),
-                    fileHelper = get(),
-                    remoteDataSource = get(),
-                    ioHelper = get()
+                mediaHelper = get(),
+                crashReportManager = get(),
+                remoteDataSource = get(),
+                ioHelper = get(),
+                paidFileHelper = get()
             )
         }
         factory {
             FavouritesHandler(
-                    mediaHelper = get(),
-                    crashReportManager = get(),
-                    fileHelper = get(),
-                    remoteDataSource = get(),
-                    ioHelper = get()
+                mediaHelper = get(),
+                crashReportManager = get(),
+                remoteDataSource = get(),
+                ioHelper = get(),
+                paidFileHelper = get()
             )
         }
         factory {
             VideoHandler(
-                    mediaHelper = get(),
-                    crashReportManager = get(),
-                    fileHelper = get(),
-                    remoteDataSource = get(),
-                    ioHelper = get()
+                mediaHelper = get(),
+                crashReportManager = get(),
+                remoteDataSource = get(),
+                ioHelper = get(),
+                paidFileHelper = get()
             )
         }
         factory<VideoHelper> { VideoHelperImpl(context = androidContext()) }
