@@ -44,15 +44,15 @@ android {
 
     productFlavors {
         free {
-            versionCode 53
-            versionName "2021.2.1"
+            versionCode 54
+            versionName "2021.3.0"
             dimension "version"
             signingConfig signingConfigs.free
         }
 
         paid {
-            versionCode 53
-            versionName "2021.2.1"
+            versionCode 54
+            versionName "2021.3.0"
             dimension "version"
             applicationIdSuffix ".paid"
             buildConfigField "String", "ACCESS_TOKEN", "\"${soundboards_access_token}\""
