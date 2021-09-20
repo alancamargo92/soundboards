@@ -9,20 +9,20 @@ import com.ukdev.carcadasalborghetti.framework.local.MediaLocalDataSourceImpl
 import com.ukdev.carcadasalborghetti.framework.remote.MediaRemoteDataSourceImpl
 import org.koin.dsl.module
 
-object PaidDataModule : LayerModule() {
+class PaidDataModule : LayerModule() {
 
     override val module = module {
         factory<MediaRepository> {
             MediaRepositoryImpl(
-                    crashReportManager = get(),
-                    remoteDataSource = get(),
-                    localDataSource = get(),
-                    favouritesDatabase = get(),
-                    ioHelper = get()
+                crashReportManager = get(),
+                remoteDataSource = get(),
+                localDataSource = get(),
+                favouritesDatabase = get(),
+                ioHelper = get()
             )
         }
         factory<MediaLocalDataSource> { MediaLocalDataSourceImpl(fileHelper = get()) }
-        factory<MediaRemoteDataSource> { MediaRemoteDataSourceImpl(apiProvider = get()) }
+        factory<MediaRemoteDataSource> { MediaRemoteDataSourceImpl(client = get()) }
     }
 
 }

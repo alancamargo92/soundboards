@@ -7,7 +7,7 @@ import com.ukdev.carcadasalborghetti.ui.tools.MenuProviderImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-object PaidUiModule : LayerModule() {
+class PaidUiModule : LayerModule() {
 
     override val module = module {
         factory {

@@ -54,8 +54,6 @@ android {
             versionName "2021.2.1"
             dimension "version"
             applicationIdSuffix ".paid"
-            buildConfigField "String", "BASE_URL", '"https://api.dropboxapi.com/"'
-            buildConfigField "String", "BASE_URL_DOWNLOADS", '"https://content.dropboxapi.com/"'
             buildConfigField "String", "ACCESS_TOKEN", "\"${soundboards_access_token}\""
             signingConfig signingConfigs.paid
         }
@@ -100,6 +98,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    implementation 'com.dropbox.core:dropbox-core-sdk:4.0.1'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.google.firebase:firebase-core:19.0.1'
     implementation 'com.google.firebase:firebase-crashlytics:18.2.1'

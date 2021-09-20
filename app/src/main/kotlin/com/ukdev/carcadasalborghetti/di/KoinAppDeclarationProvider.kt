@@ -15,9 +15,9 @@ abstract class KoinAppDeclarationProvider {
     }
 
     protected open fun loadModules() {
-        DataModule.load()
-        FrameworkModule.load()
-        UiModule.load()
+        DataModule().load()
+        FrameworkModule().load()
+        UiModule().load()
     }
 
 }

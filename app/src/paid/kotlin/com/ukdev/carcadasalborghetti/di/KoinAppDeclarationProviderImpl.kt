@@ -8,9 +8,9 @@ class KoinAppDeclarationProviderImpl : KoinAppDeclarationProvider() {
 
     override fun loadModules() {
         super.loadModules()
-        PaidDataModule.load()
-        PaidFrameworkModule.load()
-        PaidUiModule.load()
+        PaidDataModule().load()
+        PaidFrameworkModule().load()
+        PaidUiModule().load()
     }
 
 }

@@ -1,17 +1,19 @@
 package com.ukdev.carcadasalborghetti.framework.remote
 
+import com.dropbox.core.DbxDownloader
+import com.dropbox.core.v2.DbxClientV2
+import com.dropbox.core.v2.files.FileMetadata
 import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import com.ukdev.carcadasalborghetti.framework.remote.api.DIR_AUDIO
 import com.ukdev.carcadasalborghetti.framework.remote.api.DIR_VIDEO
-import com.ukdev.carcadasalborghetti.framework.remote.api.requests.MediaRequest
-import com.ukdev.carcadasalborghetti.framework.remote.api.tools.ApiProvider
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.io.InputStream
 
-class MediaRemoteDataSourceImpl(private val apiProvider: ApiProvider) : MediaRemoteDataSource {
+private const val EXTENSION_MP3 = "mp3"
+
+class MediaRemoteDataSourceImpl(
+    private val client: DbxClientV2
+) : MediaRemoteDataSource {
 
     override suspend fun listMedia(mediaType: MediaType): List<Media> {
         val dir = when (mediaType) {
@@ -20,28 +22,18 @@ class MediaRemoteDataSourceImpl(private val apiProvider: ApiProvider) : MediaRem
             else -> throw IllegalArgumentException("Must be either audio or video")
         }
 
-        val request = MediaRequest(dir)
-        val api = apiProvider.getDropboxService()
+        return client.files().listFolder(dir).entries.map {
+            val type = if (it.name.endsWith(EXTENSION_MP3))
+                MediaType.AUDIO
+            else
+                MediaType.VIDEO
 
-        return withContext(Dispatchers.IO) {
-            api.listMedia(request).entries.map {
-                val type = if (it.name.endsWith("mp3"))
-                    MediaType.AUDIO
-                else
-                    MediaType.VIDEO
-
-                Media(it.id, it.name, type)
-            }
+            Media((it as FileMetadata).id, it.name, type)
         }
     }
 
-    override suspend fun download(mediaId: String): InputStream {
-        val request = MediaRequest(mediaId)
-        val api = apiProvider.getDownloadService()
-
-        return withContext(Dispatchers.IO) {
-            api.download(request).byteStream()
-        }
+    override suspend fun download(mediaId: String): DbxDownloader<FileMetadata> {
+        return client.files().download(mediaId)
     }
 
 }

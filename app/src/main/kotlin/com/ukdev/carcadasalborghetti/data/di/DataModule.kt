@@ -8,7 +8,7 @@ import com.ukdev.carcadasalborghetti.framework.tools.PreferencesHelperImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-object DataModule : LayerModule() {
+class DataModule : LayerModule() {
 
     override val module = module {
         factory<CrashReportManager> { CrashReportManagerImpl() }
