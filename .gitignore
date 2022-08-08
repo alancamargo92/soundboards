@@ -1,6 +1,11 @@
 .idea/
 .gradle/
+.DS_Store
 build/
+app/.DS_Store
+app/src/.DS_Store
+app/src/paid/.DS_Store
+app/src/paid/res/.DS_Store
 local.properties
 *.iml
 *.jks
