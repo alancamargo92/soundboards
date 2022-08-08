@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Carcadas Alborghetti</string>
+    <string name="app_name">Carcadas Alborghetti +</string>
     <string name="clear_cache">Limpar cache</string>
     <string name="cache_cleared">Cache limpo</string>
 </resources>

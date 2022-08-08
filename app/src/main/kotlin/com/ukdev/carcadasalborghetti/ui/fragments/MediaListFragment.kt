@@ -138,35 +138,36 @@ abstract class MediaListFragment(
             when (val result = viewModel.getFavourites()) {
                 is Success<LiveData<List<Media>>> -> observeFavourites(result.body)
                 is GenericError -> showError(ErrorType.UNKNOWN)
+                is NetworkError -> showError(ErrorType.UNKNOWN)
             }
         }
     }
 
     private fun fetchAudiosOrVideos() {
         lifecycleScope.launch {
-            viewModel.getMedia(mediaType).observe(viewLifecycleOwner, { result ->
+            viewModel.getMedia(mediaType).observe(viewLifecycleOwner) { result ->
                 when (result) {
                     is Success<List<Media>> -> displayMedia(result.body)
                     is GenericError -> showError(ErrorType.UNKNOWN)
                     is NetworkError -> showError(ErrorType.CONNECTION)
                 }
-            })
+            }
         }
     }
 
     private fun observeFavourites(favouritesLiveData: LiveData<List<Media>>) {
-        favouritesLiveData.observe(viewLifecycleOwner, { favourites ->
+        favouritesLiveData.observe(viewLifecycleOwner) { favourites ->
             displayMedia(favourites)
-        })
+        }
     }
 
     private fun observePlaybackState() {
-        mediaHandler.isPlaying().observe(viewLifecycleOwner, { isPlaying ->
+        mediaHandler.isPlaying().observe(viewLifecycleOwner) { isPlaying ->
             if (isPlaying)
                 showFab()
             else
                 hideFab()
-        })
+        }
     }
 
     private fun showProgressBar() {
