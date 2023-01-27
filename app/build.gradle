@@ -17,17 +17,17 @@ android {
 
     signingConfigs {
         free {
-            keyAlias "${soundboards_key_alias}"
-            keyPassword "${soundboards_key_password}"
-            storeFile file("${soundboards_free_store_file}")
-            storePassword "${soundboards_store_password}"
+            keyAlias "${carcadas_key_alias}"
+            keyPassword "${carcadas_key_password}"
+            storeFile file("${carcadas_free_store_file}")
+            storePassword "${carcadas_store_password}"
         }
 
         paid {
-            keyAlias "${soundboards_key_alias}"
-            keyPassword "${soundboards_key_password}"
-            storeFile file("${soundboards_paid_store_file}")
-            storePassword "${soundboards_store_password}"
+            keyAlias "${carcadas_key_alias}"
+            keyPassword "${carcadas_key_password}"
+            storeFile file("${carcadas_paid_store_file}")
+            storePassword "${carcadas_store_password}"
         }
     }
 
