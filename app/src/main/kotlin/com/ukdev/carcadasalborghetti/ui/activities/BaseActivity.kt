@@ -7,14 +7,18 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.data.tools.PreferencesHelper
+import com.ukdev.carcadasalborghetti.databinding.ActivityBaseBinding
 import com.ukdev.carcadasalborghetti.ui.adapter.PagerAdapter
 import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragment
 import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
-import kotlinx.android.synthetic.main.activity_base.*
 import org.koin.android.ext.android.inject
 
-open class BaseActivity : AppCompatActivity(R.layout.activity_main) {
+open class BaseActivity : AppCompatActivity() {
+
+    private var _binding: ActivityBaseBinding? = null
+    private val binding: ActivityBaseBinding
+        get() = _binding!!
 
     private val menuProvider by inject<MenuProvider>()
     private val preferencesHelper by inject<PreferencesHelper>()
@@ -23,7 +27,9 @@ open class BaseActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setSupportActionBar(toolbar)
+        _binding = ActivityBaseBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         configureViewPager()
 
         if (preferencesHelper.shouldShowTip())
@@ -41,34 +47,39 @@ open class BaseActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun configureViewPager() {
-        val pagerAdapter = PagerAdapter(supportFragmentManager, tab_layout.tabCount)
-        mediaHandler = (pagerAdapter.getItem(0) as MediaListFragment).mediaHandler
-        with(view_pager) {
+        val pagerAdapter = PagerAdapter(supportFragmentManager, binding.tabLayout.tabCount)
+        (pagerAdapter.getItem(0) as? MediaListFragment)?.let {
+            mediaHandler = it.mediaHandler
+        }
+
+        with(binding.viewPager) {
             adapter = pagerAdapter
-            addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tab_layout))
-            tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout))
+            binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
-                    view_pager.currentItem = tab.position
+                    binding.viewPager.currentItem = tab.position
                     val currentFragment = pagerAdapter.getItem(tab.position)
                     mediaHandler.stop()
-                    mediaHandler = (currentFragment as MediaListFragment).mediaHandler
+                    (currentFragment as? MediaListFragment)?.let {
+                        mediaHandler = it.mediaHandler
+                    }
                 }
 
-                override fun onTabUnselected(tab: TabLayout.Tab) { }
+                override fun onTabUnselected(tab: TabLayout.Tab) {}
 
-                override fun onTabReselected(tab: TabLayout.Tab) { }
+                override fun onTabReselected(tab: TabLayout.Tab) {}
             })
         }
     }
 
     private fun showTip() {
         MaterialAlertDialogBuilder(this)
-                .setTitle(R.string.tip_title)
-                .setMessage(R.string.tip)
-                .setNeutralButton(R.string.ok, null)
-                .setPositiveButton(R.string.do_not_show_again) { _, _ ->
-                    preferencesHelper.disableTip()
-                }.show()
+            .setTitle(R.string.tip_title)
+            .setMessage(R.string.tip)
+            .setNeutralButton(R.string.ok, null)
+            .setPositiveButton(R.string.do_not_show_again) { _, _ ->
+                preferencesHelper.disableTip()
+            }.show()
     }
 
 }

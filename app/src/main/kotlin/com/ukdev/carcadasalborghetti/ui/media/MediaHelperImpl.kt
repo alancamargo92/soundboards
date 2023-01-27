@@ -8,8 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import com.ukdev.carcadasalborghetti.data.tools.orFalse
 
 class MediaHelperImpl(
-        videoHelper: VideoHelper,
-        private val context: Context
+    videoHelper: VideoHelper,
+    private val context: Context
 ) : MediaHelper(videoHelper) {
 
     private val isPlayingLiveData = MutableLiveData<Boolean>()

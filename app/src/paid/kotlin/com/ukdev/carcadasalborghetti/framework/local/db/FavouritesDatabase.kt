@@ -10,7 +10,7 @@ import com.ukdev.carcadasalborghetti.domain.entities.Media
 @Dao
 interface FavouritesDatabase {
 
-    @Insert
+    @Insert(entity = Media::class)
     suspend fun insert(media: Media)
 
     @Query("SELECT COUNT() FROM Media WHERE id = :mediaId")
@@ -19,7 +19,7 @@ interface FavouritesDatabase {
     @Query("SELECT * FROM Media ORDER BY title")
     fun getFavourites(): LiveData<List<Media>>
 
-    @Delete
+    @Delete(entity = Media::class)
     suspend fun delete(media: Media)
 
 }

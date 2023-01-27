@@ -24,5 +24,4 @@ abstract class MediaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
         progressBar.isVisible = false
         icon.isVisible = true
     }
-
 }

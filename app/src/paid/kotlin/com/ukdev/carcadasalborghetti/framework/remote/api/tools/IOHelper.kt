@@ -11,13 +11,13 @@ import java.io.IOException
 
 class IOHelper(private val crashReportManager: CrashReportManager) {
 
-    suspend fun <T> safeIOCall(block: suspend() -> T): Result<T> {
+    suspend fun <T> safeIOCall(block: suspend () -> T): Result<T> {
         return safeIOCall(block, null)
     }
 
     suspend fun <T> safeIOCall(
-            mainCall: suspend () -> T,
-            alternative: (suspend () -> T)? = null
+        mainCall: suspend () -> T,
+        alternative: (suspend () -> T)? = null
     ): Result<T> {
         return withContext(Dispatchers.IO) {
             try {
@@ -42,8 +42,8 @@ class IOHelper(private val crashReportManager: CrashReportManager) {
     }
 
     private suspend fun <T> tryRunAlternative(
-            originalError: Result<Nothing>,
-            block: suspend () -> T
+        originalError: Result<Nothing>,
+        block: suspend () -> T
     ): Result<T> {
         return try {
             Success(block.invoke())

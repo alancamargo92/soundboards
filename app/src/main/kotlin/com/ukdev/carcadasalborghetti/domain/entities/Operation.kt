@@ -4,7 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.ukdev.carcadasalborghetti.R
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 enum class Operation(@DrawableRes val icon: Int, @StringRes val text: Int) : Parcelable {

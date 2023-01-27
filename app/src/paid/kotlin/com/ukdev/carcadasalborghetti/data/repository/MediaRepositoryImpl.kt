@@ -12,6 +12,8 @@ import com.ukdev.carcadasalborghetti.domain.entities.Operation
 import com.ukdev.carcadasalborghetti.framework.local.db.FavouritesDatabase
 import com.ukdev.carcadasalborghetti.framework.remote.api.tools.IOHelper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 
 class MediaRepositoryImpl(
@@ -36,16 +38,14 @@ class MediaRepositoryImpl(
         }
     }
 
-    override suspend fun saveToFavourites(media: Media) {
-        ioHelper.safeIOCall {
-            favouritesDatabase.insert(media)
-        }
+    override fun saveToFavourites(media: Media): Flow<Unit> = flow {
+        val task = favouritesDatabase.insert(media)
+        emit(task)
     }
 
-    override suspend fun removeFromFavourites(media: Media) {
-        ioHelper.safeIOCall {
-            favouritesDatabase.delete(media)
-        }
+    override fun removeFromFavourites(media: Media): Flow<Unit> = flow {
+        val task = favouritesDatabase.delete(media)
+        emit(task)
     }
 
     override suspend fun getAvailableOperations(media: Media): List<Operation> {

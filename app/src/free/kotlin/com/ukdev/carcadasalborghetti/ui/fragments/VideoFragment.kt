@@ -3,30 +3,35 @@ package com.ukdev.carcadasalborghetti.ui.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.ui.adapter.VideoAdapter
-import com.ukdev.carcadasalborghetti.ui.media.VideoHandler
-import com.ukdev.carcadasalborghetti.domain.entities.MediaType
-import kotlinx.android.synthetic.free.fragment_video.*
-import org.koin.android.ext.android.inject
+import com.ukdev.carcadasalborghetti.databinding.FragmentVideoBinding
 
-open class VideoFragment : MediaListFragment(R.layout.fragment_video, MediaType.VIDEO) {
+open class VideoFragment : Fragment() {
 
-    override val mediaHandler by inject<VideoHandler>()
-    override val adapter = VideoAdapter()
+    private var _binding: FragmentVideoBinding? = null
+    private val binding: FragmentVideoBinding
+        get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentVideoBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
-        txt_paid_version.text = getString(R.string.get_paid_version_rationale)
-        bt_paid_version.setOnClickListener {
+        binding.txtPaidVersion.text = getString(R.string.get_paid_version_rationale)
+        binding.btPaidVersion.setOnClickListener {
             showPaidVersion()
         }
     }
-
-    override fun showFab() { }
-
-    override fun hideFab() { }
 
     private fun showPaidVersion() {
         val url = "https://play.google.com/store/apps/details?id=com.ukdev.carcadasalborghetti.paid"

@@ -80,6 +80,15 @@ open class FileHelperImpl(private val context: Context) : FileHelper {
         dir.deleteRecursively()
     }
 
+    override suspend fun createFile(fileName: String, mediaType: MediaType): File {
+        val dir = getDir(mediaType)
+        if (!dir.exists()) {
+            dir.mkdirs()
+        }
+
+        return File("$dir/$fileName")
+    }
+
     protected fun getFileUri(file: File): Uri {
         return if (SDK_INT >= N) {
             val authority = "${context.packageName}.provider"

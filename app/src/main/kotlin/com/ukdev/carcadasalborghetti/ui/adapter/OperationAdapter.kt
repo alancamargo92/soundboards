@@ -3,12 +3,12 @@ package com.ukdev.carcadasalborghetti.ui.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ukdev.carcadasalborghetti.R
+import com.ukdev.carcadasalborghetti.databinding.ItemOperationBinding
 import com.ukdev.carcadasalborghetti.domain.entities.Operation
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.OperationViewHolder
 
 class OperationAdapter(
-        private val listener: ItemClickListener
+    private val listener: ItemClickListener
 ) : RecyclerView.Adapter<OperationViewHolder>() {
 
     private var data: List<Operation> = emptyList()
@@ -20,8 +20,8 @@ class OperationAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OperationViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val itemView = inflater.inflate(R.layout.item_operation, parent, false)
-        return OperationViewHolder(itemView)
+        val binding = ItemOperationBinding.inflate(inflater, parent, false)
+        return OperationViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: OperationViewHolder, position: Int) {

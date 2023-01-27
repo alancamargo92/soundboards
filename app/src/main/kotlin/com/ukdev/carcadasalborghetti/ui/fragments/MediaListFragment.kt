@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
-import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -16,6 +15,7 @@ import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.data.entities.GenericError
 import com.ukdev.carcadasalborghetti.data.entities.NetworkError
 import com.ukdev.carcadasalborghetti.data.entities.Success
+import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import com.ukdev.carcadasalborghetti.domain.entities.Operation
@@ -25,26 +25,23 @@ import com.ukdev.carcadasalborghetti.ui.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.ui.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaViewModel
-import kotlinx.android.synthetic.main.layout_list.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-abstract class MediaListFragment(
-        @LayoutRes layoutId: Int,
-        private val mediaType: MediaType
-) : Fragment(layoutId),
-        RecyclerViewInteractionListener,
-        OperationsDialogue.Listener,
-        DialogInterface.OnDismissListener,
-        SwipeRefreshLayout.OnRefreshListener {
+abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
+    RecyclerViewInteractionListener,
+    OperationsDialogue.Listener,
+    DialogInterface.OnDismissListener,
+    SwipeRefreshLayout.OnRefreshListener {
 
     abstract val mediaHandler: MediaHandler
 
+    protected abstract val baseBinding: LayoutListBinding
     protected abstract val adapter: MediaAdapter
 
-    private val viewModel by viewModel<MediaViewModel>()
+    private val viewModel by sharedViewModel<MediaViewModel>()
 
     private var searchView: SearchView? = null
 
@@ -112,21 +109,21 @@ abstract class MediaListFragment(
     }
 
     override fun onRefresh() {
-        swipe_refresh_layout.isRefreshing = true
+        baseBinding.swipeRefreshLayout.isRefreshing = true
         fetchMedia(mediaType)
     }
 
-    private fun configureSwipeRefreshLayout() = with(swipe_refresh_layout) {
+    private fun configureSwipeRefreshLayout() = with(baseBinding.swipeRefreshLayout) {
         setOnRefreshListener(this@MediaListFragment)
         setColorSchemeResources(R.color.red, R.color.black)
     }
 
     private fun configureRecyclerView() {
-        recycler_view.adapter = adapter.apply { setListener(this@MediaListFragment) }
+        baseBinding.recyclerView.adapter = adapter.apply { setListener(this@MediaListFragment) }
     }
 
     private fun fetchMedia(mediaType: MediaType) {
-        group_error.isVisible = false
+        baseBinding.groupError.isVisible = false
         showProgressBar()
 
         if (mediaType == MediaType.BOTH) fetchFavourites()
@@ -170,9 +167,9 @@ abstract class MediaListFragment(
         }
     }
 
-    private fun showProgressBar() {
-        recycler_view.isVisible = false
-        progress_bar.isVisible = true
+    private fun showProgressBar() = with(baseBinding) {
+        recyclerView.isVisible = false
+        progressBar.isVisible = true
     }
 
     private fun displayMedia(media: List<Media>) {
@@ -187,45 +184,35 @@ abstract class MediaListFragment(
         }
     }
 
-    private fun hideErrorIfVisible() {
-        with(group_error) {
-            if (isVisible)
-                isVisible = false
-        }
-
-        with(bt_try_again) {
-            if (isVisible)
-                isVisible = false
-        }
+    private fun hideErrorIfVisible() = with(baseBinding) {
+        groupError.isVisible = false
+        btTryAgain.isVisible = false
     }
 
-    private fun showError(errorType: ErrorType) {
-        progress_bar.isVisible = false
-        recycler_view.isVisible = false
-        group_error.isVisible = true
+    private fun showError(errorType: ErrorType) = with(baseBinding) {
+        progressBar.isVisible = false
+        recyclerView.isVisible = false
+        groupError.isVisible = true
 
         if (errorType != ErrorType.NO_FAVOURITES) {
-            with(bt_try_again) {
-                isVisible = true
-                setOnClickListener {
-                    it.isVisible = false
-                    fetchAudiosOrVideos()
-                }
+            btTryAgain.isVisible = true
+            btTryAgain.setOnClickListener {
+                it.isVisible = false
+                fetchAudiosOrVideos()
             }
         }
 
         val icon = errorType.iconRes
         val text = errorType.textRes
 
-        img_error.setImageResource(icon)
-        txt_error.setText(text)
+        imgError.setImageResource(icon)
+        txtError.setText(text)
     }
 
-    private fun hideProgressBar() {
-        progress_bar.isVisible = false
-        recycler_view.isVisible = true
-        if (swipe_refresh_layout.isRefreshing)
-            swipe_refresh_layout.isRefreshing = false
+    private fun hideProgressBar() = with(baseBinding) {
+        progressBar.isVisible = false
+        recyclerView.isVisible = true
+        swipeRefreshLayout.isRefreshing = false
     }
 
     private fun showOperationsDialogue(operations: List<Operation>) {
