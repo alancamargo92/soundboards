@@ -22,8 +22,8 @@ abstract class PaidMediaHandler(
         val uriResult = ioHelper.safeIOCall(mainCall = {
             fileHelper.getFileUri(media.title)
         }, alternative = {
-            val downloader = remoteDataSource.download(media.id)
-            paidFileHelper.getFileUri(downloader, media)
+            val file = remoteDataSource.download(media.id)
+            paidFileHelper.getFileUri(file.name)
         })
 
         if (uriResult is Success)

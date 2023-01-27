@@ -7,16 +7,21 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.MediaController
 import androidx.appcompat.app.AppCompatActivity
-import com.ukdev.carcadasalborghetti.R
-import kotlinx.android.synthetic.paid.activity_video.*
+import com.ukdev.carcadasalborghetti.databinding.ActivityVideoBinding
 
-class VideoActivity : AppCompatActivity(R.layout.activity_video) {
+class VideoActivity : AppCompatActivity() {
+
+    private var _binding: ActivityVideoBinding? = null
+    private val binding: ActivityVideoBinding
+        get() = _binding!!
 
     private val url by lazy { intent.getParcelableExtra<Uri>(EXTRA_URL) }
     private val title by lazy { intent.getStringExtra(EXTRA_TITLE) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        _binding = ActivityVideoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         configureActionBar()
         startPlayback()
     }
@@ -28,7 +33,7 @@ class VideoActivity : AppCompatActivity(R.layout.activity_video) {
     }
 
     private fun configureActionBar() {
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.let { actionBar ->
             actionBar.setDisplayHomeAsUpEnabled(true)
             actionBar.title = title?.removeSuffix(".mp4")
@@ -36,7 +41,7 @@ class VideoActivity : AppCompatActivity(R.layout.activity_video) {
     }
 
     private fun startPlayback() {
-        with(video_view) {
+        with(binding.videoView) {
             setVideoURI(url)
             setMediaController(MediaController(context).also { it.setAnchorView(this) })
             start()
@@ -49,9 +54,9 @@ class VideoActivity : AppCompatActivity(R.layout.activity_video) {
 
         fun getIntent(context: Context, title: String, videoUrl: Uri): Intent {
             return Intent(context, VideoActivity::class.java)
-                    .putExtra(EXTRA_TITLE, title)
-                    .putExtra(EXTRA_URL, videoUrl)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(EXTRA_TITLE, title)
+                .putExtra(EXTRA_URL, videoUrl)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
     }
 

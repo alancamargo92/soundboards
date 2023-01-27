@@ -2,22 +2,23 @@ package com.ukdev.carcadasalborghetti.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.ukdev.carcadasalborghetti.R
+import com.ukdev.carcadasalborghetti.databinding.ItemAudioBinding
+import com.ukdev.carcadasalborghetti.databinding.ItemVideoBinding
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
-import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.VideoViewHolder
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.AudioViewHolder
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.MediaViewHolder
+import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.VideoViewHolder
 
 class FavouritesAdapter : MediaAdapter() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return if (viewType == VIEW_TYPE_AUDIO) {
-            val itemView = inflater.inflate(R.layout.item_audio, parent, false)
-            AudioViewHolder(itemView)
+            val binding = ItemAudioBinding.inflate(inflater, parent, false)
+            AudioViewHolder(binding)
         } else {
-            val itemView = inflater.inflate(R.layout.item_video, parent, false)
-            VideoViewHolder(itemView)
+            val binding = ItemVideoBinding.inflate(inflater, parent, false)
+            VideoViewHolder(binding)
         }
     }
 

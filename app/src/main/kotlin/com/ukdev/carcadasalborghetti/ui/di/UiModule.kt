@@ -11,7 +11,12 @@ import org.koin.dsl.module
 class UiModule : LayerModule() {
 
     override val module = module {
-        viewModel { MediaViewModel(repository = get()) }
+        viewModel {
+            MediaViewModel(
+                repository = get(),
+                crashReportManager = get()
+            )
+        }
         factory<MediaHelper> {
             MediaHelperImpl(
                     videoHelper = get(),

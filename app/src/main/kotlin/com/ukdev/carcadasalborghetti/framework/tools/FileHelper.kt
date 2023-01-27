@@ -3,6 +3,7 @@ package com.ukdev.carcadasalborghetti.framework.tools
 import android.net.Uri
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
+import java.io.File
 import java.io.InputStream
 
 interface FileHelper {
@@ -13,4 +14,6 @@ interface FileHelper {
     suspend fun shareFile(inputStream: InputStream?, media: Media)
     suspend fun getByteStream(uri: Uri): InputStream?
     suspend fun deleteAll()
+
+    suspend fun createFile(fileName: String, mediaType: MediaType): File
 }

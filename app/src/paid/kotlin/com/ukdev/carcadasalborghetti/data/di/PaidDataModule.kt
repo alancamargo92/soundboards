@@ -22,7 +22,12 @@ class PaidDataModule : LayerModule() {
             )
         }
         factory<MediaLocalDataSource> { MediaLocalDataSourceImpl(fileHelper = get()) }
-        factory<MediaRemoteDataSource> { MediaRemoteDataSourceImpl(client = get()) }
+        factory<MediaRemoteDataSource> {
+            MediaRemoteDataSourceImpl(
+                storageReference = get(),
+                fileHelper = get()
+            )
+        }
     }
 
 }

@@ -1,32 +1,49 @@
 package com.ukdev.carcadasalborghetti.ui.fragments
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.ukdev.carcadasalborghetti.R
+import com.ukdev.carcadasalborghetti.databinding.FragmentAudioBinding
+import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import com.ukdev.carcadasalborghetti.ui.adapter.FavouritesAdapter
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.ui.media.FavouritesHandler
-import kotlinx.android.synthetic.main.fragment_audio.*
 import org.koin.android.ext.android.inject
 
-class FavouritesFragment : MediaListFragment(R.layout.fragment_audio, MediaType.BOTH) {
+class FavouritesFragment : MediaListFragment(MediaType.BOTH) {
 
+    private var _binding: FragmentAudioBinding? = null
+    private val binding: FragmentAudioBinding
+        get() = _binding!!
+
+    override val baseBinding: LayoutListBinding
+        get() = LayoutListBinding.bind(binding.base.root)
     override val mediaHandler by inject<FavouritesHandler>()
     override val adapter: MediaAdapter = FavouritesAdapter()
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentAudioBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fab.setOnClickListener { mediaHandler.stop() }
+        binding.fab.setOnClickListener { mediaHandler.stop() }
     }
 
     override fun showFab() {
-        fab.isVisible = true
+        binding.fab.isVisible = true
     }
 
     override fun hideFab() {
-        fab.isVisible = false
+        binding.fab.isVisible = false
     }
 
 }
