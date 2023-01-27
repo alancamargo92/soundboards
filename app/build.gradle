@@ -44,15 +44,15 @@ android {
 
     productFlavors {
         free {
-            versionCode 55
-            versionName "2022.3.0"
+            versionCode 56
+            versionName "2023.1.0"
             dimension "version"
             signingConfig signingConfigs.free
         }
 
         paid {
-            versionCode 56
-            versionName "2022.3.1"
+            versionCode 57
+            versionName "2023.1.0"
             dimension "version"
             applicationIdSuffix ".paid"
             signingConfig signingConfigs.paid
