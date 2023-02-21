@@ -16,7 +16,6 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="@dimen/margin_fab"
         android:layout_marginEnd="@dimen/margin_fab"
-        android:layout_marginRight="@dimen/margin_fab"
         android:visibility="gone"
         android:src="@drawable/ic_stop"
         app:fabSize="normal"

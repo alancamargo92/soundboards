@@ -1,18 +1,15 @@
 package com.ukdev.carcadasalborghetti.ui.ads
 
 import android.view.View
-import com.smaato.sdk.banner.ad.BannerAdSize
-import com.smaato.sdk.banner.widget.BannerView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 
 class AdLoaderImpl : AdLoader {
 
     override fun loadBannerAds(target: View, adId: Int) {
-        with(target as BannerView) {
-            loadAd(context.getString(adId), BannerAdSize.XX_LARGE_320x50)
+        (target as? AdView)?.let { adView ->
+            val adRequest = AdRequest.Builder().build()
+            adView.loadAd(adRequest)
         }
-    }
-
-    override fun destroyBannerAds(target: View) {
-        (target as BannerView).destroy()
     }
 }

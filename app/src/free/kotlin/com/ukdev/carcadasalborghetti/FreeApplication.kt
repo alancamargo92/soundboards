@@ -1,25 +1,11 @@
 package com.ukdev.carcadasalborghetti
 
-import com.smaato.sdk.core.Config
-import com.smaato.sdk.core.SmaatoSdk
-import com.smaato.sdk.core.log.LogLevel
+import com.google.android.gms.ads.MobileAds
 
-@Suppress("unused")
 class FreeApplication : CarcadasAlborghettiApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        startSmaato()
+        MobileAds.initialize(this)
     }
-
-    private fun startSmaato() {
-        val config = Config.builder()
-                .setLogLevel(LogLevel.DEBUG)
-                .setHttpsOnly(false)
-                .build()
-
-        val publisherId = getString(R.string.smaato_publisher_id)
-        SmaatoSdk.init(this, config, publisherId)
-    }
-
 }
