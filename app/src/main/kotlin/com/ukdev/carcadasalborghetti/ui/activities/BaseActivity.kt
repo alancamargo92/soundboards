@@ -14,11 +14,9 @@ import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
 import org.koin.android.ext.android.inject
 
-open class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
 
-    private var _binding: ActivityBaseBinding? = null
-    private val binding: ActivityBaseBinding
-        get() = _binding!!
+    abstract val baseBinding: ActivityBaseBinding
 
     private val menuProvider by inject<MenuProvider>()
     private val preferencesHelper by inject<PreferencesHelper>()
@@ -27,9 +25,7 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityBaseBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+        setSupportActionBar(baseBinding.toolbar)
         configureViewPager()
 
         if (preferencesHelper.shouldShowTip())
@@ -47,17 +43,17 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     private fun configureViewPager() {
-        val pagerAdapter = PagerAdapter(supportFragmentManager, binding.tabLayout.tabCount)
+        val pagerAdapter = PagerAdapter(supportFragmentManager, baseBinding.tabLayout.tabCount)
         (pagerAdapter.getItem(0) as? MediaListFragment)?.let {
             mediaHandler = it.mediaHandler
         }
 
-        with(binding.viewPager) {
+        with(baseBinding.viewPager) {
             adapter = pagerAdapter
-            addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout))
-            binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(baseBinding.tabLayout))
+            baseBinding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
-                    binding.viewPager.currentItem = tab.position
+                    baseBinding.viewPager.currentItem = tab.position
                     val currentFragment = pagerAdapter.getItem(tab.position)
                     mediaHandler.stop()
                     (currentFragment as? MediaListFragment)?.let {
