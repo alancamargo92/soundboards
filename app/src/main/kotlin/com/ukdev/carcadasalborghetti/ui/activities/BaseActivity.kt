@@ -9,7 +9,10 @@ import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.data.tools.PreferencesHelper
 import com.ukdev.carcadasalborghetti.databinding.ActivityBaseBinding
 import com.ukdev.carcadasalborghetti.ui.adapter.PagerAdapter
+import com.ukdev.carcadasalborghetti.ui.fragments.AudioFragment
+import com.ukdev.carcadasalborghetti.ui.fragments.FavouritesFragment
 import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragment
+import com.ukdev.carcadasalborghetti.ui.fragments.VideoFragment
 import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
 import javax.inject.Inject
@@ -46,9 +49,16 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     private fun configureViewPager() {
-        val pagerAdapter = PagerAdapter(supportFragmentManager, baseBinding.tabLayout.tabCount)
-        (pagerAdapter.getItem(0) as? MediaListFragment)?.let {
-            mediaHandler = it.mediaHandler
+        val labelsAndFragments = mapOf(
+            R.string.audios to AudioFragment(),
+            R.string.videos to VideoFragment(),
+            R.string.favourites to FavouritesFragment()
+        )
+        val pagerAdapter = PagerAdapter(supportFragmentManager, labelsAndFragments)
+        supportFragmentManager.addFragmentOnAttachListener { _, fragment ->
+            if (fragment is AudioFragment) {
+                mediaHandler = fragment.mediaHandler
+            }
         }
 
         with(baseBinding.viewPager) {
