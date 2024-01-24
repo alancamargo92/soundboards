@@ -2,7 +2,7 @@ package com.ukdev.carcadasalborghetti.ui.media
 
 import com.ukdev.carcadasalborghetti.data.tools.Logger
 import com.ukdev.carcadasalborghetti.domain.model.Media
-import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
+import com.ukdev.carcadasalborghetti.data.tools.FileHelper
 import javax.inject.Inject
 
 class VideoHandler @Inject constructor(

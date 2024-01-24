@@ -13,7 +13,7 @@
 
         <provider
             android:authorities="com.ukdev.carcadasalborghetti.paid.provider"
-            android:name="com.ukdev.carcadasalborghetti.framework.tools.PaidFileProvider"
+            android:name="com.ukdev.carcadasalborghetti.data.tools.PaidFileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

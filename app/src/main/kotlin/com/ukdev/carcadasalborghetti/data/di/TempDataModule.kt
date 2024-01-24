@@ -1,7 +1,7 @@
 package com.ukdev.carcadasalborghetti.data.di
 
 import com.ukdev.carcadasalborghetti.data.tools.PreferencesHelper
-import com.ukdev.carcadasalborghetti.framework.tools.PreferencesHelperImpl
+import com.ukdev.carcadasalborghetti.data.tools.PreferencesHelperImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

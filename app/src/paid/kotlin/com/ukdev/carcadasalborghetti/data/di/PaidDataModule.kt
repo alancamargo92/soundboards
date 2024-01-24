@@ -2,8 +2,8 @@ package com.ukdev.carcadasalborghetti.data.di
 
 import com.ukdev.carcadasalborghetti.data.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.data.repository.MediaRepositoryImpl
-import com.ukdev.carcadasalborghetti.framework.tools.PaidFileHelper
-import com.ukdev.carcadasalborghetti.framework.tools.PaidFileHelperImpl
+import com.ukdev.carcadasalborghetti.data.tools.PaidFileHelper
+import com.ukdev.carcadasalborghetti.data.tools.PaidFileHelperImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

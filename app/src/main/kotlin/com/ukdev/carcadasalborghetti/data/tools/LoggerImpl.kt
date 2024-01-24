@@ -1,8 +1,7 @@
-package com.ukdev.carcadasalborghetti.framework.tools
+package com.ukdev.carcadasalborghetti.data.tools
 
 import android.util.Log
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.ukdev.carcadasalborghetti.data.tools.Logger
 import javax.inject.Inject
 
 class LoggerImpl @Inject constructor(

@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.framework.local.db
+package com.ukdev.carcadasalborghetti.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

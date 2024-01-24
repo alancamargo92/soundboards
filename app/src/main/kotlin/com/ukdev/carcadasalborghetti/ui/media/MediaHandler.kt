@@ -3,7 +3,7 @@ package com.ukdev.carcadasalborghetti.ui.media
 import androidx.lifecycle.LiveData
 import com.ukdev.carcadasalborghetti.data.tools.Logger
 import com.ukdev.carcadasalborghetti.domain.model.Media
-import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
+import com.ukdev.carcadasalborghetti.data.tools.FileHelper
 
 abstract class MediaHandler(
     protected val mediaHelper: MediaHelper,

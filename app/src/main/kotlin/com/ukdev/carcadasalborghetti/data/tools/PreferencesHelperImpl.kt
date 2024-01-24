@@ -1,7 +1,6 @@
-package com.ukdev.carcadasalborghetti.framework.tools
+package com.ukdev.carcadasalborghetti.data.tools
 
 import android.content.Context
-import com.ukdev.carcadasalborghetti.data.tools.PreferencesHelper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

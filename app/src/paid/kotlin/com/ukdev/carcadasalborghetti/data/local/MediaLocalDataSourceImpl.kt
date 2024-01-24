@@ -1,9 +1,8 @@
-package com.ukdev.carcadasalborghetti.framework.local
+package com.ukdev.carcadasalborghetti.data.local
 
-import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
+import com.ukdev.carcadasalborghetti.data.tools.FileHelper
 import com.ukdev.carcadasalborghetti.domain.model.Media
 import com.ukdev.carcadasalborghetti.domain.model.MediaType
-import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
 import javax.inject.Inject
 
 class MediaLocalDataSourceImpl @Inject constructor(

@@ -1,9 +1,8 @@
-package com.ukdev.carcadasalborghetti.framework.local
+package com.ukdev.carcadasalborghetti.data.local
 
 import android.content.Context
 import android.net.Uri
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
 import com.ukdev.carcadasalborghetti.domain.model.Media
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +17,7 @@ class MediaLocalDataSourceImpl @Inject constructor(
         val titles = getTitles()
         val uris = getAudioUris()
 
-        return arrayListOf<Media>().apply {
+        return mutableListOf<Media>().apply {
             titles.forEachIndexed { index, title ->
                 add(Media(title, uris[index]))
             }

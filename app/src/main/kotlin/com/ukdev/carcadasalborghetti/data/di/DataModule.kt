@@ -3,9 +3,9 @@ package com.ukdev.carcadasalborghetti.data.di
 import android.content.Context
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.ukdev.carcadasalborghetti.data.tools.Logger
-import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
-import com.ukdev.carcadasalborghetti.framework.tools.FileHelperImpl
-import com.ukdev.carcadasalborghetti.framework.tools.LoggerImpl
+import com.ukdev.carcadasalborghetti.data.tools.FileHelper
+import com.ukdev.carcadasalborghetti.data.tools.FileHelperImpl
+import com.ukdev.carcadasalborghetti.data.tools.LoggerImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

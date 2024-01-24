@@ -9,8 +9,8 @@ import com.ukdev.carcadasalborghetti.data.tools.Logger
 import com.ukdev.carcadasalborghetti.domain.model.Media
 import com.ukdev.carcadasalborghetti.domain.model.MediaType
 import com.ukdev.carcadasalborghetti.domain.model.Operation
-import com.ukdev.carcadasalborghetti.framework.local.db.FavouritesDao
-import com.ukdev.carcadasalborghetti.framework.remote.api.tools.IOHelper
+import com.ukdev.carcadasalborghetti.data.db.FavouritesDao
+import com.ukdev.carcadasalborghetti.data.tools.IOHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

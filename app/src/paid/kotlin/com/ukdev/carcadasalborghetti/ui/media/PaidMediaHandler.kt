@@ -5,8 +5,8 @@ import com.ukdev.carcadasalborghetti.data.model.Success
 import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.data.tools.Logger
 import com.ukdev.carcadasalborghetti.domain.model.Media
-import com.ukdev.carcadasalborghetti.framework.remote.api.tools.IOHelper
-import com.ukdev.carcadasalborghetti.framework.tools.PaidFileHelper
+import com.ukdev.carcadasalborghetti.data.tools.IOHelper
+import com.ukdev.carcadasalborghetti.data.tools.PaidFileHelper
 
 abstract class PaidMediaHandler(
     mediaHelper: MediaHelper,

@@ -5,11 +5,11 @@ import com.google.firebase.storage.StorageReference
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
 import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.data.tools.Logger
-import com.ukdev.carcadasalborghetti.framework.local.MediaLocalDataSourceImpl
-import com.ukdev.carcadasalborghetti.framework.remote.MediaRemoteDataSourceImpl
-import com.ukdev.carcadasalborghetti.framework.remote.api.tools.IOHelper
-import com.ukdev.carcadasalborghetti.framework.tools.PaidFileHelper
-import com.ukdev.carcadasalborghetti.framework.tools.PaidFileHelperImpl
+import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceImpl
+import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSourceImpl
+import com.ukdev.carcadasalborghetti.data.tools.IOHelper
+import com.ukdev.carcadasalborghetti.data.tools.PaidFileHelper
+import com.ukdev.carcadasalborghetti.data.tools.PaidFileHelperImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.framework.tools
+package com.ukdev.carcadasalborghetti.data.tools
 
 import android.net.Uri
 import com.ukdev.carcadasalborghetti.domain.model.Media
