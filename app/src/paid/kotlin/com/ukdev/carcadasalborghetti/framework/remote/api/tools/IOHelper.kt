@@ -4,12 +4,13 @@ import com.ukdev.carcadasalborghetti.data.entities.GenericError
 import com.ukdev.carcadasalborghetti.data.entities.NetworkError
 import com.ukdev.carcadasalborghetti.data.entities.Result
 import com.ukdev.carcadasalborghetti.data.entities.Success
-import com.ukdev.carcadasalborghetti.data.tools.CrashReportManager
+import com.ukdev.carcadasalborghetti.data.tools.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException
+import javax.inject.Inject
 
-class IOHelper(private val crashReportManager: CrashReportManager) {
+class IOHelper @Inject constructor(private val logger: Logger) {
 
     suspend fun <T> safeIOCall(block: suspend () -> T): Result<T> {
         return safeIOCall(block, null)
@@ -23,7 +24,7 @@ class IOHelper(private val crashReportManager: CrashReportManager) {
             try {
                 Success(mainCall.invoke())
             } catch (t: Throwable) {
-                crashReportManager.logException(t)
+                logger.logException(t)
                 val originalError = getError(t)
 
                 if (alternative != null)
@@ -48,9 +49,8 @@ class IOHelper(private val crashReportManager: CrashReportManager) {
         return try {
             Success(block.invoke())
         } catch (t: Throwable) {
-            crashReportManager.logException(t)
+            logger.logException(t)
             originalError
         }
     }
-
 }

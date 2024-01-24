@@ -28,9 +28,9 @@ class FavouritesAdapter : MediaAdapter() {
             return when (it.type) {
                 MediaType.AUDIO -> VIEW_TYPE_AUDIO
                 MediaType.VIDEO -> VIEW_TYPE_VIDEO
-                else -> throw IllegalArgumentException("Must be either audio or video")
+                else -> error("Must be either audio or video")
             }
-        } ?: throw IllegalStateException("Data has not been submitted to adapter")
+        } ?: error("Data has not been submitted to adapter")
     }
 
     private companion object {

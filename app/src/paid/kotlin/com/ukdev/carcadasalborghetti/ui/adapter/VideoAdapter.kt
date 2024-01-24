@@ -13,5 +13,4 @@ class VideoAdapter : MediaAdapter() {
         val binding = ItemVideoBinding.inflate(inflater, parent, false)
         return VideoViewHolder(binding)
     }
-
 }

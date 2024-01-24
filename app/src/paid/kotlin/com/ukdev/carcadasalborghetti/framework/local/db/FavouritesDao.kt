@@ -8,7 +8,7 @@ import androidx.room.Query
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 
 @Dao
-interface FavouritesDatabase {
+interface FavouritesDao {
 
     @Insert(entity = Media::class)
     suspend fun insert(media: Media)

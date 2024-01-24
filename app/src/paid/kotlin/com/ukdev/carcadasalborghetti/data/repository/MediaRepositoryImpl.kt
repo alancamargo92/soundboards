@@ -5,24 +5,25 @@ import com.ukdev.carcadasalborghetti.data.entities.Result
 import com.ukdev.carcadasalborghetti.data.entities.Success
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
 import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSource
-import com.ukdev.carcadasalborghetti.data.tools.CrashReportManager
+import com.ukdev.carcadasalborghetti.data.tools.Logger
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import com.ukdev.carcadasalborghetti.domain.entities.Operation
-import com.ukdev.carcadasalborghetti.framework.local.db.FavouritesDatabase
+import com.ukdev.carcadasalborghetti.framework.local.db.FavouritesDao
 import com.ukdev.carcadasalborghetti.framework.remote.api.tools.IOHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MediaRepositoryImpl(
-        crashReportManager: CrashReportManager,
-        private val remoteDataSource: MediaRemoteDataSource,
-        private val localDataSource: MediaLocalDataSource,
-        private val favouritesDatabase: FavouritesDatabase,
-        private val ioHelper: IOHelper
-) : MediaRepository(crashReportManager) {
+class MediaRepositoryImpl @Inject constructor(
+    logger: Logger,
+    private val remoteDataSource: MediaRemoteDataSource,
+    private val localDataSource: MediaLocalDataSource,
+    private val favouritesDao: FavouritesDao,
+    private val ioHelper: IOHelper
+) : MediaRepository(logger) {
 
     override suspend fun getMedia(mediaType: MediaType): Result<List<Media>> {
         return ioHelper.safeIOCall(mainCall = {
@@ -34,17 +35,17 @@ class MediaRepositoryImpl(
 
     override suspend fun getFavourites(): Result<LiveData<List<Media>>> {
         return ioHelper.safeIOCall {
-            favouritesDatabase.getFavourites()
+            favouritesDao.getFavourites()
         }
     }
 
     override fun saveToFavourites(media: Media): Flow<Unit> = flow {
-        val task = favouritesDatabase.insert(media)
+        val task = favouritesDao.insert(media)
         emit(task)
     }
 
     override fun removeFromFavourites(media: Media): Flow<Unit> = flow {
-        val task = favouritesDatabase.delete(media)
+        val task = favouritesDao.delete(media)
         emit(task)
     }
 
@@ -75,8 +76,7 @@ class MediaRepositoryImpl(
 
     private suspend fun isSavedToFavourites(media: Media): Result<Boolean> {
         return ioHelper.safeIOCall {
-            favouritesDatabase.count(media.id) > 0
+            favouritesDao.count(media.id) > 0
         }
     }
-
 }

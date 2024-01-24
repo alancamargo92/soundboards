@@ -3,18 +3,18 @@ package com.ukdev.carcadasalborghetti.ui.media
 import android.net.Uri
 import com.ukdev.carcadasalborghetti.data.entities.Success
 import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSource
-import com.ukdev.carcadasalborghetti.data.tools.CrashReportManager
+import com.ukdev.carcadasalborghetti.data.tools.Logger
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.framework.remote.api.tools.IOHelper
 import com.ukdev.carcadasalborghetti.framework.tools.PaidFileHelper
 
 abstract class PaidMediaHandler(
     mediaHelper: MediaHelper,
-    crashReportManager: CrashReportManager,
+    logger: Logger,
     private val remoteDataSource: MediaRemoteDataSource,
     private val ioHelper: IOHelper,
     private val paidFileHelper: PaidFileHelper
-) : MediaHandler(mediaHelper, crashReportManager, paidFileHelper) {
+) : MediaHandler(mediaHelper, logger, paidFileHelper) {
 
     protected abstract fun playMedia(link: Uri, media: Media)
 

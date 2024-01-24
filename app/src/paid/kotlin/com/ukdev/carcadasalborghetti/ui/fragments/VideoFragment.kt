@@ -8,9 +8,12 @@ import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.ui.adapter.VideoAdapter
-import com.ukdev.carcadasalborghetti.ui.media.VideoHandler
-import org.koin.android.ext.android.inject
+import com.ukdev.carcadasalborghetti.ui.di.VideoHandlerDependency
+import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class VideoFragment : MediaListFragment(MediaType.VIDEO) {
 
     private var _binding: LayoutListBinding? = null
@@ -19,7 +22,11 @@ class VideoFragment : MediaListFragment(MediaType.VIDEO) {
 
     override val baseBinding: LayoutListBinding
         get() = binding
-    override val mediaHandler by inject<VideoHandler>()
+
+    @Inject
+    @VideoHandlerDependency
+    override lateinit var mediaHandler: MediaHandler
+
     override val adapter: MediaAdapter = VideoAdapter()
 
     override fun onCreateView(
@@ -34,5 +41,4 @@ class VideoFragment : MediaListFragment(MediaType.VIDEO) {
     override fun showFab() { }
 
     override fun hideFab() { }
-
 }

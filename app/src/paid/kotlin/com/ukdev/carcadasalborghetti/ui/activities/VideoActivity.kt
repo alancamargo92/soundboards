@@ -8,7 +8,9 @@ import android.view.MenuItem
 import android.widget.MediaController
 import androidx.appcompat.app.AppCompatActivity
 import com.ukdev.carcadasalborghetti.databinding.ActivityVideoBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class VideoActivity : AppCompatActivity() {
 
     private var _binding: ActivityVideoBinding? = null

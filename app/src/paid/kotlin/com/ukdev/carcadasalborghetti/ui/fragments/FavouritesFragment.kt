@@ -10,9 +10,12 @@ import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import com.ukdev.carcadasalborghetti.ui.adapter.FavouritesAdapter
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
-import com.ukdev.carcadasalborghetti.ui.media.FavouritesHandler
-import org.koin.android.ext.android.inject
+import com.ukdev.carcadasalborghetti.ui.di.FavouritesHandlerDependency
+import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FavouritesFragment : MediaListFragment(MediaType.BOTH) {
 
     private var _binding: FragmentAudioBinding? = null
@@ -21,7 +24,11 @@ class FavouritesFragment : MediaListFragment(MediaType.BOTH) {
 
     override val baseBinding: LayoutListBinding
         get() = LayoutListBinding.bind(binding.base.root)
-    override val mediaHandler by inject<FavouritesHandler>()
+
+    @Inject
+    @FavouritesHandlerDependency
+    override lateinit var mediaHandler: MediaHandler
+
     override val adapter: MediaAdapter = FavouritesAdapter()
 
     override fun onCreateView(

@@ -9,10 +9,11 @@ import com.ukdev.carcadasalborghetti.framework.remote.api.DIR_VIDEO
 import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
 import kotlinx.coroutines.tasks.await
 import java.io.File
+import javax.inject.Inject
 
 private const val EXTENSION_MP3 = "mp3"
 
-class MediaRemoteDataSourceImpl(
+class MediaRemoteDataSourceImpl @Inject constructor(
     private val storageReference: StorageReference,
     private val fileHelper: FileHelper
 ) : MediaRemoteDataSource {

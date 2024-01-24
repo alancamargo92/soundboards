@@ -8,8 +8,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MenuProviderImpl(private val localDataSource: MediaLocalDataSource) : MenuProvider() {
+class MenuProviderImpl @Inject constructor(
+    private val localDataSource: MediaLocalDataSource
+) : MenuProvider() {
 
     override fun getMenuItemsAndActions(): Map<Int, (activity: Activity) -> Unit> {
         return defaultItemsAndActions.apply {

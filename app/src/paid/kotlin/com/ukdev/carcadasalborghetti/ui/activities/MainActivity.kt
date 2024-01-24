@@ -2,7 +2,9 @@ package com.ukdev.carcadasalborghetti.ui.activities
 
 import android.os.Bundle
 import com.ukdev.carcadasalborghetti.databinding.ActivityBaseBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
     private var _binding: ActivityBaseBinding? = null
