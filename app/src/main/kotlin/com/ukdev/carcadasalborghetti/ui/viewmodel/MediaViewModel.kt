@@ -1,66 +1,93 @@
 package com.ukdev.carcadasalborghetti.ui.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ukdev.carcadasalborghetti.data.model.Result
-import com.ukdev.carcadasalborghetti.domain.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.data.tools.Logger
+import com.ukdev.carcadasalborghetti.di.IoDispatcher
 import com.ukdev.carcadasalborghetti.domain.model.Media
 import com.ukdev.carcadasalborghetti.domain.model.MediaType
 import com.ukdev.carcadasalborghetti.domain.model.Operation
+import com.ukdev.carcadasalborghetti.domain.usecase.GetAvailableOperationsUseCase
+import com.ukdev.carcadasalborghetti.domain.usecase.GetFavouritesUseCase
+import com.ukdev.carcadasalborghetti.domain.usecase.GetMediaListUseCase
+import com.ukdev.carcadasalborghetti.domain.usecase.RemoveFromFavouritesUseCase
+import com.ukdev.carcadasalborghetti.domain.usecase.SaveToFavouritesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MediaViewModel @Inject constructor(
-    private val repository: MediaRepository,
-    private val logger: Logger
+    private val getMediaListUseCase: GetMediaListUseCase,
+    private val getFavouritesUseCase: GetFavouritesUseCase,
+    private val saveToFavouritesUseCase: SaveToFavouritesUseCase,
+    private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
+    private val getAvailableOperationsUseCase: GetAvailableOperationsUseCase,
+    private val logger: Logger,
+    @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    private val audioLiveData = MutableLiveData<Result<List<Media>>>()
-    private val videoLiveData = MutableLiveData<Result<List<Media>>>()
-
-    suspend fun getMedia(mediaType: MediaType): LiveData<Result<List<Media>>> {
-        val media = repository.getMedia(mediaType)
-
-        val liveData = when (mediaType) {
-            MediaType.AUDIO -> audioLiveData
-            MediaType.VIDEO -> videoLiveData
-            MediaType.BOTH -> throw IllegalArgumentException("Must be either audio or video")
-        }
-
-        return liveData.apply {
-            postValue(media)
+    fun getMedia(mediaType: MediaType) {
+        viewModelScope.launch(dispatcher) {
+            getMediaListUseCase(mediaType).onStart {
+                // Do stuff
+            }.onCompletion {
+                // Do stuff
+            }.catch {
+                logger.logException(it)
+                // Do stuff
+            }.collect {
+                // Do stuff
+            }
         }
     }
 
-    suspend fun getFavourites(): Result<LiveData<List<Media>>> {
-        return repository.getFavourites()
+    fun getFavourites() {
+        viewModelScope.launch(dispatcher) {
+            getFavouritesUseCase().onStart {
+                // Do stuff
+            }.onCompletion {
+                // Do stuff
+            }.catch {
+                logger.logException(it)
+                // Do stuff
+            }.collect {
+                // Do stuff
+            }
+        }
     }
 
-    suspend fun getAvailableOperations(media: Media): List<Operation> {
-        return repository.getAvailableOperations(media)
+    fun getAvailableOperations(media: Media): List<Operation> {
+        return getAvailableOperationsUseCase(media)
     }
 
     fun saveToFavourites(media: Media) {
-        viewModelScope.launch {
-            repository.saveToFavourites(media).flowOn(Dispatchers.IO).catch {
+        viewModelScope.launch(dispatcher) {
+            saveToFavouritesUseCase(media).onStart {
+                // Do stuff
+            }.onCompletion {
+                // Do stuff
+            }.catch {
                 logger.logException(it)
+                // Do stuff
             }.collect()
         }
     }
 
     fun removeFromFavourites(media: Media) {
-        viewModelScope.launch {
-            repository.removeFromFavourites(media).flowOn(Dispatchers.IO).catch {
+        viewModelScope.launch(dispatcher) {
+            removeFromFavouritesUseCase(media).onStart {
+                // Do stuff
+            }.onCompletion {
+                // Do stuff
+            }.catch {
                 logger.logException(it)
+                // Do stuff
             }.collect()
         }
     }
