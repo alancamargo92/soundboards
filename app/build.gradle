@@ -83,26 +83,27 @@ android {
 }
 
 dependencies {
-    implementation platform('com.google.firebase:firebase-bom:32.7.1')
+    implementation platform(libs.firebase.bom)
 
-    implementation 'androidx.activity:activity-ktx:1.8.2'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.fragment:fragment-ktx:1.6.2'
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'com.google.android.material:material:1.11.0'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx'
-    implementation 'com.google.firebase:firebase-storage-ktx'
-    implementation "com.google.dagger:hilt-android:$hilt_version"
+    implementation libs.android.activity
+    implementation libs.android.appcompat
+    implementation libs.android.core
+    implementation libs.android.fragment
+    implementation libs.android.swiperefreshlayout
+    implementation libs.android.material
+    implementation libs.firebase.crashlytics
+    implementation libs.firebase.storage
+    implementation libs.hilt.android
 
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    kapt libs.hilt.compiler
 
-    freeImplementation 'com.google.android.gms:play-services-ads:22.6.0'
+    freeImplementation libs.google.ads
 
-    paidImplementation "androidx.room:room-ktx:$room_version"
-    ksp "androidx.room:room-compiler:$room_version"
+    paidImplementation libs.room.ktx
+    ksp libs.room.compiler
 
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'io.mockk:mockk:1.13.9'
-    testImplementation 'com.google.truth:truth:1.3.0'
+    testImplementation libs.junit
+    testImplementation libs.mockk.android
+    testImplementation libs.truth
+    testImplementation libs.turbine
 }
