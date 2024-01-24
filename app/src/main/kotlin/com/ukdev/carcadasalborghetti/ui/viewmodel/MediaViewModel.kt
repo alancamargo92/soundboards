@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ukdev.carcadasalborghetti.data.model.Result
-import com.ukdev.carcadasalborghetti.data.repository.MediaRepository
+import com.ukdev.carcadasalborghetti.domain.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.data.tools.Logger
 import com.ukdev.carcadasalborghetti.domain.model.Media
 import com.ukdev.carcadasalborghetti.domain.model.MediaType

@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.data.repository
+package com.ukdev.carcadasalborghetti.domain.repository
 
 import androidx.lifecycle.LiveData
 import com.ukdev.carcadasalborghetti.data.model.Result
@@ -11,9 +11,13 @@ import kotlinx.coroutines.flow.Flow
 abstract class MediaRepository(protected val logger: Logger) {
 
     abstract suspend fun getMedia(mediaType: MediaType): Result<List<Media>>
+
     abstract suspend fun getFavourites(): Result<LiveData<List<Media>>>
+
     abstract fun saveToFavourites(media: Media): Flow<Unit>
+
     abstract fun removeFromFavourites(media: Media): Flow<Unit>
+
     abstract suspend fun getAvailableOperations(media: Media): List<Operation>
 
     protected fun List<Media>.sort(): List<Media> {

@@ -1,7 +1,7 @@
 package com.ukdev.carcadasalborghetti.data.di
 
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
-import com.ukdev.carcadasalborghetti.data.repository.MediaRepository
+import com.ukdev.carcadasalborghetti.domain.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.data.repository.MediaRepositoryImpl
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceImpl
 import dagger.Binds
