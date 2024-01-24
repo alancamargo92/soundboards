@@ -1,7 +1,7 @@
 package com.ukdev.carcadasalborghetti.framework.tools
 
 import android.content.Context
-import com.ukdev.carcadasalborghetti.domain.entities.Media
+import com.ukdev.carcadasalborghetti.domain.model.Media
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import javax.inject.Inject

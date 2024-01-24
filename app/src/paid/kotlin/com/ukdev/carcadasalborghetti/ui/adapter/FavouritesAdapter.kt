@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ukdev.carcadasalborghetti.databinding.ItemAudioBinding
 import com.ukdev.carcadasalborghetti.databinding.ItemVideoBinding
-import com.ukdev.carcadasalborghetti.domain.entities.MediaType
+import com.ukdev.carcadasalborghetti.domain.model.MediaType
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.AudioViewHolder
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.MediaViewHolder
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.VideoViewHolder

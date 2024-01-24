@@ -2,7 +2,7 @@ package com.ukdev.carcadasalborghetti.ui.adapter.viewholder
 
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.databinding.ItemAudioBinding
-import com.ukdev.carcadasalborghetti.domain.entities.Media
+import com.ukdev.carcadasalborghetti.domain.model.Media
 
 class AudioViewHolder(private val binding: ItemAudioBinding) : MediaViewHolder(binding.root) {
 

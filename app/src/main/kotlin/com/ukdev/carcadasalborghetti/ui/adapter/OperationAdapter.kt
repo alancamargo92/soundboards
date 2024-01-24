@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.databinding.ItemOperationBinding
-import com.ukdev.carcadasalborghetti.domain.entities.Operation
+import com.ukdev.carcadasalborghetti.domain.model.Operation
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.OperationViewHolder
 
 class OperationAdapter(

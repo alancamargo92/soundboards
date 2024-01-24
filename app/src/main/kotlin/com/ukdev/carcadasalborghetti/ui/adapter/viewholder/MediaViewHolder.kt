@@ -6,7 +6,7 @@ import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.domain.entities.Media
+import com.ukdev.carcadasalborghetti.domain.model.Media
 
 abstract class MediaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

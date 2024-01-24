@@ -1,14 +1,14 @@
 package com.ukdev.carcadasalborghetti.data.repository
 
 import androidx.lifecycle.LiveData
-import com.ukdev.carcadasalborghetti.data.entities.Result
-import com.ukdev.carcadasalborghetti.data.entities.Success
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
+import com.ukdev.carcadasalborghetti.data.model.Result
+import com.ukdev.carcadasalborghetti.data.model.Success
 import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.data.tools.Logger
-import com.ukdev.carcadasalborghetti.domain.entities.Media
-import com.ukdev.carcadasalborghetti.domain.entities.MediaType
-import com.ukdev.carcadasalborghetti.domain.entities.Operation
+import com.ukdev.carcadasalborghetti.domain.model.Media
+import com.ukdev.carcadasalborghetti.domain.model.MediaType
+import com.ukdev.carcadasalborghetti.domain.model.Operation
 import com.ukdev.carcadasalborghetti.framework.local.db.FavouritesDao
 import com.ukdev.carcadasalborghetti.framework.remote.api.tools.IOHelper
 import kotlinx.coroutines.Dispatchers

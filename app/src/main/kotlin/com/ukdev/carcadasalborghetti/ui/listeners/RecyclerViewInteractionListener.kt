@@ -1,6 +1,6 @@
 package com.ukdev.carcadasalborghetti.ui.listeners
 
-import com.ukdev.carcadasalborghetti.domain.entities.Media
+import com.ukdev.carcadasalborghetti.domain.model.Media
 
 interface RecyclerViewInteractionListener {
     fun onItemClick(media: Media)

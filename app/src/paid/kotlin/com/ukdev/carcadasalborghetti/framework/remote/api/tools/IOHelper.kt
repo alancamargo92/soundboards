@@ -1,9 +1,9 @@
 package com.ukdev.carcadasalborghetti.framework.remote.api.tools
 
-import com.ukdev.carcadasalborghetti.data.entities.GenericError
-import com.ukdev.carcadasalborghetti.data.entities.NetworkError
-import com.ukdev.carcadasalborghetti.data.entities.Result
-import com.ukdev.carcadasalborghetti.data.entities.Success
+import com.ukdev.carcadasalborghetti.data.model.GenericError
+import com.ukdev.carcadasalborghetti.data.model.NetworkError
+import com.ukdev.carcadasalborghetti.data.model.Result
+import com.ukdev.carcadasalborghetti.data.model.Success
 import com.ukdev.carcadasalborghetti.data.tools.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

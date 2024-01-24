@@ -7,8 +7,8 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.N
 import androidx.core.content.FileProvider
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.domain.entities.Media
-import com.ukdev.carcadasalborghetti.domain.entities.MediaType
+import com.ukdev.carcadasalborghetti.domain.model.Media
+import com.ukdev.carcadasalborghetti.domain.model.MediaType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File

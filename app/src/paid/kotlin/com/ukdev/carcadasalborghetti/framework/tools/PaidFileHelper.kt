@@ -1,6 +1,6 @@
 package com.ukdev.carcadasalborghetti.framework.tools
 
-import com.ukdev.carcadasalborghetti.domain.entities.Media
+import com.ukdev.carcadasalborghetti.domain.model.Media
 import java.io.File
 
 interface PaidFileHelper : FileHelper {

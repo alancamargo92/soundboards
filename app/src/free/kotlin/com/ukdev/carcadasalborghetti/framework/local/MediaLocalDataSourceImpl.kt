@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
-import com.ukdev.carcadasalborghetti.domain.entities.Media
+import com.ukdev.carcadasalborghetti.domain.model.Media
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

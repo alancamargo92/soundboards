@@ -1,12 +1,12 @@
-package com.ukdev.carcadasalborghetti.domain.entities
+package com.ukdev.carcadasalborghetti.domain.model
 
 import android.net.Uri
 
 data class Media(
-        val title: String,
-        val uri: Uri,
-        val type: MediaType = MediaType.AUDIO,
-        var position: Int = 0
+    val title: String,
+    val uri: Uri,
+    val type: MediaType = MediaType.AUDIO,
+    var position: Int = 0
 ) {
 
     companion object {

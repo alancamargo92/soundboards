@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.data.entities
+package com.ukdev.carcadasalborghetti.data.model
 
 enum class ErrorType {
 

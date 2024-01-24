@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
-import com.ukdev.carcadasalborghetti.domain.entities.MediaType
+import com.ukdev.carcadasalborghetti.domain.model.MediaType
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.ui.adapter.VideoAdapter
 import com.ukdev.carcadasalborghetti.ui.di.VideoHandlerDependency

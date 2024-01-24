@@ -1,10 +1,10 @@
 package com.ukdev.carcadasalborghetti.ui.media
 
 import android.net.Uri
-import com.ukdev.carcadasalborghetti.data.entities.Success
+import com.ukdev.carcadasalborghetti.data.model.Success
 import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.data.tools.Logger
-import com.ukdev.carcadasalborghetti.domain.entities.Media
+import com.ukdev.carcadasalborghetti.domain.model.Media
 import com.ukdev.carcadasalborghetti.framework.remote.api.tools.IOHelper
 import com.ukdev.carcadasalborghetti.framework.tools.PaidFileHelper
 

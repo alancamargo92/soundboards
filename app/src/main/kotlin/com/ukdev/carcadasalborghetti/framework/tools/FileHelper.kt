@@ -1,8 +1,8 @@
 package com.ukdev.carcadasalborghetti.framework.tools
 
 import android.net.Uri
-import com.ukdev.carcadasalborghetti.domain.entities.Media
-import com.ukdev.carcadasalborghetti.domain.entities.MediaType
+import com.ukdev.carcadasalborghetti.domain.model.Media
+import com.ukdev.carcadasalborghetti.domain.model.MediaType
 import java.io.File
 import java.io.InputStream
 

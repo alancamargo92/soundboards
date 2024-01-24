@@ -1,7 +1,7 @@
 package com.ukdev.carcadasalborghetti.ui.media
 
 import com.ukdev.carcadasalborghetti.data.tools.Logger
-import com.ukdev.carcadasalborghetti.domain.entities.Media
+import com.ukdev.carcadasalborghetti.domain.model.Media
 import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -1,7 +1,7 @@
 package com.ukdev.carcadasalborghetti.ui.adapter
 
 import androidx.recyclerview.widget.RecyclerView
-import com.ukdev.carcadasalborghetti.domain.entities.Media
+import com.ukdev.carcadasalborghetti.domain.model.Media
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.MediaViewHolder
 import com.ukdev.carcadasalborghetti.ui.listeners.RecyclerViewInteractionListener
 import java.util.*

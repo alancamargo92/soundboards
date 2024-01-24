@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.domain.entities
+package com.ukdev.carcadasalborghetti.domain.model
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes

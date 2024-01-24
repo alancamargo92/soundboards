@@ -2,7 +2,7 @@ package com.ukdev.carcadasalborghetti.ui.adapter.viewholder
 
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.databinding.ItemOperationBinding
-import com.ukdev.carcadasalborghetti.domain.entities.Operation
+import com.ukdev.carcadasalborghetti.domain.model.Operation
 
 class OperationViewHolder(
     private val binding: ItemOperationBinding

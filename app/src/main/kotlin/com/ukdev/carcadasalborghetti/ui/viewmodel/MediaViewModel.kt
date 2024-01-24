@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ukdev.carcadasalborghetti.data.entities.Result
+import com.ukdev.carcadasalborghetti.data.model.Result
 import com.ukdev.carcadasalborghetti.data.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.data.tools.Logger
-import com.ukdev.carcadasalborghetti.domain.entities.Media
-import com.ukdev.carcadasalborghetti.domain.entities.MediaType
-import com.ukdev.carcadasalborghetti.domain.entities.Operation
+import com.ukdev.carcadasalborghetti.domain.model.Media
+import com.ukdev.carcadasalborghetti.domain.model.MediaType
+import com.ukdev.carcadasalborghetti.domain.model.Operation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch

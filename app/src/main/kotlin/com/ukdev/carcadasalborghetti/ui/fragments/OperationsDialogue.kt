@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.ukdev.carcadasalborghetti.databinding.DialogueOperationsBinding
-import com.ukdev.carcadasalborghetti.domain.entities.Operation
+import com.ukdev.carcadasalborghetti.domain.model.Operation
 import com.ukdev.carcadasalborghetti.ui.adapter.OperationAdapter
 
 class OperationsDialogue : DialogFragment(), OperationAdapter.ItemClickListener {

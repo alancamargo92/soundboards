@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.domain.entities
+package com.ukdev.carcadasalborghetti.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
