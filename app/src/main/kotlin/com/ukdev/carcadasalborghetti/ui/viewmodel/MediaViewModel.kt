@@ -6,19 +6,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ukdev.carcadasalborghetti.data.entities.Result
 import com.ukdev.carcadasalborghetti.data.repository.MediaRepository
-import com.ukdev.carcadasalborghetti.data.tools.CrashReportManager
+import com.ukdev.carcadasalborghetti.data.tools.Logger
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import com.ukdev.carcadasalborghetti.domain.entities.Operation
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MediaViewModel(
+@HiltViewModel
+class MediaViewModel @Inject constructor(
     private val repository: MediaRepository,
-    private val crashReportManager: CrashReportManager
+    private val logger: Logger
 ) : ViewModel() {
 
     private val audioLiveData = MutableLiveData<Result<List<Media>>>()
@@ -49,7 +52,7 @@ class MediaViewModel(
     fun saveToFavourites(media: Media) {
         viewModelScope.launch {
             repository.saveToFavourites(media).flowOn(Dispatchers.IO).catch {
-                crashReportManager.logException(it)
+                logger.logException(it)
             }.collect()
         }
     }
@@ -57,9 +60,8 @@ class MediaViewModel(
     fun removeFromFavourites(media: Media) {
         viewModelScope.launch {
             repository.removeFromFavourites(media).flowOn(Dispatchers.IO).catch {
-                crashReportManager.logException(it)
+                logger.logException(it)
             }.collect()
         }
     }
-
 }

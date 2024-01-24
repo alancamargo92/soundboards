@@ -1,18 +1,29 @@
 package com.ukdev.carcadasalborghetti.data.di
 
-import com.ukdev.carcadasalborghetti.data.tools.CrashReportManager
-import com.ukdev.carcadasalborghetti.data.tools.PreferencesHelper
-import com.ukdev.carcadasalborghetti.di.LayerModule
-import com.ukdev.carcadasalborghetti.framework.tools.CrashReportManagerImpl
-import com.ukdev.carcadasalborghetti.framework.tools.PreferencesHelperImpl
-import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module
+import android.content.Context
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.ukdev.carcadasalborghetti.data.tools.Logger
+import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
+import com.ukdev.carcadasalborghetti.framework.tools.FileHelperImpl
+import com.ukdev.carcadasalborghetti.framework.tools.LoggerImpl
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
-class DataModule : LayerModule() {
+@Module
+@InstallIn(SingletonComponent::class)
+object DataModule {
 
-    override val module = module {
-        factory<CrashReportManager> { CrashReportManagerImpl() }
-        factory<PreferencesHelper> { PreferencesHelperImpl(context = androidContext()) }
-    }
+    @Provides
+    @Singleton
+    fun provideLogger(crashlytics: FirebaseCrashlytics): Logger = LoggerImpl(crashlytics)
 
+    @Provides
+    @Singleton
+    fun provideFileHelper(
+        @ApplicationContext context: Context
+    ): FileHelper = FileHelperImpl(context)
 }

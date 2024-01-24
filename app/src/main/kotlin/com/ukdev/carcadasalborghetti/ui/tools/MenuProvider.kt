@@ -33,5 +33,4 @@ abstract class MenuProvider {
                 .setNeutralButton(R.string.ok, null)
                 .show()
     }
-
 }

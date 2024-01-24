@@ -38,5 +38,4 @@ open class VideoFragment : Fragment() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
     }
-
 }

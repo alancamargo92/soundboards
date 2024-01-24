@@ -2,13 +2,13 @@ package com.ukdev.carcadasalborghetti.data.repository
 
 import androidx.lifecycle.LiveData
 import com.ukdev.carcadasalborghetti.data.entities.Result
-import com.ukdev.carcadasalborghetti.data.tools.CrashReportManager
+import com.ukdev.carcadasalborghetti.data.tools.Logger
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import com.ukdev.carcadasalborghetti.domain.entities.Operation
 import kotlinx.coroutines.flow.Flow
 
-abstract class MediaRepository(protected val crashReportManager: CrashReportManager) {
+abstract class MediaRepository(protected val logger: Logger) {
 
     abstract suspend fun getMedia(mediaType: MediaType): Result<List<Media>>
     abstract suspend fun getFavourites(): Result<LiveData<List<Media>>>
@@ -23,5 +23,4 @@ abstract class MediaRepository(protected val crashReportManager: CrashReportMana
             }
         }
     }
-
 }

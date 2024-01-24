@@ -1,9 +1,9 @@
 package com.ukdev.carcadasalborghetti.ui.media
 
 import android.net.Uri
+import javax.inject.Inject
 
-class VideoHelperImpl : VideoHelper {
+class VideoHelperImpl @Inject constructor() : VideoHelper {
 
-    override fun playVideo(link: Uri, title: String) { }
-
+    override fun playVideo(link: Uri, title: String) = Unit
 }

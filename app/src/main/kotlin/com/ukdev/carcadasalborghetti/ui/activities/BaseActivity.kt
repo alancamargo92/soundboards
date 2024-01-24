@@ -12,14 +12,17 @@ import com.ukdev.carcadasalborghetti.ui.adapter.PagerAdapter
 import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragment
 import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 abstract class BaseActivity : AppCompatActivity() {
 
     abstract val baseBinding: ActivityBaseBinding
 
-    private val menuProvider by inject<MenuProvider>()
-    private val preferencesHelper by inject<PreferencesHelper>()
+    @Inject
+    lateinit var menuProvider: MenuProvider
+
+    @Inject
+    lateinit var preferencesHelper: PreferencesHelper
 
     private lateinit var mediaHandler: MediaHandler
 
@@ -77,5 +80,4 @@ abstract class BaseActivity : AppCompatActivity() {
                 preferencesHelper.disableTip()
             }.show()
     }
-
 }

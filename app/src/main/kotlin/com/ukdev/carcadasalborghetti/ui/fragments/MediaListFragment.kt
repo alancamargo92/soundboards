@@ -8,6 +8,7 @@ import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -28,7 +29,6 @@ import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
     RecyclerViewInteractionListener,
@@ -41,7 +41,7 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
     protected abstract val baseBinding: LayoutListBinding
     protected abstract val adapter: MediaAdapter
 
-    private val viewModel by sharedViewModel<MediaViewModel>()
+    private val viewModel by viewModels<MediaViewModel>()
 
     private var searchView: SearchView? = null
 

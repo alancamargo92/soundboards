@@ -1,5 +1,6 @@
 package com.ukdev.carcadasalborghetti.data.tools
 
-interface CrashReportManager {
+interface Logger {
+
     fun logException(t: Throwable)
 }

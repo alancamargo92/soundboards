@@ -5,10 +5,14 @@ import android.net.Uri
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
 import com.ukdev.carcadasalborghetti.domain.entities.Media
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MediaLocalDataSourceImpl(private val context: Context) : MediaLocalDataSource {
+class MediaLocalDataSourceImpl @Inject constructor(
+    @ApplicationContext private val context: Context
+) : MediaLocalDataSource {
 
     override suspend fun getMediaList(): List<Media> {
         val titles = getTitles()
@@ -38,5 +42,4 @@ class MediaLocalDataSourceImpl(private val context: Context) : MediaLocalDataSou
             Uri.parse("android.resource://${context.packageName}/$resId")
         }.toTypedArray()
     }
-
 }

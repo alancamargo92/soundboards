@@ -3,7 +3,9 @@ plugins {
     id 'com.google.devtools.ksp'
     id 'com.google.firebase.crashlytics'
     id 'com.google.gms.google-services'
+    id 'com.google.dagger.hilt.android'
     id 'kotlin-android'
+    id 'kotlin-kapt'
     id 'kotlin-parcelize'
 }
 
@@ -83,14 +85,17 @@ android {
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.7.1')
 
+    implementation 'androidx.activity:activity-ktx:1.8.2'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
-    implementation "io.insert-koin:koin-core:$koin_version"
-    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
 
     freeImplementation 'com.google.android.gms:play-services-ads:22.6.0'
 

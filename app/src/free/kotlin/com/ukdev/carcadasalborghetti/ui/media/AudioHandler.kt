@@ -1,22 +1,23 @@
 package com.ukdev.carcadasalborghetti.ui.media
 
-import com.ukdev.carcadasalborghetti.data.tools.CrashReportManager
+import com.ukdev.carcadasalborghetti.data.tools.Logger
 import com.ukdev.carcadasalborghetti.domain.entities.Media
 import com.ukdev.carcadasalborghetti.framework.tools.FileHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class AudioHandler(
+class AudioHandler @Inject constructor(
     mediaHelper: MediaHelper,
-    crashReportManager: CrashReportManager,
+    logger: Logger,
     fileSharingHelper: FileHelper
-) : MediaHandler(mediaHelper, crashReportManager, fileSharingHelper) {
+) : MediaHandler(mediaHelper, logger, fileSharingHelper) {
 
     override suspend fun play(media: Media) {
         try {
             mediaHelper.playAudio(media.uri)
         } catch (t: Throwable) {
-            crashReportManager.logException(t)
+            logger.logException(t)
         }
     }
 
@@ -28,8 +29,7 @@ class AudioHandler(
                 fileHelper.shareFile(byteStream, media)
             }
         } catch (t: Throwable) {
-            crashReportManager.logException(t)
+            logger.logException(t)
         }
     }
-
 }

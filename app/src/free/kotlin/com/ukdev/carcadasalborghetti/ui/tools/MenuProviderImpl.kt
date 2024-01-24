@@ -1,12 +1,11 @@
 package com.ukdev.carcadasalborghetti.ui.tools
 
 import android.app.Activity
-import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
+import javax.inject.Inject
 
-class MenuProviderImpl : MenuProvider() {
+class MenuProviderImpl @Inject constructor() : MenuProvider() {
 
     override fun getMenuItemsAndActions(): Map<Int, (activity: Activity) -> Unit> {
         return defaultItemsAndActions
     }
-
 }

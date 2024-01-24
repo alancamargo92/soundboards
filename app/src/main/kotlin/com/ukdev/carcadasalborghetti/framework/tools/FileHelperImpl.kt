@@ -15,13 +15,14 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.InputStream
+import javax.inject.Inject
 
 private const val DIR_MEDIA = "media"
 private const val DIR_AUDIOS = "$DIR_MEDIA/audios"
 private const val DIR_VIDEOS = "$DIR_MEDIA/videos"
 private const val EXTENSION_AUDIO = "mp3"
 
-open class FileHelperImpl(private val context: Context) : FileHelper {
+open class FileHelperImpl @Inject constructor(private val context: Context) : FileHelper {
 
     private val baseDir by lazy { context.filesDir.absolutePath }
 
@@ -150,5 +151,4 @@ open class FileHelperImpl(private val context: Context) : FileHelper {
     private fun buildMedia(fileName: String): Media {
         return Media.fromFileName(fileName)
     }
-
 }

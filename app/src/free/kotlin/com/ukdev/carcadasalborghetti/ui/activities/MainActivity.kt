@@ -5,8 +5,10 @@ import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.databinding.ActivityBaseBinding
 import com.ukdev.carcadasalborghetti.databinding.ActivityMainBinding
 import com.ukdev.carcadasalborghetti.ui.ads.AdLoader
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
     private var _binding: ActivityMainBinding? = null
@@ -16,7 +18,8 @@ class MainActivity : BaseActivity() {
     override val baseBinding: ActivityBaseBinding
         get() = binding.base
 
-    private val adLoader by inject<AdLoader>()
+    @Inject
+    lateinit var adLoader: AdLoader
 
     override fun onCreate(savedInstanceState: Bundle?) {
         _binding = ActivityMainBinding.inflate(layoutInflater)

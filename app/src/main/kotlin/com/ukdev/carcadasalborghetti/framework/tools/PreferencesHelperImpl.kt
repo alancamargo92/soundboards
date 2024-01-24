@@ -2,8 +2,15 @@ package com.ukdev.carcadasalborghetti.framework.tools
 
 import android.content.Context
 import com.ukdev.carcadasalborghetti.data.tools.PreferencesHelper
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class PreferencesHelperImpl(context: Context) : PreferencesHelper {
+private const val FILE_NAME = "preferences"
+private const val KEY_SHOW_TIP = "show_tip"
+
+class PreferencesHelperImpl @Inject constructor(
+    @ApplicationContext context: Context
+) : PreferencesHelper {
 
     private val preferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
 
@@ -14,10 +21,4 @@ class PreferencesHelperImpl(context: Context) : PreferencesHelper {
     override fun disableTip() {
         preferences.edit().putBoolean(KEY_SHOW_TIP, false).apply()
     }
-
-    private companion object {
-        const val FILE_NAME = "preferences"
-        const val KEY_SHOW_TIP = "show_tip"
-    }
-
 }

@@ -3,21 +3,22 @@ package com.ukdev.carcadasalborghetti.data.di
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
 import com.ukdev.carcadasalborghetti.data.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.data.repository.MediaRepositoryImpl
-import com.ukdev.carcadasalborghetti.di.LayerModule
 import com.ukdev.carcadasalborghetti.framework.local.MediaLocalDataSourceImpl
-import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ViewModelComponent
+import dagger.hilt.android.scopes.ViewModelScoped
 
-object FreeDataModule : LayerModule() {
+@Module
+@InstallIn(ViewModelComponent::class)
+abstract class FreeDataModule {
 
-    override val module = module {
-        factory<MediaRepository> {
-            MediaRepositoryImpl(
-                    crashReportManager = get(),
-                    localDataSource = get()
-            )
-        }
-        factory<MediaLocalDataSource> { MediaLocalDataSourceImpl(context = androidContext()) }
-    }
+    @Binds
+    @ViewModelScoped
+    abstract fun bindMediaRepository(impl: MediaRepositoryImpl): MediaRepository
 
+    @Binds
+    @ViewModelScoped
+    abstract fun bindMediaLocalDataSource(impl: MediaLocalDataSourceImpl): MediaLocalDataSource
 }

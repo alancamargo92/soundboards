@@ -9,9 +9,12 @@ import com.ukdev.carcadasalborghetti.databinding.FragmentAudioBinding
 import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
 import com.ukdev.carcadasalborghetti.domain.entities.MediaType
 import com.ukdev.carcadasalborghetti.ui.adapter.AudioAdapter
-import com.ukdev.carcadasalborghetti.ui.media.AudioHandler
-import org.koin.android.ext.android.inject
+import com.ukdev.carcadasalborghetti.ui.di.AudioHandlerDependency
+import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AudioFragment : MediaListFragment(MediaType.AUDIO) {
 
     private var _binding: FragmentAudioBinding? = null
@@ -21,7 +24,10 @@ class AudioFragment : MediaListFragment(MediaType.AUDIO) {
     override val baseBinding: LayoutListBinding
         get() = LayoutListBinding.bind(binding.base.root)
 
-    override val mediaHandler by inject<AudioHandler>()
+    @Inject
+    @AudioHandlerDependency
+    override lateinit var mediaHandler: MediaHandler
+
     override val adapter = AudioAdapter()
 
     override fun onCreateView(
@@ -45,5 +51,4 @@ class AudioFragment : MediaListFragment(MediaType.AUDIO) {
     override fun hideFab() {
         binding.fab.isVisible = false
     }
-
 }

@@ -6,10 +6,12 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ukdev.carcadasalborghetti.data.tools.orFalse
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class MediaHelperImpl(
+class MediaHelperImpl @Inject constructor(
     videoHelper: VideoHelper,
-    private val context: Context
+    @ApplicationContext private val context: Context
 ) : MediaHelper(videoHelper) {
 
     private val isPlayingLiveData = MutableLiveData<Boolean>()
@@ -47,5 +49,4 @@ class MediaHelperImpl(
             setOnCompletionListener { isPlayingLiveData.value = false }
         }
     }
-
 }

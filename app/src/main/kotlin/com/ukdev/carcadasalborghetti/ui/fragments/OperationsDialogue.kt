@@ -76,5 +76,4 @@ class OperationsDialogue : DialogFragment(), OperationAdapter.ItemClickListener 
     interface Listener {
         fun onOperationSelected(operation: Operation)
     }
-
 }
