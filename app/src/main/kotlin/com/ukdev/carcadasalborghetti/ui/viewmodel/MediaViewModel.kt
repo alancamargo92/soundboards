@@ -39,7 +39,7 @@ class MediaViewModel @Inject constructor(
             }.onCompletion {
                 // Do stuff
             }.catch {
-                logger.logException(it)
+                logger.error(it)
                 // Do stuff
             }.collect {
                 // Do stuff
@@ -54,7 +54,7 @@ class MediaViewModel @Inject constructor(
             }.onCompletion {
                 // Do stuff
             }.catch {
-                logger.logException(it)
+                logger.error(it)
                 // Do stuff
             }.collect {
                 // Do stuff
@@ -73,7 +73,7 @@ class MediaViewModel @Inject constructor(
             }.onCompletion {
                 // Do stuff
             }.catch {
-                logger.logException(it)
+                logger.error(it)
                 // Do stuff
             }.collect()
         }
@@ -86,7 +86,7 @@ class MediaViewModel @Inject constructor(
             }.onCompletion {
                 // Do stuff
             }.catch {
-                logger.logException(it)
+                logger.error(it)
                 // Do stuff
             }.collect()
         }

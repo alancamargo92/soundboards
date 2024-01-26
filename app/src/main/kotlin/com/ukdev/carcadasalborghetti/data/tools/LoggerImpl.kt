@@ -1,15 +1,17 @@
 package com.ukdev.carcadasalborghetti.data.tools
 
 import android.util.Log
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import javax.inject.Inject
 
-class LoggerImpl @Inject constructor(
-    private val crashlytics: FirebaseCrashlytics
-) : Logger {
+private const val TAG = "LOG_CARCADAS"
 
-    override fun logException(t: Throwable) {
-        Log.e("ERROR_CARCADAS", t.message, t)
-        crashlytics.recordException(t)
+class LoggerImpl @Inject constructor() : Logger {
+
+    override fun debug(message: String) {
+        Log.d(TAG, message)
+    }
+
+    override fun error(t: Throwable) {
+        Log.e(TAG, t.message, t)
     }
 }

@@ -17,7 +17,7 @@ class AudioHandler @Inject constructor(
         try {
             mediaHelper.playAudio(media.uri)
         } catch (t: Throwable) {
-            logger.logException(t)
+            logger.error(t)
         }
     }
 
@@ -29,7 +29,7 @@ class AudioHandler @Inject constructor(
                 fileHelper.shareFile(byteStream, media)
             }
         } catch (t: Throwable) {
-            logger.logException(t)
+            logger.error(t)
         }
     }
 }

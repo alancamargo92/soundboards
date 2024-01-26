@@ -1,5 +1,7 @@
 package com.ukdev.carcadasalborghetti.domain.di
 
+import com.ukdev.carcadasalborghetti.data.repository.MediaRepositoryV2Impl
+import com.ukdev.carcadasalborghetti.domain.repository.MediaRepositoryV2
 import com.ukdev.carcadasalborghetti.domain.usecase.GetFavouritesUseCase
 import com.ukdev.carcadasalborghetti.domain.usecase.GetFavouritesUseCaseImpl
 import com.ukdev.carcadasalborghetti.domain.usecase.GetMediaListUseCase
@@ -37,4 +39,8 @@ abstract class DomainModule {
     abstract fun bindRemoveFromFavouritesUseCase(
         impl: RemoveFromFavouritesUseCaseImpl
     ): RemoveFromFavouritesUseCase
+
+    @Binds
+    @ViewModelScoped
+    abstract fun bindMediaRepository(impl: MediaRepositoryV2Impl): MediaRepositoryV2
 }
