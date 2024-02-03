@@ -25,7 +25,7 @@ import com.ukdev.carcadasalborghetti.ui.model.ErrorType
 import com.ukdev.carcadasalborghetti.ui.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.ui.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
-import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaViewModel
+import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaListViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -41,7 +41,7 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
     protected abstract val baseBinding: LayoutListBinding
     protected abstract val adapter: MediaAdapter
 
-    private val viewModel by viewModels<MediaViewModel>()
+    private val viewModel by viewModels<MediaListViewModel>()
 
     private var searchView: SearchView? = null
 

@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ukdev.carcadasalborghetti.data.tools.Logger
 import com.ukdev.carcadasalborghetti.di.IoDispatcher
-import com.ukdev.carcadasalborghetti.domain.model.Media
-import com.ukdev.carcadasalborghetti.domain.model.MediaType
+import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
+import com.ukdev.carcadasalborghetti.domain.model.MediaV2
 import com.ukdev.carcadasalborghetti.domain.model.Operation
 import com.ukdev.carcadasalborghetti.domain.usecase.GetAvailableOperationsUseCase
 import com.ukdev.carcadasalborghetti.domain.usecase.GetFavouritesUseCase
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MediaViewModel @Inject constructor(
+class MediaListViewModel @Inject constructor(
     private val getMediaListUseCase: GetMediaListUseCase,
     private val getFavouritesUseCase: GetFavouritesUseCase,
     private val saveToFavouritesUseCase: SaveToFavouritesUseCase,
@@ -32,7 +32,7 @@ class MediaViewModel @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
-    fun getMedia(mediaType: MediaType) {
+    fun getMedia(mediaType: MediaTypeV2) {
         viewModelScope.launch(dispatcher) {
             getMediaListUseCase(mediaType).onStart {
                 // Do stuff
@@ -62,11 +62,11 @@ class MediaViewModel @Inject constructor(
         }
     }
 
-    fun getAvailableOperations(media: Media): List<Operation> {
+    fun getAvailableOperations(media: MediaV2): List<Operation> {
         return getAvailableOperationsUseCase(media)
     }
 
-    fun saveToFavourites(media: Media) {
+    fun saveToFavourites(media: MediaV2) {
         viewModelScope.launch(dispatcher) {
             saveToFavouritesUseCase(media).onStart {
                 // Do stuff
@@ -79,7 +79,7 @@ class MediaViewModel @Inject constructor(
         }
     }
 
-    fun removeFromFavourites(media: Media) {
+    fun removeFromFavourites(media: MediaV2) {
         viewModelScope.launch(dispatcher) {
             removeFromFavouritesUseCase(media).onStart {
                 // Do stuff

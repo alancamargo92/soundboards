@@ -1,64 +1,59 @@
 package com.ukdev.carcadasalborghetti.ui.adapter
 
-import androidx.recyclerview.widget.RecyclerView
-import com.ukdev.carcadasalborghetti.domain.model.Media
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
+import com.ukdev.carcadasalborghetti.databinding.ItemAudioBinding
+import com.ukdev.carcadasalborghetti.databinding.ItemVideoBinding
+import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
+import com.ukdev.carcadasalborghetti.domain.model.MediaV2
+import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.AudioViewHolder
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.MediaViewHolder
-import com.ukdev.carcadasalborghetti.ui.listeners.RecyclerViewInteractionListener
-import java.util.*
+import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.VideoViewHolder
+import java.util.Locale
 
-abstract class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
+private const val VIEW_TYPE_AUDIO = 0
+private const val VIEW_TYPE_VIDEO = 1
 
-    protected var data: List<Media>? = null
+class MediaAdapter(
+    private val onItemClicked: (MediaV2) -> Unit,
+    private val onItemLongClicked: (MediaV2) -> Unit
+) : ListAdapter<MediaV2, MediaViewHolder>(MediaDiffCallback()) {
 
-    private lateinit var holder: MediaViewHolder
-
-    private var listener: RecyclerViewInteractionListener? = null
-
-    fun submitData(data: List<Media>) {
-        this.data = data
-        notifyDataSetChanged()
-    }
-
-    fun setListener(listener: RecyclerViewInteractionListener) {
-        this.listener = listener
-    }
-
-    fun filter(media: List<Media>, searchTerm: String?) {
+    fun filter(mediaList: List<MediaV2>, searchTerm: String?) {
         searchTerm?.lowercase(Locale.getDefault())?.let { query ->
-            data = media.filter { it.title.lowercase().contains(query) }
-            notifyDataSetChanged()
+            val filteredList = mediaList.filter { it.title.lowercase().contains(query) }
+            submitList(filteredList)
         }
     }
 
-    fun notifyItemClicked() {
-        holder.notifyItemClicked()
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        return when (viewType) {
+            VIEW_TYPE_AUDIO -> {
+                val binding = ItemAudioBinding.inflate(inflater, parent, false)
+                AudioViewHolder(onItemClicked, onItemLongClicked, binding)
+            }
 
-    fun notifyItemReady() {
-        holder.notifyItemReady()
+            VIEW_TYPE_VIDEO -> {
+                val binding = ItemVideoBinding.inflate(inflater, parent, false)
+                VideoViewHolder(onItemClicked, onItemLongClicked, binding)
+            }
+
+            else -> error("Invalid view type")
+        }
     }
 
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
-        data?.get(position)?.let { media ->
-            with(holder) {
-                bindTo(media)
-
-                itemView.setOnClickListener {
-                    this@MediaAdapter.holder = holder
-                    notifyItemClicked()
-                    listener?.onItemClick(media)
-                }
-
-                itemView.setOnLongClickListener {
-                    this@MediaAdapter.holder = holder
-                    notifyItemClicked()
-                    listener?.onItemLongClick(media)
-                    true
-                }
-            }
-        }
+        val media = getItem(position)
+        holder.bindTo(media)
     }
 
-    override fun getItemCount() = data?.size ?: 0
-
+    override fun getItemViewType(position: Int): Int {
+        val media = getItem(position)
+        return when (media.type) {
+            MediaTypeV2.AUDIO -> VIEW_TYPE_AUDIO
+            MediaTypeV2.VIDEO -> VIEW_TYPE_VIDEO
+        }
+    }
 }

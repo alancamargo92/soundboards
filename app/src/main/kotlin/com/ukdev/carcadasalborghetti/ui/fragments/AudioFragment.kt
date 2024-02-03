@@ -8,7 +8,6 @@ import androidx.core.view.isVisible
 import com.ukdev.carcadasalborghetti.databinding.FragmentAudioBinding
 import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
 import com.ukdev.carcadasalborghetti.domain.model.MediaType
-import com.ukdev.carcadasalborghetti.ui.adapter.AudioAdapter
 import com.ukdev.carcadasalborghetti.ui.di.AudioHandlerDependency
 import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import dagger.hilt.android.AndroidEntryPoint
