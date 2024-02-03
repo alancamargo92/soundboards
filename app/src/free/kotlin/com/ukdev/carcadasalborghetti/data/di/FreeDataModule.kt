@@ -22,13 +22,13 @@ abstract class FreeDataModule {
 
     @Binds
     @ViewModelScoped
-    abstract fun bindMediaRemoteDataSource(
+    abstract fun bindMediaRemoteDataSourceV2(
         impl: MediaRemoteDataSourceV2Impl
     ): MediaRemoteDataSourceV2
 
     @Binds
     @ViewModelScoped
-    abstract fun bindMediaLocalDataSource(
+    abstract fun bindMediaLocalDataSourceV2(
         impl: MediaLocalDataSourceV2Impl
     ): MediaLocalDataSourceV2
 }
