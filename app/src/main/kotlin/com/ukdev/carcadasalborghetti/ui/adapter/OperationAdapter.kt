@@ -2,42 +2,24 @@ package com.ukdev.carcadasalborghetti.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.ukdev.carcadasalborghetti.databinding.ItemOperationBinding
-import com.ukdev.carcadasalborghetti.domain.model.Operation
+import com.ukdev.carcadasalborghetti.ui.adapter.diffcallback.OperationDiffCallback
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.OperationViewHolder
+import com.ukdev.carcadasalborghetti.ui.model.UiOperation
 
 class OperationAdapter(
-    private val listener: ItemClickListener
-) : RecyclerView.Adapter<OperationViewHolder>() {
-
-    private var data: List<Operation> = emptyList()
-
-    fun submitData(data: List<Operation>) {
-        this.data = data
-        notifyDataSetChanged()
-    }
+    private val onItemClicked: (UiOperation) -> Unit
+) : ListAdapter<UiOperation, OperationViewHolder>(OperationDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OperationViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemOperationBinding.inflate(inflater, parent, false)
-        return OperationViewHolder(binding)
+        return OperationViewHolder(binding, onItemClicked)
     }
 
     override fun onBindViewHolder(holder: OperationViewHolder, position: Int) {
-        val operation = data[position]
-        with(holder) {
-            bindTo(operation)
-            itemView.setOnClickListener {
-                listener.onItemClick(operation)
-            }
-        }
+        val operation = getItem(position)
+        holder.bindTo(operation)
     }
-
-    override fun getItemCount(): Int = data.size
-
-    interface ItemClickListener {
-        fun onItemClick(operation: Operation)
-    }
-
 }

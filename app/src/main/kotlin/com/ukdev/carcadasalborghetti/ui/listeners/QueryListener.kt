@@ -1,15 +1,18 @@
 package com.ukdev.carcadasalborghetti.ui.listeners
 
 import androidx.appcompat.widget.SearchView
+import com.ukdev.carcadasalborghetti.domain.model.MediaV2
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
-import com.ukdev.carcadasalborghetti.domain.model.Media
 
-class QueryListener(private val adapter: MediaAdapter,
-                    private val media: List<Media>) : SearchView.OnQueryTextListener {
+class QueryListener(
+    private val adapter: MediaAdapter,
+    private val mediaList: List<MediaV2>
+) : SearchView.OnQueryTextListener {
+
     override fun onQueryTextSubmit(query: String?) = false
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        adapter.filter(media, newText)
+        adapter.filter(mediaList, newText)
         return false
     }
 }

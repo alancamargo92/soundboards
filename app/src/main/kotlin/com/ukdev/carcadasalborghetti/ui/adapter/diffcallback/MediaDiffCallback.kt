@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.ui.adapter
+package com.ukdev.carcadasalborghetti.ui.adapter.diffcallback
 
 import androidx.recyclerview.widget.DiffUtil
 import com.ukdev.carcadasalborghetti.domain.model.MediaV2

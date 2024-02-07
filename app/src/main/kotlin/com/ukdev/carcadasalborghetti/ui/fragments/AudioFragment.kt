@@ -27,8 +27,6 @@ class AudioFragment : MediaListFragment(MediaType.AUDIO) {
     @AudioHandlerDependency
     override lateinit var mediaHandler: MediaHandler
 
-    override val adapter = AudioAdapter()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

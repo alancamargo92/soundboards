@@ -1,6 +1,5 @@
 package com.ukdev.carcadasalborghetti.ui.fragments
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -13,33 +12,31 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.data.model.GenericError
-import com.ukdev.carcadasalborghetti.data.model.NetworkError
-import com.ukdev.carcadasalborghetti.data.model.Success
 import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
 import com.ukdev.carcadasalborghetti.domain.model.Media
 import com.ukdev.carcadasalborghetti.domain.model.MediaType
-import com.ukdev.carcadasalborghetti.domain.model.Operation
+import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
+import com.ukdev.carcadasalborghetti.domain.model.MediaV2
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
-import com.ukdev.carcadasalborghetti.ui.model.ErrorType
 import com.ukdev.carcadasalborghetti.ui.listeners.QueryListener
-import com.ukdev.carcadasalborghetti.ui.listeners.RecyclerViewInteractionListener
 import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
+import com.ukdev.carcadasalborghetti.ui.model.UiOperation
 import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaListViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
-    RecyclerViewInteractionListener,
-    OperationsDialogue.Listener,
-    DialogInterface.OnDismissListener,
+abstract class MediaListFragment(private val mediaType: MediaTypeV2) : Fragment(),
     SwipeRefreshLayout.OnRefreshListener {
 
     abstract val mediaHandler: MediaHandler
 
     protected abstract val baseBinding: LayoutListBinding
-    protected abstract val adapter: MediaAdapter
+
+    private val adapter by lazy {
+        MediaAdapter(
+            onItemClicked = viewModel::onItemClicked,
+            onItemLongClicked = viewModel::onItemLongClicked
+        )
+    }
 
     private val viewModel by viewModels<MediaListViewModel>()
 
@@ -53,8 +50,7 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        configureSwipeRefreshLayout()
-        configureRecyclerView()
+        setUpUi()
         fetchMedia(mediaType)
         setHasOptionsMenu(true)
         observePlaybackState()
@@ -68,61 +64,18 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onItemClick(media: Media) {
-        lifecycleScope.launch {
-            adapter.notifyItemClicked()
-            withContext(Dispatchers.IO) {
-                mediaHandler.play(media)
-            }
-            adapter.notifyItemReady()
-        }
-    }
-
-    override fun onItemLongClick(media: Media) {
-        lifecycleScope.launch {
-            val operations = viewModel.getAvailableOperations(media)
-
-            if (operations.isOnlyShare()) {
-                mediaHandler.share(media)
-                adapter.notifyItemReady()
-            } else {
-                selectedMedia = media
-                showOperationsDialogue(operations)
-            }
-        }
-    }
-
-    override fun onOperationSelected(operation: Operation) {
-        when (operation) {
-            Operation.ADD_TO_FAVOURITES -> viewModel.saveToFavourites(selectedMedia)
-            Operation.REMOVE_FROM_FAVOURITES -> viewModel.removeFromFavourites(selectedMedia)
-            Operation.SHARE -> lifecycleScope.launch {
-                mediaHandler.share(selectedMedia)
-            }
-        }
-
-        adapter.notifyItemReady()
-    }
-
-    override fun onDismiss(dialogue: DialogInterface?) {
-        adapter.notifyItemReady()
-    }
-
     override fun onRefresh() {
         baseBinding.swipeRefreshLayout.isRefreshing = true
         fetchMedia(mediaType)
     }
 
-    private fun configureSwipeRefreshLayout() = with(baseBinding.swipeRefreshLayout) {
-        setOnRefreshListener(this@MediaListFragment)
-        setColorSchemeResources(R.color.red, R.color.black)
+    private fun setUpUi() = with(baseBinding) {
+        swipeRefreshLayout.setOnRefreshListener(this@MediaListFragment)
+        swipeRefreshLayout.setColorSchemeResources(R.color.red, R.color.black)
+        recyclerView.adapter = adapter
     }
 
-    private fun configureRecyclerView() {
-        baseBinding.recyclerView.adapter = adapter.apply { setListener(this@MediaListFragment) }
-    }
-
-    private fun fetchMedia(mediaType: MediaType) {
+    private fun fetchMedia(mediaType: MediaTypeV2) {
         baseBinding.groupError.isVisible = false
         showProgressBar()
 
@@ -152,7 +105,7 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         }
     }
 
-    private fun observeFavourites(favouritesLiveData: LiveData<List<Media>>) {
+    private fun observeFavourites(favouritesLiveData: LiveData<List<MediaV2>>) {
         favouritesLiveData.observe(viewLifecycleOwner) { favourites ->
             displayMedia(favourites)
         }
@@ -160,10 +113,11 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
 
     private fun observePlaybackState() {
         mediaHandler.isPlaying().observe(viewLifecycleOwner) { isPlaying ->
-            if (isPlaying)
+            if (isPlaying) {
                 showFab()
-            else
+            } else {
                 hideFab()
+            }
         }
     }
 
@@ -172,14 +126,14 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         progressBar.isVisible = true
     }
 
-    private fun displayMedia(media: List<Media>) {
+    private fun displayMedia(mediaList: List<MediaV2>) {
         hideErrorIfVisible()
 
-        if (media.isEmpty()) {
+        if (mediaList.isEmpty()) {
             showError(ErrorType.NO_FAVOURITES)
         } else {
-            adapter.submitData(media)
-            searchView?.setOnQueryTextListener(QueryListener(adapter, media))
+            adapter.submitList(mediaList)
+            searchView?.setOnQueryTextListener(QueryListener(adapter, mediaList))
             hideProgressBar()
         }
     }
@@ -215,14 +169,7 @@ abstract class MediaListFragment(private val mediaType: MediaType) : Fragment(),
         swipeRefreshLayout.isRefreshing = false
     }
 
-    private fun showOperationsDialogue(operations: List<Operation>) {
-        OperationsDialogue.newInstance(operations).apply {
-            setOnOperationSelectedListener(this@MediaListFragment)
-        }.show(childFragmentManager, null)
+    private fun showOperationsDialogue(operations: List<UiOperation>) {
+        OperationsDialogue.newInstance(operations).show(childFragmentManager, null)
     }
-
-    private fun List<Operation>.isOnlyShare(): Boolean {
-        return size == 1 && first() == Operation.SHARE
-    }
-
 }

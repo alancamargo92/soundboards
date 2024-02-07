@@ -12,83 +12,152 @@ import com.ukdev.carcadasalborghetti.domain.usecase.GetFavouritesUseCase
 import com.ukdev.carcadasalborghetti.domain.usecase.GetMediaListUseCase
 import com.ukdev.carcadasalborghetti.domain.usecase.RemoveFromFavouritesUseCase
 import com.ukdev.carcadasalborghetti.domain.usecase.SaveToFavouritesUseCase
+import com.ukdev.carcadasalborghetti.ui.mapping.toUi
+import com.ukdev.carcadasalborghetti.ui.model.UiError
+import com.ukdev.carcadasalborghetti.ui.model.UiOperation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
 class MediaListViewModel @Inject constructor(
-    private val getMediaListUseCase: GetMediaListUseCase,
-    private val getFavouritesUseCase: GetFavouritesUseCase,
-    private val saveToFavouritesUseCase: SaveToFavouritesUseCase,
-    private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
-    private val getAvailableOperationsUseCase: GetAvailableOperationsUseCase,
+    private val useCases: UseCases,
     private val logger: Logger,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
+    private var selectedMedia: MediaV2? = null
+
+    private val _state = MutableStateFlow(MediaListUiState())
+    private val _action = MutableSharedFlow<MediaListUiAction>()
+
+    val state = _state.asStateFlow()
+    val action = _action.asSharedFlow()
+
     fun getMedia(mediaType: MediaTypeV2) {
         viewModelScope.launch(dispatcher) {
-            getMediaListUseCase(mediaType).onStart {
-                // Do stuff
+            useCases.getMediaListUseCase(mediaType).onStart {
+                _state.update { it.onLoading() }
             }.onCompletion {
-                // Do stuff
-            }.catch {
-                logger.error(it)
-                // Do stuff
-            }.collect {
-                // Do stuff
+                _state.update { it.onFinishedLoading() }
+            }.catch { exception ->
+                logger.error(exception)
+                val error = if (exception is IOException) {
+                    UiError.CONNECTION
+                } else {
+                    UiError.UNKNOWN
+                }
+
+                _state.update { it.onError(error) }
+            }.collect { mediaList ->
+                if (mediaList.isEmpty()) {
+                    _state.update { it.onError(UiError.UNKNOWN) }
+                } else {
+                    _state.update { it.onMediaListReceived(mediaList) }
+                }
             }
         }
     }
 
     fun getFavourites() {
         viewModelScope.launch(dispatcher) {
-            getFavouritesUseCase().onStart {
-                // Do stuff
+            useCases.getFavouritesUseCase().onStart {
+                _state.update { it.onLoading() }
             }.onCompletion {
-                // Do stuff
-            }.catch {
-                logger.error(it)
-                // Do stuff
-            }.collect {
-                // Do stuff
+                _state.update { it.onFinishedLoading() }
+            }.catch { exception ->
+                logger.error(exception)
+                _state.update { it.onError(UiError.UNKNOWN) }
+            }.collect { mediaList ->
+                if (mediaList.isEmpty()) {
+                    _state.update { it.onError(UiError.NO_FAVOURITES) }
+                } else {
+                    _state.update { it.onMediaListReceived(mediaList) }
+                }
             }
         }
     }
 
     fun getAvailableOperations(media: MediaV2): List<Operation> {
-        return getAvailableOperationsUseCase(media)
+        return useCases.getAvailableOperationsUseCase(media)
     }
 
-    fun saveToFavourites(media: MediaV2) {
+    fun onItemClicked(media: MediaV2) {
+        val action = MediaListUiAction.PlayMedia(media)
+        sendAction(action)
+    }
+
+    fun onStopButtonClicked() {
+        sendAction(MediaListUiAction.StopPlayback)
+    }
+
+    fun onItemLongClicked(media: MediaV2) {
+        selectedMedia = media
+        val operations = useCases.getAvailableOperationsUseCase(media)
+        val action = if (operations.isOnlyShare()) {
+            MediaListUiAction.ShareMedia(media)
+        } else {
+            val uiOperations = operations.map { it.toUi() }
+            MediaListUiAction.ShowAvailableOperations(uiOperations)
+        }
+
+        sendAction(action)
+    }
+
+    fun onOperationSelected(operation: UiOperation) {
+        selectedMedia?.let { media ->
+            when (operation) {
+                UiOperation.ADD_TO_FAVOURITES -> saveToFavourites(media)
+                UiOperation.REMOVE_FROM_FAVOURITES -> removeFromFavourites(media)
+                UiOperation.SHARE -> shareMedia(media)
+            }
+        }
+    }
+
+    private fun saveToFavourites(media: MediaV2) {
         viewModelScope.launch(dispatcher) {
-            saveToFavouritesUseCase(media).onStart {
-                // Do stuff
-            }.onCompletion {
-                // Do stuff
-            }.catch {
+            useCases.saveToFavouritesUseCase(media).catch {
                 logger.error(it)
-                // Do stuff
             }.collect()
         }
     }
 
-    fun removeFromFavourites(media: MediaV2) {
+    private fun removeFromFavourites(media: MediaV2) {
         viewModelScope.launch(dispatcher) {
-            removeFromFavouritesUseCase(media).onStart {
-                // Do stuff
-            }.onCompletion {
-                // Do stuff
-            }.catch {
+            useCases.removeFromFavouritesUseCase(media).catch {
                 logger.error(it)
-                // Do stuff
             }.collect()
         }
     }
+
+    private fun shareMedia(media: MediaV2) {
+
+    }
+
+    private fun sendAction(action: MediaListUiAction) = viewModelScope.launch(dispatcher) {
+        _action.emit(action)
+    }
+
+    private fun List<Operation>.isOnlyShare(): Boolean {
+        return size == 1 && first() == Operation.SHARE
+    }
+
+    class UseCases @Inject constructor(
+        val getMediaListUseCase: GetMediaListUseCase,
+        val getFavouritesUseCase: GetFavouritesUseCase,
+        val saveToFavouritesUseCase: SaveToFavouritesUseCase,
+        val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
+        val getAvailableOperationsUseCase: GetAvailableOperationsUseCase
+    )
 }

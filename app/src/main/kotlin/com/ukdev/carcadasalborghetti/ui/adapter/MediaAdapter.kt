@@ -7,6 +7,7 @@ import com.ukdev.carcadasalborghetti.databinding.ItemAudioBinding
 import com.ukdev.carcadasalborghetti.databinding.ItemVideoBinding
 import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
 import com.ukdev.carcadasalborghetti.domain.model.MediaV2
+import com.ukdev.carcadasalborghetti.ui.adapter.diffcallback.MediaDiffCallback
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.AudioViewHolder
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.MediaViewHolder
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.VideoViewHolder
