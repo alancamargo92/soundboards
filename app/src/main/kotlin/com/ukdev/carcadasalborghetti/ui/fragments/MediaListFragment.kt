@@ -20,6 +20,7 @@ import com.ukdev.carcadasalborghetti.domain.model.MediaV2
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.ui.listeners.QueryListener
 import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
+import com.ukdev.carcadasalborghetti.ui.model.UiError
 import com.ukdev.carcadasalborghetti.ui.model.UiOperation
 import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaListViewModel
 import kotlinx.coroutines.launch
@@ -39,14 +40,9 @@ abstract class MediaListFragment(private val mediaType: MediaTypeV2) : Fragment(
     }
 
     private val viewModel by viewModels<MediaListViewModel>()
-
     private var searchView: SearchView? = null
 
-    private lateinit var selectedMedia: Media
-
-    abstract fun showFab()
-
-    abstract fun hideFab()
+    protected abstract fun setStopButtonVisibility(isVisible: Boolean)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -87,8 +83,8 @@ abstract class MediaListFragment(private val mediaType: MediaTypeV2) : Fragment(
         lifecycleScope.launch {
             when (val result = viewModel.getFavourites()) {
                 is Success<LiveData<List<Media>>> -> observeFavourites(result.body)
-                is GenericError -> showError(ErrorType.UNKNOWN)
-                is NetworkError -> showError(ErrorType.UNKNOWN)
+                is GenericError -> showError(UiError.UNKNOWN)
+                is NetworkError -> showError(UiError.UNKNOWN)
             }
         }
     }
@@ -98,8 +94,8 @@ abstract class MediaListFragment(private val mediaType: MediaTypeV2) : Fragment(
             viewModel.getMedia(mediaType).observe(viewLifecycleOwner) { result ->
                 when (result) {
                     is Success<List<Media>> -> displayMedia(result.body)
-                    is GenericError -> showError(ErrorType.UNKNOWN)
-                    is NetworkError -> showError(ErrorType.CONNECTION)
+                    is GenericError -> showError(UiError.UNKNOWN)
+                    is NetworkError -> showError(UiError.CONNECTION)
                 }
             }
         }
@@ -113,11 +109,7 @@ abstract class MediaListFragment(private val mediaType: MediaTypeV2) : Fragment(
 
     private fun observePlaybackState() {
         mediaHandler.isPlaying().observe(viewLifecycleOwner) { isPlaying ->
-            if (isPlaying) {
-                showFab()
-            } else {
-                hideFab()
-            }
+            setStopButtonVisibility(isPlaying)
         }
     }
 
@@ -130,7 +122,7 @@ abstract class MediaListFragment(private val mediaType: MediaTypeV2) : Fragment(
         hideErrorIfVisible()
 
         if (mediaList.isEmpty()) {
-            showError(ErrorType.NO_FAVOURITES)
+            showError(UiError.NO_FAVOURITES)
         } else {
             adapter.submitList(mediaList)
             searchView?.setOnQueryTextListener(QueryListener(adapter, mediaList))
@@ -143,12 +135,12 @@ abstract class MediaListFragment(private val mediaType: MediaTypeV2) : Fragment(
         btTryAgain.isVisible = false
     }
 
-    private fun showError(errorType: ErrorType) = with(baseBinding) {
+    private fun showError(errorType: UiError) = with(baseBinding) {
         progressBar.isVisible = false
         recyclerView.isVisible = false
         groupError.isVisible = true
 
-        if (errorType != ErrorType.NO_FAVOURITES) {
+        if (errorType != UiError.NO_FAVOURITES) {
             btTryAgain.isVisible = true
             btTryAgain.setOnClickListener {
                 it.isVisible = false

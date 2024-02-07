@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.ukdev.carcadasalborghetti.databinding.FragmentAudioBinding
 import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
-import com.ukdev.carcadasalborghetti.domain.model.MediaType
+import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
 import com.ukdev.carcadasalborghetti.ui.di.AudioHandlerDependency
 import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AudioFragment : MediaListFragment(MediaType.AUDIO) {
+class AudioFragment : MediaListFragment(MediaTypeV2.AUDIO) {
 
     private var _binding: FragmentAudioBinding? = null
     private val binding: FragmentAudioBinding
@@ -41,11 +41,7 @@ class AudioFragment : MediaListFragment(MediaType.AUDIO) {
         binding.fab.setOnClickListener { mediaHandler.stop() }
     }
 
-    override fun showFab() {
-        binding.fab.isVisible = true
-    }
-
-    override fun hideFab() {
-        binding.fab.isVisible = false
+    override fun setStopButtonVisibility(isVisible: Boolean) {
+        binding.fab.isVisible = isVisible
     }
 }
