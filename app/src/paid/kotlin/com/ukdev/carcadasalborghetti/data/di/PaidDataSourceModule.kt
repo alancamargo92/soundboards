@@ -3,11 +3,9 @@ package com.ukdev.carcadasalborghetti.data.di
 import android.content.Context
 import com.google.firebase.storage.StorageReference
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
-import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSource
-import com.ukdev.carcadasalborghetti.data.tools.Logger
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceImpl
+import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSourceImpl
-import com.ukdev.carcadasalborghetti.data.tools.IOHelper
 import com.ukdev.carcadasalborghetti.data.tools.PaidFileHelper
 import com.ukdev.carcadasalborghetti.data.tools.PaidFileHelperImpl
 import dagger.Module
@@ -20,10 +18,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object PaidDataSourceModule {
-
-    @Provides
-    @Singleton
-    fun provideIoHelper(logger: Logger) = IOHelper(logger)
 
     @Provides
     @Singleton

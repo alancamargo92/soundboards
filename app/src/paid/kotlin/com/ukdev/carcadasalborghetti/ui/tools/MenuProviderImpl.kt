@@ -28,5 +28,4 @@ class MenuProviderImpl @Inject constructor(
             Toast.makeText(activity, R.string.cache_cleared, Toast.LENGTH_SHORT).show()
         }
     }
-
 }

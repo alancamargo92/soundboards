@@ -89,30 +89,30 @@ class MediaListViewModel @Inject constructor(
         }
     }
 
-    fun getAvailableOperations(media: MediaV2): List<Operation> {
-        return useCases.getAvailableOperationsUseCase(media)
-    }
-
     fun onItemClicked(media: MediaV2) {
         val action = MediaListUiAction.PlayMedia(media)
         sendAction(action)
     }
 
-    fun onStopButtonClicked() {
-        sendAction(MediaListUiAction.StopPlayback)
-    }
-
     fun onItemLongClicked(media: MediaV2) {
         selectedMedia = media
-        val operations = useCases.getAvailableOperationsUseCase(media)
-        val action = if (operations.isOnlyShare()) {
-            MediaListUiAction.ShareMedia(media)
-        } else {
-            val uiOperations = operations.map { it.toUi() }
-            MediaListUiAction.ShowAvailableOperations(uiOperations)
-        }
 
-        sendAction(action)
+        viewModelScope.launch(dispatcher) {
+            useCases.getAvailableOperationsUseCase(media).collect { operations ->
+                val action = if (operations.isOnlyShare()) {
+                    MediaListUiAction.ShareMedia(media)
+                } else {
+                    val uiOperations = operations.map { it.toUi() }
+                    MediaListUiAction.ShowAvailableOperations(uiOperations)
+                }
+
+                _action.emit(action)
+            }
+        }
+    }
+
+    fun onStopButtonClicked() {
+        sendAction(MediaListUiAction.StopPlayback)
     }
 
     fun onOperationSelected(operation: UiOperation) {

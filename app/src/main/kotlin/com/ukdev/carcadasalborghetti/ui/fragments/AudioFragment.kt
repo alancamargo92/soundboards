@@ -38,11 +38,11 @@ class AudioFragment : MediaListFragment(MediaTypeV2.AUDIO) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.fab.setOnClickListener { mediaHandler.stop() }
+        binding.btStop.setOnClickListener { mediaHandler.stop() }
     }
 
     override fun setStopButtonVisibility(isVisible: Boolean) {
-        binding.fab.isVisible = isVisible
+        binding.btStop.isVisible = isVisible
     }
 
     override fun getMediaList() {

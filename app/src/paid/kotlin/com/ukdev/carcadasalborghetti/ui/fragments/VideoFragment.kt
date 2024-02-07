@@ -5,16 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
-import com.ukdev.carcadasalborghetti.domain.model.MediaType
-import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
-import com.ukdev.carcadasalborghetti.ui.adapter.VideoAdapter
+import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
 import com.ukdev.carcadasalborghetti.ui.di.VideoHandlerDependency
 import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class VideoFragment : MediaListFragment(MediaType.VIDEO) {
+class VideoFragment : MediaListFragment(MediaTypeV2.VIDEO) {
 
     private var _binding: LayoutListBinding? = null
     private val binding: LayoutListBinding
@@ -27,8 +25,6 @@ class VideoFragment : MediaListFragment(MediaType.VIDEO) {
     @VideoHandlerDependency
     override lateinit var mediaHandler: MediaHandler
 
-    override val adapter: MediaAdapter = VideoAdapter()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,7 +34,9 @@ class VideoFragment : MediaListFragment(MediaType.VIDEO) {
         return binding.root
     }
 
-    override fun showFab() { }
+    override fun getMediaList() {
+        viewModel.getMediaList(mediaType)
+    }
 
-    override fun hideFab() { }
+    override fun setStopButtonVisibility(isVisible: Boolean) = Unit
 }

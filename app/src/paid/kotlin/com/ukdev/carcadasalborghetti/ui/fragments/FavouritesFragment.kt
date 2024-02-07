@@ -7,16 +7,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.ukdev.carcadasalborghetti.databinding.FragmentAudioBinding
 import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
-import com.ukdev.carcadasalborghetti.domain.model.MediaType
-import com.ukdev.carcadasalborghetti.ui.adapter.FavouritesAdapter
-import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
+import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
 import com.ukdev.carcadasalborghetti.ui.di.FavouritesHandlerDependency
 import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FavouritesFragment : MediaListFragment(MediaType.BOTH) {
+class FavouritesFragment : MediaListFragment(MediaTypeV2.AUDIO) {
 
     private var _binding: FragmentAudioBinding? = null
     private val binding: FragmentAudioBinding
@@ -29,8 +27,6 @@ class FavouritesFragment : MediaListFragment(MediaType.BOTH) {
     @FavouritesHandlerDependency
     override lateinit var mediaHandler: MediaHandler
 
-    override val adapter: MediaAdapter = FavouritesAdapter()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,15 +38,14 @@ class FavouritesFragment : MediaListFragment(MediaType.BOTH) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.fab.setOnClickListener { mediaHandler.stop() }
+        binding.btStop.setOnClickListener { mediaHandler.stop() }
     }
 
-    override fun showFab() {
-        binding.fab.isVisible = true
+    override fun setStopButtonVisibility(isVisible: Boolean) {
+        binding.btStop.isVisible = isVisible
     }
 
-    override fun hideFab() {
-        binding.fab.isVisible = false
+    override fun getMediaList() {
+        viewModel.getFavourites()
     }
-
 }

@@ -14,5 +14,4 @@ class VideoHelperImpl @Inject constructor(
         val intent = VideoActivity.getIntent(context, title, link)
         context.startActivity(intent)
     }
-
 }

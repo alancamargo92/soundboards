@@ -13,7 +13,9 @@ class AudioViewHolder(
 
     override fun bindTo(media: MediaV2) = with(binding) {
         txtTitle.text = itemView.context.getString(
-                R.string.title_format, adapterPosition, media.title
+            R.string.title_format,
+            adapterPosition + 1,
+            media.title
         ).removeSuffix(suffix = ".mp3")
 
         root.setOnClickListener {
