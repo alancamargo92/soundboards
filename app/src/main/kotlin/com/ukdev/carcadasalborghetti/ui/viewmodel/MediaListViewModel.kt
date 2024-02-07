@@ -45,7 +45,7 @@ class MediaListViewModel @Inject constructor(
     val state = _state.asStateFlow()
     val action = _action.asSharedFlow()
 
-    fun getMedia(mediaType: MediaTypeV2) {
+    fun getMediaList(mediaType: MediaTypeV2) {
         viewModelScope.launch(dispatcher) {
             useCases.getMediaListUseCase(mediaType).onStart {
                 _state.update { it.onLoading() }
@@ -142,7 +142,8 @@ class MediaListViewModel @Inject constructor(
     }
 
     private fun shareMedia(media: MediaV2) {
-
+        val action = MediaListUiAction.ShareMedia(media)
+        sendAction(action)
     }
 
     private fun sendAction(action: MediaListUiAction) = viewModelScope.launch(dispatcher) {

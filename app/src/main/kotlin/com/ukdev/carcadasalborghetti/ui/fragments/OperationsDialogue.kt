@@ -11,8 +11,8 @@ import androidx.fragment.app.viewModels
 import com.ukdev.carcadasalborghetti.databinding.DialogueOperationsBinding
 import com.ukdev.carcadasalborghetti.ui.adapter.OperationAdapter
 import com.ukdev.carcadasalborghetti.ui.model.UiOperation
-import com.ukdev.carcadasalborghetti.ui.tools.args
-import com.ukdev.carcadasalborghetti.ui.tools.putArguments
+import com.ukdev.carcadasalborghetti.core.extensions.args
+import com.ukdev.carcadasalborghetti.core.extensions.putArguments
 import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaListViewModel
 import kotlinx.parcelize.Parcelize
 

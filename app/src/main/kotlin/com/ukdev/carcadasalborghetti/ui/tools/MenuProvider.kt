@@ -3,6 +3,8 @@ package com.ukdev.carcadasalborghetti.ui.tools
 import android.app.Activity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ukdev.carcadasalborghetti.R
+import com.ukdev.carcadasalborghetti.core.extensions.getAppName
+import com.ukdev.carcadasalborghetti.core.extensions.getAppVersion
 
 abstract class MenuProvider {
 

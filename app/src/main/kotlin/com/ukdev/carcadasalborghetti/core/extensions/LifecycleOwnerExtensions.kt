@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.ui.tools
+package com.ukdev.carcadasalborghetti.core.extensions
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner

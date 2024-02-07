@@ -44,4 +44,8 @@ class AudioFragment : MediaListFragment(MediaTypeV2.AUDIO) {
     override fun setStopButtonVisibility(isVisible: Boolean) {
         binding.fab.isVisible = isVisible
     }
+
+    override fun getMediaList() {
+        viewModel.getMediaList(mediaType)
+    }
 }
