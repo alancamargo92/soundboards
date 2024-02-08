@@ -77,9 +77,10 @@ class DefaultMediaListFragment : MediaListFragment() {
         viewModel.getMediaList(isRefreshing = false)
     }
 
-    override fun onPause() {
+    override fun onStop() {
+        binding.btStop.isVisible = false
         stopAudioPlayback()
-        super.onPause()
+        super.onStop()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -118,6 +119,7 @@ class DefaultMediaListFragment : MediaListFragment() {
         btTryAgain.isVisible = state.error != null && state.error != UiError.NO_FAVOURITES
         recyclerView.isVisible = state.mediaList != null
         btStop.isVisible = state.showStopButton
+
         state.mediaList?.let {
             val listener = QueryListener(adapter, it)
             searchView?.setOnQueryTextListener(listener)

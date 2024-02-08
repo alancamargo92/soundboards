@@ -98,7 +98,10 @@ class MediaListViewModel @AssistedInject constructor(
 
     fun onItemClicked(media: UiMedia) {
         val action = when (media.type) {
-            UiMediaType.AUDIO -> MediaListUiAction.PlayAudio(media)
+            UiMediaType.AUDIO -> {
+                _state.update { it.onMediaPlaying() }
+                MediaListUiAction.PlayAudio(media)
+            }
             UiMediaType.VIDEO -> MediaListUiAction.PlayVideo(media)
         }
 
@@ -122,6 +125,7 @@ class MediaListViewModel @AssistedInject constructor(
     }
 
     fun onStopButtonClicked() {
+        _state.update { it.onMediaFinishedPlaying() }
         sendAction(MediaListUiAction.StopAudioPlayback)
     }
 

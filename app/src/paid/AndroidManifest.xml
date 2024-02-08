@@ -4,16 +4,9 @@
     <application android:name=".PaidApplication"
         tools:ignore="GoogleAppIndexingWarning,MissingApplicationIcon">
 
-        <activity android:name="com.ukdev.carcadasalborghetti.ui.VideoActivity"
-            android:parentActivityName="com.ukdev.carcadasalborghetti.ui.MainActivity">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.ukdev.carcadasalborghetti.ui.MainActivity"/>
-        </activity>
-
         <provider
             android:authorities="com.ukdev.carcadasalborghetti.paid.provider"
-            android:name="com.ukdev.carcadasalborghetti.data.tools.PaidFileProvider"
+            android:name=".data.tools.PaidFileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
