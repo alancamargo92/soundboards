@@ -12,19 +12,29 @@ import com.ukdev.carcadasalborghetti.core.extensions.args
 import com.ukdev.carcadasalborghetti.core.extensions.putArguments
 import com.ukdev.carcadasalborghetti.databinding.DialogueOperationsBinding
 import com.ukdev.carcadasalborghetti.ui.adapter.OperationAdapter
+import com.ukdev.carcadasalborghetti.ui.model.MediaListFragmentType
 import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 import com.ukdev.carcadasalborghetti.ui.model.UiOperation
 import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaListViewModel
+import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaListViewModelAssistedFactory
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.parcelize.Parcelize
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class OperationsDialogue : DialogFragment() {
 
     private var _binding: DialogueOperationsBinding? = null
     private val binding: DialogueOperationsBinding
         get() = _binding!!
 
+    @Inject
+    lateinit var assistedFactory: MediaListViewModelAssistedFactory
+
     private val args by args<Args>()
-    private val activityViewModel by activityViewModels<MediaListViewModel>()
+    private val activityViewModel by activityViewModels<MediaListViewModel> {
+        MediaListViewModel.Factory(assistedFactory, args.parentFragmentType)
+    }
 
     private val adapter by lazy {
         OperationAdapter { operation ->
@@ -65,12 +75,17 @@ class OperationsDialogue : DialogFragment() {
     @Parcelize
     data class Args(
         val operations: List<UiOperation>,
-        val media: UiMedia
+        val media: UiMedia,
+        val parentFragmentType: MediaListFragmentType
     ) : Parcelable
 
     companion object {
-        fun newInstance(operations: List<UiOperation>, media: UiMedia): OperationsDialogue {
-            val args = Args(operations, media)
+        fun newInstance(
+            operations: List<UiOperation>,
+            media: UiMedia,
+            parentFragmentType: MediaListFragmentType
+        ): OperationsDialogue {
+            val args = Args(operations, media, parentFragmentType)
             return OperationsDialogue().putArguments(args)
         }
     }

@@ -187,7 +187,7 @@ class DefaultMediaListFragment : MediaListFragment() {
     }
 
     private fun showOperationsDialogue(operations: List<UiOperation>, media: UiMedia) {
-        val dialogue = OperationsDialogue.newInstance(operations, media)
+        val dialogue = OperationsDialogue.newInstance(operations, media, args.fragmentType)
         dialogue.show(childFragmentManager, TAG_OPERATIONS_DIALOGUE)
     }
 
