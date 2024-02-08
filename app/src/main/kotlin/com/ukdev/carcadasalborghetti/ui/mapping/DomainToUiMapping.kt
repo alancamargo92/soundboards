@@ -16,7 +16,7 @@ fun Operation.toUi() = when (this) {
 
 fun MediaV2.toUi() = UiMedia(
     uri = id.toUri(),
-    title = title.replace("[.mp3|4]".toRegex(), ""),
+    title = title.replace("(.mp3|.mp4)".toRegex(), ""),
     type = type.toUi()
 )
 

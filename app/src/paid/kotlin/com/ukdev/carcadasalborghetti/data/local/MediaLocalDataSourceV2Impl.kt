@@ -70,6 +70,28 @@ class MediaLocalDataSourceV2Impl @Inject constructor(
         return dao.count(media.id) > 0
     }
 
+    override fun createFile(media: MediaV2): File {
+        val dir = getDir(media.type)
+        if (!dir.exists()) {
+            dir.mkdirs()
+        }
+
+        return File("$dir/${media.title}")
+    }
+
+    override fun getFileUri(file: File): String {
+        if (!file.exists()) {
+            throw FileNotFoundException()
+        }
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val authority = "${context.packageName}.provider"
+            FileProvider.getUriForFile(context, authority, file)
+        } else {
+            Uri.fromFile(file)
+        }.toString()
+    }
+
     private fun getDir(mediaType: MediaTypeV2): File {
         val subDir = if (mediaType == MediaTypeV2.AUDIO) {
             DIR_AUDIOS
@@ -78,14 +100,5 @@ class MediaLocalDataSourceV2Impl @Inject constructor(
         }
 
         return File("$baseDir/$subDir")
-    }
-
-    private fun getFileUri(file: File): String {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val authority = "${context.packageName}.provider"
-            FileProvider.getUriForFile(context, authority, file)
-        } else {
-            Uri.fromFile(file)
-        }.toString()
     }
 }

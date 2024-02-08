@@ -8,6 +8,7 @@ import com.ukdev.carcadasalborghetti.data.tools.Logger
 import com.ukdev.carcadasalborghetti.di.IoDispatcher
 import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
 import com.ukdev.carcadasalborghetti.domain.model.Operation
+import com.ukdev.carcadasalborghetti.domain.usecase.DownloadMediaUseCase
 import com.ukdev.carcadasalborghetti.domain.usecase.GetAvailableOperationsUseCase
 import com.ukdev.carcadasalborghetti.domain.usecase.GetFavouritesUseCase
 import com.ukdev.carcadasalborghetti.domain.usecase.GetMediaListUseCase
@@ -42,6 +43,7 @@ class MediaListViewModel @AssistedInject constructor(
     private val saveToFavouritesUseCase: SaveToFavouritesUseCase,
     private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
     private val getAvailableOperationsUseCase: GetAvailableOperationsUseCase,
+    private val downloadMediaUseCase: DownloadMediaUseCase,
     private val logger: Logger,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -97,29 +99,30 @@ class MediaListViewModel @AssistedInject constructor(
     }
 
     fun onItemClicked(media: UiMedia) {
-        val action = when (media.type) {
-            UiMediaType.AUDIO -> {
-                _state.update { it.onMediaPlaying() }
-                MediaListUiAction.PlayAudio(media)
+        downloadMedia(media) { downloadedMedia ->
+            val action = when (downloadedMedia.type) {
+                UiMediaType.AUDIO -> {
+                    _state.update { it.onMediaPlaying() }
+                    MediaListUiAction.PlayAudio(downloadedMedia)
+                }
+                UiMediaType.VIDEO -> MediaListUiAction.PlayVideo(downloadedMedia)
             }
-            UiMediaType.VIDEO -> MediaListUiAction.PlayVideo(media)
-        }
 
-        sendAction(action)
+            sendAction(action)
+        }
     }
 
     fun onItemLongClicked(media: UiMedia) {
         viewModelScope.launch(dispatcher) {
             val domainMedia = media.toDomain()
             getAvailableOperationsUseCase(domainMedia).collect { operations ->
-                val action = if (operations.isOnlyShare()) {
-                    buildShareMediaAction(media)
+                if (operations.isOnlyShare()) {
+                    onOperationSelected(UiOperation.SHARE, media)
                 } else {
                     val uiOperations = operations.map { it.toUi() }
-                    MediaListUiAction.ShowAvailableOperations(uiOperations, media)
+                    val action = MediaListUiAction.ShowAvailableOperations(uiOperations, media)
+                    _action.emit(action)
                 }
-
-                _action.emit(action)
             }
         }
     }
@@ -137,10 +140,7 @@ class MediaListViewModel @AssistedInject constructor(
         when (operation) {
             UiOperation.ADD_TO_FAVOURITES -> saveToFavourites(media)
             UiOperation.REMOVE_FROM_FAVOURITES -> removeFromFavourites(media)
-            UiOperation.SHARE -> {
-                val action = buildShareMediaAction(media)
-                sendAction(action)
-            }
+            UiOperation.SHARE -> shareMedia(media)
         }
     }
 
@@ -162,18 +162,34 @@ class MediaListViewModel @AssistedInject constructor(
         }
     }
 
-    private fun buildShareMediaAction(media: UiMedia): MediaListUiAction.ShareMedia {
-        val chooserType = when (media.type) {
-            UiMediaType.AUDIO -> "audio/*"
-            UiMediaType.VIDEO -> "video/*"
-        }
+    private fun shareMedia(media: UiMedia) {
+        downloadMedia(media) { downloadedMedia ->
+            val chooserType = when (downloadedMedia.type) {
+                UiMediaType.AUDIO -> "audio/*"
+                UiMediaType.VIDEO -> "video/*"
+            }
 
-        return MediaListUiAction.ShareMedia(
-            chooserTitleRes = R.string.chooser_title_share,
-            chooserSubjectRes = R.string.chooser_subject_share,
-            chooserType = chooserType,
-            media = media
-        )
+            val action = MediaListUiAction.ShareMedia(
+                chooserTitleRes = R.string.chooser_title_share,
+                chooserSubjectRes = R.string.chooser_subject_share,
+                chooserType = chooserType,
+                media = downloadedMedia
+            )
+            sendAction(action)
+        }
+    }
+
+    private fun downloadMedia(media: UiMedia, onSuccess: (UiMedia) -> Unit) {
+        viewModelScope.launch(dispatcher) {
+            val rawMedia = media.toDomain()
+            downloadMediaUseCase(rawMedia).catch { exception ->
+                logger.error(exception)
+                _state.update { it.onError(UiError.UNKNOWN) }
+            }.collect { downloadedMedia ->
+                val uiMedia = downloadedMedia.toUi()
+                onSuccess(uiMedia)
+            }
+        }
     }
 
     private fun sendAction(action: MediaListUiAction) = viewModelScope.launch(dispatcher) {

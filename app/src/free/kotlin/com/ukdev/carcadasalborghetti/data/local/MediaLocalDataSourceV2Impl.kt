@@ -7,6 +7,7 @@ import com.ukdev.carcadasalborghetti.domain.model.MediaV2
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import java.io.File
 import javax.inject.Inject
 
 class MediaLocalDataSourceV2Impl @Inject constructor(
@@ -36,6 +37,14 @@ class MediaLocalDataSourceV2Impl @Inject constructor(
     override suspend fun isSavedToFavourites(media: MediaV2): Boolean = false
 
     override fun clearCache() = Unit
+
+    override fun createFile(media: MediaV2): File {
+        error("Free version already uses local files")
+    }
+
+    override fun getFileUri(file: File): String {
+        error("Free version already uses local files")
+    }
 
     private fun getIds(): List<String> {
         val typedArray = context.resources.obtainTypedArray(R.array.audios)

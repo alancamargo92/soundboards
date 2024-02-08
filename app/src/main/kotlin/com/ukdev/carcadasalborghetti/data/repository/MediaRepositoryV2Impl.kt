@@ -41,4 +41,15 @@ class MediaRepositoryV2Impl @Inject constructor(
     override suspend fun isSavedToFavourites(media: MediaV2): Boolean {
         return localDataSource.isSavedToFavourites(media)
     }
+
+    override suspend fun downloadMedia(media: MediaV2): MediaV2 {
+        return runCatching {
+            val destinationFile = localDataSource.createFile(media)
+            val downloadedFile = remoteDataSource.download(media, destinationFile)
+            val fileUri = localDataSource.getFileUri(downloadedFile)
+            media.copy(id = fileUri)
+        }.getOrElse {
+            media
+        }
+    }
 }

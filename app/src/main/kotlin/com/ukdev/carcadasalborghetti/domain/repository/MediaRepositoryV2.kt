@@ -15,4 +15,6 @@ interface MediaRepositoryV2 {
     suspend fun removeFromFavourites(media: MediaV2)
 
     suspend fun isSavedToFavourites(media: MediaV2): Boolean
+
+    suspend fun downloadMedia(media: MediaV2): MediaV2
 }
