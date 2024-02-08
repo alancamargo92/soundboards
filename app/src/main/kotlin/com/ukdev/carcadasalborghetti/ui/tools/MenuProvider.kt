@@ -1,38 +1,37 @@
 package com.ukdev.carcadasalborghetti.ui.tools
 
-import android.app.Activity
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import android.content.Context
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.core.extensions.getAppName
 import com.ukdev.carcadasalborghetti.core.extensions.getAppVersion
+import com.ukdev.carcadasalborghetti.core.tools.DialogueHelper
 
-abstract class MenuProvider {
+abstract class MenuProvider(private val dialogueHelper: DialogueHelper) {
 
     protected val defaultItemsAndActions = mutableMapOf(
             R.id.item_about to ::showAppInfo,
             R.id.item_privacy to ::showPrivacyPolicy
     )
 
-    abstract fun getMenuItemsAndActions(): Map<Int, (activity: Activity) -> Unit>
+    abstract fun getMenuItemsAndActions(): Map<Int, (Context) -> Unit>
 
-    private fun showAppInfo(activity: Activity) {
-        val appName = activity.getAppName()
-        val appVersion = activity.getAppVersion()
-        val title = activity.getString(R.string.app_info, appName, appVersion)
+    private fun showAppInfo(context: Context) {
+        val appName = context.getAppName()
+        val appVersion = context.getAppVersion()
+        val title = context.getString(R.string.app_info, appName, appVersion)
 
-        MaterialAlertDialogBuilder(activity)
-                .setTitle(title)
-                .setMessage(R.string.developer_info)
-                .setNeutralButton(R.string.ok, null)
-                .setIcon(R.mipmap.ic_launcher)
-                .show()
+        dialogueHelper.showDialogue(
+            context = context,
+            title = title,
+            messageRes = R.string.developer_info
+        )
     }
 
-    private fun showPrivacyPolicy(activity: Activity) {
-        MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.privacy_terms_title)
-                .setMessage(R.string.privacy_terms)
-                .setNeutralButton(R.string.ok, null)
-                .show()
+    private fun showPrivacyPolicy(context: Context) {
+        dialogueHelper.showDialogue(
+            context = context,
+            titleRes = R.string.privacy_terms_title,
+            messageRes = R.string.privacy_terms
+        )
     }
 }

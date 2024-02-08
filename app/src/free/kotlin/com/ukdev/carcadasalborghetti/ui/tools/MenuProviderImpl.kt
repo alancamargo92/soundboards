@@ -1,11 +1,14 @@
 package com.ukdev.carcadasalborghetti.ui.tools
 
-import android.app.Activity
+import android.content.Context
+import com.ukdev.carcadasalborghetti.core.tools.DialogueHelper
 import javax.inject.Inject
 
-class MenuProviderImpl @Inject constructor() : MenuProvider() {
+class MenuProviderImpl @Inject constructor(
+    dialogueHelper: DialogueHelper
+) : MenuProvider(dialogueHelper) {
 
-    override fun getMenuItemsAndActions(): Map<Int, (activity: Activity) -> Unit> {
+    override fun getMenuItemsAndActions(): Map<Int, (Context) -> Unit> {
         return defaultItemsAndActions
     }
 }
