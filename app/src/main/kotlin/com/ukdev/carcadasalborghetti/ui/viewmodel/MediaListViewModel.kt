@@ -1,6 +1,7 @@
 package com.ukdev.carcadasalborghetti.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.data.tools.Logger
@@ -14,11 +15,13 @@ import com.ukdev.carcadasalborghetti.domain.usecase.RemoveFromFavouritesUseCase
 import com.ukdev.carcadasalborghetti.domain.usecase.SaveToFavouritesUseCase
 import com.ukdev.carcadasalborghetti.ui.mapping.toDomain
 import com.ukdev.carcadasalborghetti.ui.mapping.toUi
+import com.ukdev.carcadasalborghetti.ui.model.MediaListFragmentType
 import com.ukdev.carcadasalborghetti.ui.model.UiError
 import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 import com.ukdev.carcadasalborghetti.ui.model.UiMediaType
 import com.ukdev.carcadasalborghetti.ui.model.UiOperation
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,10 +34,9 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
-import javax.inject.Inject
 
-@HiltViewModel
-class MediaListViewModel @Inject constructor(
+class MediaListViewModel @AssistedInject constructor(
+    @Assisted private val fragmentType: MediaListFragmentType,
     private val getMediaListUseCase: GetMediaListUseCase,
     private val getFavouritesUseCase: GetFavouritesUseCase,
     private val saveToFavouritesUseCase: SaveToFavouritesUseCase,
@@ -50,9 +52,15 @@ class MediaListViewModel @Inject constructor(
     val state = _state.asStateFlow()
     val action = _action.asSharedFlow()
 
-    fun getMediaList(mediaType: MediaTypeV2, isRefreshing: Boolean) {
+    fun getMediaList(isRefreshing: Boolean) {
+        val flow = when (fragmentType) {
+            MediaListFragmentType.AUDIO -> getMediaListUseCase(MediaTypeV2.AUDIO)
+            MediaListFragmentType.VIDEO -> getMediaListUseCase(MediaTypeV2.VIDEO)
+            MediaListFragmentType.FAVOURITES -> getFavouritesUseCase()
+        }
+
         viewModelScope.launch(dispatcher) {
-            getMediaListUseCase(mediaType).onStart {
+            flow.onStart {
                 _state.update {
                     if (isRefreshing) {
                         it.onRefreshing()
@@ -73,33 +81,13 @@ class MediaListViewModel @Inject constructor(
                 _state.update { it.onError(error) }
             }.collect { mediaList ->
                 if (mediaList.isEmpty()) {
-                    _state.update { it.onError(UiError.UNKNOWN) }
-                } else {
-                    val uiMediaList = mediaList.map { it.toUi() }
-                    _state.update { it.onMediaListReceived(uiMediaList) }
-                }
-            }
-        }
-    }
-
-    fun getFavourites(isRefreshing: Boolean) {
-        viewModelScope.launch(dispatcher) {
-            getFavouritesUseCase().onStart {
-                _state.update {
-                    if (isRefreshing) {
-                        it.onRefreshing()
+                    val error = if (fragmentType == MediaListFragmentType.FAVOURITES) {
+                        UiError.NO_FAVOURITES
                     } else {
-                        it.onLoading()
+                        UiError.UNKNOWN
                     }
-                }
-            }.onCompletion {
-                _state.update { it.onFinishedLoading() }
-            }.catch { exception ->
-                logger.error(exception)
-                _state.update { it.onError(UiError.UNKNOWN) }
-            }.collect { mediaList ->
-                if (mediaList.isEmpty()) {
-                    _state.update { it.onError(UiError.NO_FAVOURITES) }
+
+                    _state.update { it.onError(error) }
                 } else {
                     val uiMediaList = mediaList.map { it.toUi() }
                     _state.update { it.onMediaListReceived(uiMediaList) }
@@ -131,6 +119,10 @@ class MediaListViewModel @Inject constructor(
 
     fun onStopButtonClicked() {
         sendAction(MediaListUiAction.StopPlayback)
+    }
+
+    fun onPlaybackCompleted() {
+        _state.update { it.onMediaFinishedPlaying() }
     }
 
     fun onOperationSelected(operation: UiOperation, media: UiMedia) {
@@ -182,5 +174,16 @@ class MediaListViewModel @Inject constructor(
 
     private fun List<Operation>.isOnlyShare(): Boolean {
         return size == 1 && first() == Operation.SHARE
+    }
+
+    class Factory(
+        private val assistedFactory: MediaListViewModelAssistedFactory,
+        private val fragmentType: MediaListFragmentType
+    ) : ViewModelProvider.Factory {
+
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return assistedFactory.create(fragmentType) as? T ?: error("Invalid fragment")
+        }
     }
 }

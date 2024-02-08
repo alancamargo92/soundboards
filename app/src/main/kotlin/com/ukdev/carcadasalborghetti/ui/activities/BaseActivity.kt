@@ -9,10 +9,9 @@ import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.data.tools.PreferencesHelper
 import com.ukdev.carcadasalborghetti.databinding.ActivityBaseBinding
 import com.ukdev.carcadasalborghetti.ui.adapter.PagerAdapter
-import com.ukdev.carcadasalborghetti.ui.fragments.AudioFragment
-import com.ukdev.carcadasalborghetti.ui.fragments.FavouritesFragment
+import com.ukdev.carcadasalborghetti.ui.fragments.DefaultMediaListFragment
 import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragment
-import com.ukdev.carcadasalborghetti.ui.fragments.VideoFragment
+import com.ukdev.carcadasalborghetti.ui.model.MediaListFragmentType
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
 import javax.inject.Inject
 
@@ -44,9 +43,9 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private fun configureViewPager() {
         val labelsAndFragments = mapOf(
-            R.string.audios to AudioFragment(),
-            R.string.videos to VideoFragment(),
-            R.string.favourites to FavouritesFragment()
+            R.string.audios to DefaultMediaListFragment.newInstance(MediaListFragmentType.AUDIO),
+            R.string.videos to DefaultMediaListFragment.newInstance(MediaListFragmentType.VIDEO),
+            R.string.favourites to DefaultMediaListFragment.newInstance(MediaListFragmentType.FAVOURITES)
         )
         val pagerAdapter = PagerAdapter(supportFragmentManager, labelsAndFragments)
         supportFragmentManager.addFragmentOnAttachListener { _, fragment ->
@@ -62,7 +61,7 @@ abstract class BaseActivity : AppCompatActivity() {
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     baseBinding.viewPager.currentItem = tab.position
                     val currentFragment = pagerAdapter.getItem(tab.position)
-                    (currentFragment as? MediaListFragment)?.let {
+                    (currentFragment as? DefaultMediaListFragment)?.let {
                         this@BaseActivity.currentFragment = it
                     }
                 }

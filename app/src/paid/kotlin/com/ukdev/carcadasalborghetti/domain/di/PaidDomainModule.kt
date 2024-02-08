@@ -5,15 +5,15 @@ import com.ukdev.carcadasalborghetti.domain.usecase.GetAvailableOperationsUseCas
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.scopes.FragmentScoped
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(FragmentComponent::class)
 abstract class PaidDomainModule {
 
     @Binds
-    @ViewModelScoped
+    @FragmentScoped
     abstract fun bindGetAvailableOperationsUseCase(
         impl: GetAvailableOperationsUseCaseImpl
     ): GetAvailableOperationsUseCase

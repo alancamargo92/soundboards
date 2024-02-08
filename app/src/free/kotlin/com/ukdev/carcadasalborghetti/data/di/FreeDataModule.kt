@@ -9,25 +9,25 @@ import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSourceV2Impl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.scopes.FragmentScoped
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(FragmentComponent::class)
 abstract class FreeDataModule {
 
     @Binds
-    @ViewModelScoped
+    @FragmentScoped
     abstract fun bindMediaLocalDataSource(impl: MediaLocalDataSourceImpl): MediaLocalDataSource
 
     @Binds
-    @ViewModelScoped
+    @FragmentScoped
     abstract fun bindMediaRemoteDataSourceV2(
         impl: MediaRemoteDataSourceV2Impl
     ): MediaRemoteDataSourceV2
 
     @Binds
-    @ViewModelScoped
+    @FragmentScoped
     abstract fun bindMediaLocalDataSourceV2(
         impl: MediaLocalDataSourceV2Impl
     ): MediaLocalDataSourceV2

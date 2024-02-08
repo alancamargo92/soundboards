@@ -9,17 +9,6 @@
 
     <include android:id="@+id/base" layout="@layout/layout_list"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btStop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/margin_fab"
-        android:layout_marginEnd="@dimen/margin_fab"
-        android:visibility="gone"
-        android:src="@drawable/ic_stop"
-        android:contentDescription="@string/stop"
-        app:fabSize="normal"
-        tools:visibility="visible"/>
+
 
 </FrameLayout>

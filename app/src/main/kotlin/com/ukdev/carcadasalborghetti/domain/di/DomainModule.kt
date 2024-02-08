@@ -13,34 +13,34 @@ import com.ukdev.carcadasalborghetti.domain.usecase.SaveToFavouritesUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.scopes.FragmentScoped
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(FragmentComponent::class)
 abstract class DomainModule {
 
     @Binds
-    @ViewModelScoped
+    @FragmentScoped
     abstract fun bindGetMediaListUseCase(impl: GetMediaListUseCaseImpl): GetMediaListUseCase
 
     @Binds
-    @ViewModelScoped
+    @FragmentScoped
     abstract fun bindGetFavouritesUseCase(impl: GetFavouritesUseCaseImpl): GetFavouritesUseCase
 
     @Binds
-    @ViewModelScoped
+    @FragmentScoped
     abstract fun bindSaveToFavouritesUseCase(
         impl: SaveToFavouritesUseCaseImpl
     ): SaveToFavouritesUseCase
 
     @Binds
-    @ViewModelScoped
+    @FragmentScoped
     abstract fun bindRemoveFromFavouritesUseCase(
         impl: RemoveFromFavouritesUseCaseImpl
     ): RemoveFromFavouritesUseCase
 
     @Binds
-    @ViewModelScoped
+    @FragmentScoped
     abstract fun bindMediaRepository(impl: MediaRepositoryV2Impl): MediaRepositoryV2
 }

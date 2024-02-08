@@ -6,14 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.databinding.FragmentVideoBinding
+import com.ukdev.carcadasalborghetti.databinding.FragmentPaidAppPromotionBinding
 
-open class VideoFragment : Fragment() {
+class PaidAppPromotionFragment : MediaListFragment() {
 
-    private var _binding: FragmentVideoBinding? = null
-    private val binding: FragmentVideoBinding
+    private var _binding: FragmentPaidAppPromotionBinding? = null
+    private val binding: FragmentPaidAppPromotionBinding
         get() = _binding!!
 
     override fun onCreateView(
@@ -21,7 +20,7 @@ open class VideoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentVideoBinding.inflate(inflater, container, false)
+        _binding = FragmentPaidAppPromotionBinding.inflate(inflater, container, false)
         return binding.root
     }
 
