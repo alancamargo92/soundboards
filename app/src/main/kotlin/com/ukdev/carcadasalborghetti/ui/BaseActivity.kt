@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.core.tools.DialogueHelper
-import com.ukdev.carcadasalborghetti.data.tools.PreferencesHelper
+import com.ukdev.carcadasalborghetti.core.tools.PreferencesHelper
 import com.ukdev.carcadasalborghetti.databinding.ActivityBaseBinding
 import com.ukdev.carcadasalborghetti.ui.adapter.PagerAdapter
 import com.ukdev.carcadasalborghetti.ui.fragments.DefaultMediaListFragment

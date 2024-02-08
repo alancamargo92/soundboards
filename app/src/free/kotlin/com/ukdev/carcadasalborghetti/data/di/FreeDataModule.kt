@@ -1,7 +1,5 @@
 package com.ukdev.carcadasalborghetti.data.di
 
-import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
-import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceImpl
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceV2
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceV2Impl
 import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSourceV2
@@ -15,10 +13,6 @@ import dagger.hilt.android.scopes.FragmentScoped
 @Module
 @InstallIn(FragmentComponent::class)
 abstract class FreeDataModule {
-
-    @Binds
-    @FragmentScoped
-    abstract fun bindMediaLocalDataSource(impl: MediaLocalDataSourceImpl): MediaLocalDataSource
 
     @Binds
     @FragmentScoped

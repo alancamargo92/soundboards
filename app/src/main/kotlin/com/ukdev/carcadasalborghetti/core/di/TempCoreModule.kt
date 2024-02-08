@@ -1,7 +1,7 @@
-package com.ukdev.carcadasalborghetti.data.di
+package com.ukdev.carcadasalborghetti.core.di
 
-import com.ukdev.carcadasalborghetti.data.tools.PreferencesHelper
-import com.ukdev.carcadasalborghetti.data.tools.PreferencesHelperImpl
+import com.ukdev.carcadasalborghetti.core.tools.PreferencesHelper
+import com.ukdev.carcadasalborghetti.core.tools.PreferencesHelperImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -10,7 +10,7 @@ import dagger.hilt.android.scopes.ActivityScoped
 
 @Module
 @InstallIn(ActivityComponent::class)
-abstract class TempDataModule {
+abstract class TempCoreModule {
 
     @Binds
     @ActivityScoped

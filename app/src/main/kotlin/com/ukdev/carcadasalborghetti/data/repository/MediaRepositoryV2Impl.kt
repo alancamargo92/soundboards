@@ -2,7 +2,7 @@ package com.ukdev.carcadasalborghetti.data.repository
 
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceV2
 import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSourceV2
-import com.ukdev.carcadasalborghetti.data.tools.Logger
+import com.ukdev.carcadasalborghetti.core.tools.Logger
 import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
 import com.ukdev.carcadasalborghetti.domain.model.MediaV2
 import com.ukdev.carcadasalborghetti.domain.repository.MediaRepositoryV2

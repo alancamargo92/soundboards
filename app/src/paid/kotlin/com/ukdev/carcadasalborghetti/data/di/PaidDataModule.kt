@@ -4,8 +4,6 @@ import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceV2
 import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceV2Impl
 import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSourceV2
 import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSourceV2Impl
-import com.ukdev.carcadasalborghetti.data.tools.PaidFileHelper
-import com.ukdev.carcadasalborghetti.data.tools.PaidFileHelperImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,10 +13,6 @@ import dagger.hilt.android.scopes.FragmentScoped
 @Module
 @InstallIn(FragmentComponent::class)
 abstract class PaidDataModule {
-
-    @Binds
-    @FragmentScoped
-    abstract fun bindPaidFileHelper(impl: PaidFileHelperImpl): PaidFileHelper
 
     @Binds
     @FragmentScoped

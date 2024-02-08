@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.data.tools.Logger
+import com.ukdev.carcadasalborghetti.core.tools.Logger
 import com.ukdev.carcadasalborghetti.di.IoDispatcher
 import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
 import com.ukdev.carcadasalborghetti.domain.model.Operation

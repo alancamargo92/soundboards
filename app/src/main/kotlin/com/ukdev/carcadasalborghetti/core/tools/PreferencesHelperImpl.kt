@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.data.tools
+package com.ukdev.carcadasalborghetti.core.tools
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext

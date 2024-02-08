@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.data.tools
+package com.ukdev.carcadasalborghetti.core.tools
 
 interface PreferencesHelper {
     fun shouldShowTip(): Boolean
