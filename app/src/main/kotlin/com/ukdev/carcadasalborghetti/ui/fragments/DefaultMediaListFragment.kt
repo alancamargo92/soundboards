@@ -16,9 +16,10 @@ import androidx.fragment.app.viewModels
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.core.extensions.args
 import com.ukdev.carcadasalborghetti.core.extensions.observeFlow
+import com.ukdev.carcadasalborghetti.core.extensions.orFalse
 import com.ukdev.carcadasalborghetti.core.extensions.putArguments
-import com.ukdev.carcadasalborghetti.data.tools.orFalse
 import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
+import com.ukdev.carcadasalborghetti.ui.VideoActivity
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.ui.model.MediaListFragmentType
 import com.ukdev.carcadasalborghetti.ui.model.UiError
@@ -76,7 +77,7 @@ class DefaultMediaListFragment : MediaListFragment() {
     }
 
     override fun onPause() {
-        stopPlayback()
+        stopAudioPlayback()
         super.onPause()
     }
 
@@ -126,9 +127,11 @@ class DefaultMediaListFragment : MediaListFragment() {
 
     private fun onAction(action: MediaListUiAction) {
         when (action) {
-            is MediaListUiAction.PlayMedia -> playMedia(action.media)
+            is MediaListUiAction.PlayAudio -> playAudio(action.media)
 
-            is MediaListUiAction.StopPlayback -> stopPlayback()
+            is MediaListUiAction.PlayVideo -> playVideo(action.media)
+
+            is MediaListUiAction.StopAudioPlayback -> stopAudioPlayback()
 
             is MediaListUiAction.ShareMedia -> shareMedia(
                 chooserTitleRes = action.chooserTitleRes,
@@ -144,12 +147,17 @@ class DefaultMediaListFragment : MediaListFragment() {
         }
     }
 
-    private fun playMedia(media: UiMedia) {
+    private fun playAudio(media: UiMedia) {
         mediaPlayer?.release()
         mediaPlayer = createMediaPlayer(media.uri)
     }
 
-    private fun stopPlayback() {
+    private fun playVideo(media: UiMedia) {
+        val intent = VideoActivity.getIntent(context = requireContext(), media = media)
+        startActivity(intent)
+    }
+
+    private fun stopAudioPlayback() {
         mediaPlayer?.stop()
     }
 

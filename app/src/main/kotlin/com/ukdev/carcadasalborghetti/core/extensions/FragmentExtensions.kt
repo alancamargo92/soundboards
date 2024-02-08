@@ -13,6 +13,7 @@ fun <F : Fragment> F.putArguments(args: Parcelable): F = also {
 
 inline fun <reified A : Parcelable> Fragment.args() = lazy {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+        @Suppress("DEPRECATION")
         arguments?.getParcelable(KEY_ARGS)
     } else {
         arguments?.getParcelable(KEY_ARGS, A::class.java)

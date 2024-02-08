@@ -2,13 +2,17 @@ package com.ukdev.carcadasalborghetti.ui
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.MenuItem
 import android.widget.MediaController
 import androidx.appcompat.app.AppCompatActivity
+import com.ukdev.carcadasalborghetti.core.extensions.args
+import com.ukdev.carcadasalborghetti.core.extensions.putArguments
 import com.ukdev.carcadasalborghetti.databinding.ActivityVideoBinding
+import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.parcelize.Parcelize
 
 @AndroidEntryPoint
 class VideoActivity : AppCompatActivity() {
@@ -17,8 +21,7 @@ class VideoActivity : AppCompatActivity() {
     private val binding: ActivityVideoBinding
         get() = _binding!!
 
-    private val url by lazy { intent.getParcelableExtra<Uri>(EXTRA_URL) }
-    private val title by lazy { intent.getStringExtra(EXTRA_TITLE) }
+    private val args by args<Args>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +32,9 @@ class VideoActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home)
+        if (item.itemId == android.R.id.home) {
             onBackPressed()
+        }
         return true
     }
 
@@ -38,26 +42,27 @@ class VideoActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.let { actionBar ->
             actionBar.setDisplayHomeAsUpEnabled(true)
-            actionBar.title = title?.removeSuffix(".mp4")
+            actionBar.title = args.media.title
         }
     }
 
     private fun startPlayback() {
         with(binding.videoView) {
-            setVideoURI(url)
+            setVideoURI(args.media.uri)
             setMediaController(MediaController(context).also { it.setAnchorView(this) })
             start()
         }
     }
 
-    companion object {
-        private const val EXTRA_TITLE = "EXTRA_TITLE"
-        private const val EXTRA_URL = "EXTRA_URL"
+    @Parcelize
+    data class Args(val media: UiMedia) : Parcelable
 
-        fun getIntent(context: Context, title: String, videoUrl: Uri): Intent {
+    companion object {
+
+        fun getIntent(context: Context, media: UiMedia): Intent {
+            val args = Args(media)
             return Intent(context, VideoActivity::class.java)
-                .putExtra(EXTRA_TITLE, title)
-                .putExtra(EXTRA_URL, videoUrl)
+                .putArguments(args)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
     }

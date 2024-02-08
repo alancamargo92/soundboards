@@ -17,7 +17,7 @@ class MediaViewHolder(
             R.string.title_format,
             adapterPosition + 1,
             media.title
-        ).replace("[.mp3|4]".toRegex(), "")
+        )
         iconMedia.setImageResource(media.type.iconRes)
 
         root.setOnClickListener {

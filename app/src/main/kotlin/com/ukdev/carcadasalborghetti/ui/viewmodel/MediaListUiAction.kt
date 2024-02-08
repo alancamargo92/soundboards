@@ -6,9 +6,11 @@ import com.ukdev.carcadasalborghetti.ui.model.UiOperation
 
 sealed class MediaListUiAction {
 
-    data class PlayMedia(val media: UiMedia) : MediaListUiAction()
+    data class PlayAudio(val media: UiMedia) : MediaListUiAction()
 
-    object StopPlayback : MediaListUiAction()
+    data class PlayVideo(val media: UiMedia) : MediaListUiAction()
+
+    object StopAudioPlayback : MediaListUiAction()
 
     data class ShareMedia(
         @StringRes val chooserTitleRes: Int,
