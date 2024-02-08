@@ -1,11 +1,13 @@
 package com.ukdev.carcadasalborghetti.data.db
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.ukdev.carcadasalborghetti.data.model.DbMedia
 import kotlinx.coroutines.flow.Flow
 
+@Dao
 interface FavouritesDaoV2 {
 
     @Insert(entity = DbMedia::class)

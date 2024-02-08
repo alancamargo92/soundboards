@@ -8,5 +8,5 @@ interface MediaRemoteDataSourceV2 {
 
     suspend fun getMediaList(mediaType: MediaTypeV2): List<MediaV2>
 
-    suspend fun download(media: MediaV2): File
+    suspend fun download(media: MediaV2, destinationFile: File): File
 }
