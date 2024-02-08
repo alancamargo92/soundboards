@@ -1,7 +1,6 @@
-package com.ukdev.carcadasalborghetti.ui.listeners
+package com.ukdev.carcadasalborghetti.ui.adapter
 
 import androidx.appcompat.widget.SearchView
-import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 
 class QueryListener(

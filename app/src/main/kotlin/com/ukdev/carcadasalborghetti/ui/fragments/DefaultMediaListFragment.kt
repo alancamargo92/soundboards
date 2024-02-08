@@ -21,6 +21,7 @@ import com.ukdev.carcadasalborghetti.core.extensions.putArguments
 import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
 import com.ukdev.carcadasalborghetti.ui.VideoActivity
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
+import com.ukdev.carcadasalborghetti.ui.adapter.QueryListener
 import com.ukdev.carcadasalborghetti.ui.model.MediaListFragmentType
 import com.ukdev.carcadasalborghetti.ui.model.UiError
 import com.ukdev.carcadasalborghetti.ui.model.UiMedia
@@ -117,7 +118,11 @@ class DefaultMediaListFragment : MediaListFragment() {
         btTryAgain.isVisible = state.error != null && state.error != UiError.NO_FAVOURITES
         recyclerView.isVisible = state.mediaList != null
         btStop.isVisible = state.showStopButton
-        state.mediaList?.let(adapter::submitList)
+        state.mediaList?.let {
+            val listener = QueryListener(adapter, it)
+            searchView?.setOnQueryTextListener(listener)
+            adapter.submitList(it)
+        }
 
         state.error?.let {
             imgError.setImageResource(it.iconRes)
