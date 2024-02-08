@@ -32,7 +32,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MediaListViewModel @Inject constructor(
-    private val useCases: UseCases,
+    private val getMediaListUseCase: GetMediaListUseCase,
+    private val getFavouritesUseCase: GetFavouritesUseCase,
+    private val saveToFavouritesUseCase: SaveToFavouritesUseCase,
+    private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
+    private val getAvailableOperationsUseCase: GetAvailableOperationsUseCase,
     private val logger: Logger,
     @IoDispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
@@ -47,7 +51,7 @@ class MediaListViewModel @Inject constructor(
 
     fun getMediaList(mediaType: MediaTypeV2) {
         viewModelScope.launch(dispatcher) {
-            useCases.getMediaListUseCase(mediaType).onStart {
+            getMediaListUseCase(mediaType).onStart {
                 _state.update { it.onLoading() }
             }.onCompletion {
                 _state.update { it.onFinishedLoading() }
@@ -72,7 +76,7 @@ class MediaListViewModel @Inject constructor(
 
     fun getFavourites() {
         viewModelScope.launch(dispatcher) {
-            useCases.getFavouritesUseCase().onStart {
+            getFavouritesUseCase().onStart {
                 _state.update { it.onLoading() }
             }.onCompletion {
                 _state.update { it.onFinishedLoading() }
@@ -98,7 +102,7 @@ class MediaListViewModel @Inject constructor(
         selectedMedia = media
 
         viewModelScope.launch(dispatcher) {
-            useCases.getAvailableOperationsUseCase(media).collect { operations ->
+            getAvailableOperationsUseCase(media).collect { operations ->
                 val action = if (operations.isOnlyShare()) {
                     MediaListUiAction.ShareMedia(media)
                 } else {
@@ -127,7 +131,7 @@ class MediaListViewModel @Inject constructor(
 
     private fun saveToFavourites(media: MediaV2) {
         viewModelScope.launch(dispatcher) {
-            useCases.saveToFavouritesUseCase(media).catch {
+            saveToFavouritesUseCase(media).catch {
                 logger.error(it)
             }.collect()
         }
@@ -135,7 +139,7 @@ class MediaListViewModel @Inject constructor(
 
     private fun removeFromFavourites(media: MediaV2) {
         viewModelScope.launch(dispatcher) {
-            useCases.removeFromFavouritesUseCase(media).catch {
+            removeFromFavouritesUseCase(media).catch {
                 logger.error(it)
             }.collect()
         }
@@ -153,12 +157,4 @@ class MediaListViewModel @Inject constructor(
     private fun List<Operation>.isOnlyShare(): Boolean {
         return size == 1 && first() == Operation.SHARE
     }
-
-    class UseCases @Inject constructor(
-        val getMediaListUseCase: GetMediaListUseCase,
-        val getFavouritesUseCase: GetFavouritesUseCase,
-        val saveToFavouritesUseCase: SaveToFavouritesUseCase,
-        val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
-        val getAvailableOperationsUseCase: GetAvailableOperationsUseCase
-    )
 }
