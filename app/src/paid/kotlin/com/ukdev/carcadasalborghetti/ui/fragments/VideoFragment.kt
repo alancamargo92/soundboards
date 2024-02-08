@@ -21,10 +21,6 @@ class VideoFragment : MediaListFragment(MediaTypeV2.VIDEO) {
     override val baseBinding: LayoutListBinding
         get() = binding
 
-    @Inject
-    @VideoHandlerDependency
-    override lateinit var mediaHandler: MediaHandler
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,8 +30,8 @@ class VideoFragment : MediaListFragment(MediaTypeV2.VIDEO) {
         return binding.root
     }
 
-    override fun getMediaList() {
-        viewModel.getMediaList(mediaType)
+    override fun getMediaList(isRefreshing: Boolean) {
+        viewModel.getMediaList(mediaType, isRefreshing)
     }
 
     override fun setStopButtonVisibility(isVisible: Boolean) = Unit

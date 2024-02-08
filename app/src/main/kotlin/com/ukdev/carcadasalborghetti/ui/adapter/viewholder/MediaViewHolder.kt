@@ -1,31 +1,46 @@
 package com.ukdev.carcadasalborghetti.ui.adapter.viewholder
 
-import android.view.View
-import android.widget.ImageView
-import android.widget.ProgressBar
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.domain.model.MediaV2
+import com.ukdev.carcadasalborghetti.databinding.ItemMediaBinding
+import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 
-abstract class MediaViewHolder(
-    protected val onItemClicked: (MediaV2) -> Unit,
-    protected val onItemLongClicked: (MediaV2) -> Unit,
-    itemView: View
-) : RecyclerView.ViewHolder(itemView) {
+class MediaViewHolder(
+    private val onItemClicked: (UiMedia) -> Unit,
+    private val onItemLongClicked: (UiMedia) -> Unit,
+    private val binding: ItemMediaBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
-    private val progressBar: ProgressBar = itemView.findViewById(R.id.progress_bar_media)
-    private val icon: ImageView = itemView.findViewById(R.id.icon_media)
+    fun bindTo(media: UiMedia) = with(binding) {
+        txtTitle.text = itemView.context.getString(
+            R.string.title_format,
+            adapterPosition + 1,
+            media.title
+        ).replace("[.mp3|4]".toRegex(), "")
+        iconMedia.setImageResource(media.type.iconRes)
 
-    abstract fun bindTo(media: MediaV2)
+        root.setOnClickListener {
+            showLoading()
+            onItemClicked(media)
+            hideLoading()
+        }
 
-    fun notifyItemClicked() {
-        icon.isVisible = false
-        progressBar.isVisible = true
+        root.setOnLongClickListener {
+            showLoading()
+            onItemLongClicked(media)
+            hideLoading()
+            true
+        }
     }
 
-    fun notifyItemReady() {
-        progressBar.isVisible = false
-        icon.isVisible = true
+    private fun ItemMediaBinding.showLoading() {
+        iconMedia.isVisible = false
+        progressBarMedia.isVisible = true
+    }
+
+    private fun ItemMediaBinding.hideLoading() {
+        iconMedia.isVisible = true
+        progressBarMedia.isVisible = false
     }
 }

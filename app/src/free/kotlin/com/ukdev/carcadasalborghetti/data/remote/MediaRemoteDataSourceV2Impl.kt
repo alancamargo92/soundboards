@@ -11,7 +11,7 @@ class MediaRemoteDataSourceV2Impl @Inject constructor() : MediaRemoteDataSourceV
         error("Free version only uses local files")
     }
 
-    override suspend fun download(media: MediaV2): File {
+    override suspend fun download(media: MediaV2, destinationFile: File): File {
         error("Free version only uses local files")
     }
 }

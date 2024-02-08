@@ -7,12 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
-import com.ukdev.carcadasalborghetti.databinding.DialogueOperationsBinding
-import com.ukdev.carcadasalborghetti.ui.adapter.OperationAdapter
-import com.ukdev.carcadasalborghetti.ui.model.UiOperation
+import androidx.fragment.app.activityViewModels
 import com.ukdev.carcadasalborghetti.core.extensions.args
 import com.ukdev.carcadasalborghetti.core.extensions.putArguments
+import com.ukdev.carcadasalborghetti.databinding.DialogueOperationsBinding
+import com.ukdev.carcadasalborghetti.ui.adapter.OperationAdapter
+import com.ukdev.carcadasalborghetti.ui.model.UiMedia
+import com.ukdev.carcadasalborghetti.ui.model.UiOperation
 import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaListViewModel
 import kotlinx.parcelize.Parcelize
 
@@ -23,8 +24,13 @@ class OperationsDialogue : DialogFragment() {
         get() = _binding!!
 
     private val args by args<Args>()
-    private val adapter by lazy { OperationAdapter(::onOperationSelected) }
-    private val activityViewModel by viewModels<MediaListViewModel>()
+    private val activityViewModel by activityViewModels<MediaListViewModel>()
+
+    private val adapter by lazy {
+        OperationAdapter { operation ->
+            onOperationSelected(operation, args.media)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,17 +57,20 @@ class OperationsDialogue : DialogFragment() {
         super.onDismiss(dialogue)
     }
 
-    private fun onOperationSelected(operation: UiOperation) {
-        activityViewModel.onOperationSelected(operation)
+    private fun onOperationSelected(operation: UiOperation, media: UiMedia) {
+        activityViewModel.onOperationSelected(operation, media)
         dismiss()
     }
 
     @Parcelize
-    data class Args(val operations: List<UiOperation>) : Parcelable
+    data class Args(
+        val operations: List<UiOperation>,
+        val media: UiMedia
+    ) : Parcelable
 
     companion object {
-        fun newInstance(operations: List<UiOperation>): OperationsDialogue {
-            val args = Args(operations)
+        fun newInstance(operations: List<UiOperation>, media: UiMedia): OperationsDialogue {
+            val args = Args(operations, media)
             return OperationsDialogue().putArguments(args)
         }
     }

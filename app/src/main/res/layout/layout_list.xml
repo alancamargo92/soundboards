@@ -27,7 +27,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/item_audio"
+            tools:listitem="@layout/item_media"
             tools:itemCount="100"
             tools:visibility="visible"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

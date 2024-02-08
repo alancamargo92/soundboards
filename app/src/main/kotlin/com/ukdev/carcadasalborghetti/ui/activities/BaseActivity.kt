@@ -13,7 +13,6 @@ import com.ukdev.carcadasalborghetti.ui.fragments.AudioFragment
 import com.ukdev.carcadasalborghetti.ui.fragments.FavouritesFragment
 import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragment
 import com.ukdev.carcadasalborghetti.ui.fragments.VideoFragment
-import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
 import javax.inject.Inject
 
@@ -27,7 +26,7 @@ abstract class BaseActivity : AppCompatActivity() {
     @Inject
     lateinit var preferencesHelper: PreferencesHelper
 
-    private lateinit var mediaHandler: MediaHandler
+    private var currentFragment: MediaListFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,11 +35,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
         if (preferencesHelper.shouldShowTip())
             showTip()
-    }
-
-    override fun onBackPressed() {
-        mediaHandler.stop()
-        super.onBackPressed()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -56,8 +50,8 @@ abstract class BaseActivity : AppCompatActivity() {
         )
         val pagerAdapter = PagerAdapter(supportFragmentManager, labelsAndFragments)
         supportFragmentManager.addFragmentOnAttachListener { _, fragment ->
-            if (fragment is AudioFragment) {
-                mediaHandler = fragment.mediaHandler
+            if (fragment is MediaListFragment) {
+                currentFragment = fragment
             }
         }
 
@@ -68,9 +62,8 @@ abstract class BaseActivity : AppCompatActivity() {
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     baseBinding.viewPager.currentItem = tab.position
                     val currentFragment = pagerAdapter.getItem(tab.position)
-                    mediaHandler.stop()
                     (currentFragment as? MediaListFragment)?.let {
-                        mediaHandler = it.mediaHandler
+                        this@BaseActivity.currentFragment = it
                     }
                 }
 

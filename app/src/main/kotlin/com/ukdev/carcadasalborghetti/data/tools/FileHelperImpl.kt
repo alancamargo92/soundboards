@@ -54,7 +54,7 @@ open class FileHelperImpl @Inject constructor(private val context: Context) : Fi
         val type = if (media.type == MediaType.AUDIO) "audio/*" else "video/*"
         val shareIntent = Intent(Intent.ACTION_SEND).setType(type)
             .putExtra(Intent.EXTRA_STREAM, uri)
-            .putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.subject_share))
+            .putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.chooser_subject_share))
 
         val chooser = Intent.createChooser(
             shareIntent,

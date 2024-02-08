@@ -1,5 +1,6 @@
 package com.ukdev.carcadasalborghetti.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -13,8 +14,8 @@ import com.ukdev.carcadasalborghetti.core.extensions.observeFlow
 import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
 import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
-import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
 import com.ukdev.carcadasalborghetti.ui.model.UiError
+import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 import com.ukdev.carcadasalborghetti.ui.model.UiOperation
 import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaListUiAction
 import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaListUiState
@@ -26,8 +27,6 @@ abstract class MediaListFragment(
     protected val mediaType: MediaTypeV2
 ) : Fragment() {
 
-    abstract val mediaHandler: MediaHandler
-
     protected abstract val baseBinding: LayoutListBinding
 
     protected val viewModel by viewModels<MediaListViewModel>()
@@ -38,19 +37,27 @@ abstract class MediaListFragment(
             onItemLongClicked = viewModel::onItemLongClicked
         )
     }
+
     private var searchView: SearchView? = null
 
     protected abstract fun setStopButtonVisibility(isVisible: Boolean)
 
-    protected abstract fun getMediaList()
+    protected abstract fun getMediaList(isRefreshing: Boolean)
+
+    protected abstract fun playMedia(media: UiMedia)
+
+    protected abstract fun stopPlayback()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpUi()
         observeViewModelFlows()
-        observePlaybackState()
-        viewModel.getMediaList(mediaType)
-        getMediaList()
+        getMediaList(isRefreshing = false)
+    }
+
+    override fun onPause() {
+        stopPlayback()
+        super.onPause()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -63,13 +70,11 @@ abstract class MediaListFragment(
 
     private fun setUpUi() = with(baseBinding) {
         swipeRefreshLayout.setOnRefreshListener {
-            baseBinding.swipeRefreshLayout.isRefreshing = true
-            getMediaList()
+            getMediaList(isRefreshing = true)
         }
 
         btTryAgain.setOnClickListener {
-            it.isVisible = false
-            getMediaList()
+            getMediaList(isRefreshing = false)
         }
 
         swipeRefreshLayout.setColorSchemeResources(R.color.red, R.color.black)
@@ -82,15 +87,16 @@ abstract class MediaListFragment(
         observeFlow(viewModel.action, ::onAction)
     }
 
-    private fun onStateChanged(state: MediaListUiState) = with(state) {
-        baseBinding.progressBar.isVisible = isLoading
-        baseBinding.groupError.isVisible = error != null
-        baseBinding.btTryAgain.isVisible = error != null && error != UiError.NO_FAVOURITES
-        baseBinding.recyclerView.isVisible = mediaList != null
-        setStopButtonVisibility(showStopButton)
-        mediaList?.let(adapter::submitList)
+    private fun onStateChanged(state: MediaListUiState) = with(baseBinding) {
+        progressBar.isVisible = state.isLoading
+        swipeRefreshLayout.isRefreshing = state.isRefreshing
+        groupError.isVisible = state.error != null
+        btTryAgain.isVisible = state.error != null && state.error != UiError.NO_FAVOURITES
+        recyclerView.isVisible = state.mediaList != null
+        setStopButtonVisibility(state.showStopButton)
+        state.mediaList?.let(adapter::submitList)
 
-        error?.let {
+        state.error?.let {
             baseBinding.imgError.setImageResource(it.iconRes)
             baseBinding.txtError.setText(it.textRes)
         }
@@ -98,23 +104,44 @@ abstract class MediaListFragment(
 
     private fun onAction(action: MediaListUiAction) {
         when (action) {
-            is MediaListUiAction.PlayMedia -> TODO()
-            is MediaListUiAction.StopPlayback -> TODO()
-            is MediaListUiAction.ShareMedia -> TODO()
+            is MediaListUiAction.PlayMedia -> playMedia(action.media)
+
+            is MediaListUiAction.StopPlayback -> stopPlayback()
+
+            is MediaListUiAction.ShareMedia -> shareMedia(
+                chooserTitleRes = action.chooserTitleRes,
+                chooserSubjectRes = action.chooserSubjectRes,
+                chooserType = action.chooserType,
+                media = action.media
+            )
+
             is MediaListUiAction.ShowAvailableOperations -> showOperationsDialogue(
-                action.operations
+                action.operations,
+                action.media
             )
         }
     }
 
-    private fun observePlaybackState() {
-        mediaHandler.isPlaying().observe(viewLifecycleOwner) { isPlaying ->
-            setStopButtonVisibility(isPlaying)
-        }
+    private fun shareMedia(
+        chooserTitleRes: Int,
+        chooserSubjectRes: Int,
+        chooserType: String,
+        media: UiMedia
+    ) {
+        val shareIntent = Intent(Intent.ACTION_SEND).setType(chooserType)
+            .putExtra(Intent.EXTRA_STREAM, media.uri)
+            .putExtra(Intent.EXTRA_SUBJECT, getString(chooserSubjectRes))
+
+        val chooser = Intent.createChooser(
+            shareIntent,
+            getString(chooserTitleRes)
+        ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+        startActivity(chooser)
     }
 
-    private fun showOperationsDialogue(operations: List<UiOperation>) {
-        val dialogue = OperationsDialogue.newInstance(operations)
+    private fun showOperationsDialogue(operations: List<UiOperation>, media: UiMedia) {
+        val dialogue = OperationsDialogue.newInstance(operations, media)
         dialogue.show(childFragmentManager, TAG_OPERATIONS_DIALOGUE)
     }
 }

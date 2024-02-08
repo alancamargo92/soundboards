@@ -23,10 +23,6 @@ class FavouritesFragment : MediaListFragment(MediaTypeV2.AUDIO) {
     override val baseBinding: LayoutListBinding
         get() = LayoutListBinding.bind(binding.base.root)
 
-    @Inject
-    @FavouritesHandlerDependency
-    override lateinit var mediaHandler: MediaHandler
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -38,14 +34,14 @@ class FavouritesFragment : MediaListFragment(MediaTypeV2.AUDIO) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btStop.setOnClickListener { mediaHandler.stop() }
+        binding.btStop.setOnClickListener { viewModel.onStopButtonClicked() }
     }
 
     override fun setStopButtonVisibility(isVisible: Boolean) {
         binding.btStop.isVisible = isVisible
     }
 
-    override fun getMediaList() {
-        viewModel.getFavourites()
+    override fun getMediaList(isRefreshing: Boolean) {
+        viewModel.getFavourites(isRefreshing)
     }
 }

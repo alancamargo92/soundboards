@@ -35,6 +35,8 @@ class MediaLocalDataSourceV2Impl @Inject constructor(
 
     override suspend fun isSavedToFavourites(media: MediaV2): Boolean = false
 
+    override fun clearCache() = Unit
+
     private fun getIds(): List<String> {
         val typedArray = context.resources.obtainTypedArray(R.array.audios)
         val audioResourceIds = IntArray(typedArray.length()).also {
