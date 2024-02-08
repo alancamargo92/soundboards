@@ -21,6 +21,7 @@ class MediaRepositoryV2Impl @Inject constructor(
             remoteDataSource.getMediaList(mediaType)
         }.getOrElse {
             logger.error(it)
+            logger.debug("Fetching from local...")
             localDataSource.getMediaList(mediaType)
         }
     }
