@@ -1,7 +1,8 @@
-package com.ukdev.carcadasalborghetti.ui.activities
+package com.ukdev.carcadasalborghetti.ui
 
 import android.os.Bundle
 import com.ukdev.carcadasalborghetti.databinding.ActivityBaseBinding
+import com.ukdev.carcadasalborghetti.ui.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.ui.activities
+package com.ukdev.carcadasalborghetti.ui
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -11,7 +11,7 @@ import com.ukdev.carcadasalborghetti.databinding.ActivityBaseBinding
 import com.ukdev.carcadasalborghetti.ui.adapter.PagerAdapter
 import com.ukdev.carcadasalborghetti.ui.fragments.DefaultMediaListFragment
 import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragment
-import com.ukdev.carcadasalborghetti.ui.model.MediaListFragmentType
+import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragmentMapProvider
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
 import javax.inject.Inject
 
@@ -24,6 +24,9 @@ abstract class BaseActivity : AppCompatActivity() {
 
     @Inject
     lateinit var preferencesHelper: PreferencesHelper
+
+    @Inject
+    lateinit var fragmentMapProvider: MediaListFragmentMapProvider
 
     private var currentFragment: MediaListFragment? = null
 
@@ -42,12 +45,8 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     private fun configureViewPager() {
-        val labelsAndFragments = mapOf(
-            R.string.audios to DefaultMediaListFragment.newInstance(MediaListFragmentType.AUDIO),
-            R.string.videos to DefaultMediaListFragment.newInstance(MediaListFragmentType.VIDEO),
-            R.string.favourites to DefaultMediaListFragment.newInstance(MediaListFragmentType.FAVOURITES)
-        )
-        val pagerAdapter = PagerAdapter(supportFragmentManager, labelsAndFragments)
+        val fragmentMap = fragmentMapProvider.provideFragmentMap()
+        val pagerAdapter = PagerAdapter(supportFragmentManager, fragmentMap)
         supportFragmentManager.addFragmentOnAttachListener { _, fragment ->
             if (fragment is MediaListFragment) {
                 currentFragment = fragment

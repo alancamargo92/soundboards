@@ -2,6 +2,8 @@ package com.ukdev.carcadasalborghetti.ui.di
 
 import com.ukdev.carcadasalborghetti.ui.ads.AdLoader
 import com.ukdev.carcadasalborghetti.ui.ads.AdLoaderImpl
+import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragmentMapProvider
+import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragmentMapProviderImpl
 import com.ukdev.carcadasalborghetti.ui.media.VideoHelper
 import com.ukdev.carcadasalborghetti.ui.media.VideoHelperImpl
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
@@ -27,4 +29,10 @@ abstract class FreeUiModule {
     @Binds
     @ActivityScoped
     abstract fun bindAdLoader(impl: AdLoaderImpl): AdLoader
+
+    @Binds
+    @ActivityScoped
+    abstract fun bindFreeMediaListFragmentMapProvider(
+        impl: MediaListFragmentMapProviderImpl
+    ): MediaListFragmentMapProvider
 }

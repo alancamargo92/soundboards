@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.ui.activities
+package com.ukdev.carcadasalborghetti.ui
 
 import android.content.Context
 import android.content.Intent

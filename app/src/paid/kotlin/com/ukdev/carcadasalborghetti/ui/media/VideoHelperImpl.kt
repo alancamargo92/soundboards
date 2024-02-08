@@ -2,7 +2,7 @@ package com.ukdev.carcadasalborghetti.ui.media
 
 import android.content.Context
 import android.net.Uri
-import com.ukdev.carcadasalborghetti.ui.activities.VideoActivity
+import com.ukdev.carcadasalborghetti.ui.VideoActivity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 

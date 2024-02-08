@@ -1,5 +1,7 @@
 package com.ukdev.carcadasalborghetti.ui.di
 
+import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragmentMapProvider
+import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragmentMapProviderImpl
 import com.ukdev.carcadasalborghetti.ui.media.*
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProviderImpl
@@ -20,4 +22,10 @@ abstract class PaidUiModule  {
     @Binds
     @ActivityScoped
     abstract fun bindMenuProvider(impl: MenuProviderImpl): MenuProvider
+
+    @Binds
+    @ActivityScoped
+    abstract fun bindPaidMediaListFragmentMapProvider(
+        impl: MediaListFragmentMapProviderImpl
+    ): MediaListFragmentMapProvider
 }
