@@ -57,9 +57,9 @@ class AudioFragment : MediaListFragment(MediaTypeV2.AUDIO) {
         mediaPlayer?.stop()
     }
 
-    private fun createMediaPlayer(uri: Uri): MediaPlayer {
-        return MediaPlayer.create(requireContext(), uri).apply {
-            if (this?.isPlaying.orFalse()) {
+    private fun createMediaPlayer(uri: Uri): MediaPlayer? {
+        return MediaPlayer.create(requireContext(), uri)?.apply {
+            if (isPlaying.orFalse()) {
                 stop()
                 start()
             } else {

@@ -6,10 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
 import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
-import com.ukdev.carcadasalborghetti.ui.di.VideoHandlerDependency
-import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
+import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class VideoFragment : MediaListFragment(MediaTypeV2.VIDEO) {
@@ -32,6 +30,14 @@ class VideoFragment : MediaListFragment(MediaTypeV2.VIDEO) {
 
     override fun getMediaList(isRefreshing: Boolean) {
         viewModel.getMediaList(mediaType, isRefreshing)
+    }
+
+    override fun playMedia(media: UiMedia) {
+
+    }
+
+    override fun stopPlayback() {
+
     }
 
     override fun setStopButtonVisibility(isVisible: Boolean) = Unit

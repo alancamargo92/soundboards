@@ -8,10 +8,8 @@ import androidx.core.view.isVisible
 import com.ukdev.carcadasalborghetti.databinding.FragmentAudioBinding
 import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
 import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
-import com.ukdev.carcadasalborghetti.ui.di.FavouritesHandlerDependency
-import com.ukdev.carcadasalborghetti.ui.media.MediaHandler
+import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FavouritesFragment : MediaListFragment(MediaTypeV2.AUDIO) {
@@ -43,5 +41,13 @@ class FavouritesFragment : MediaListFragment(MediaTypeV2.AUDIO) {
 
     override fun getMediaList(isRefreshing: Boolean) {
         viewModel.getFavourites(isRefreshing)
+    }
+
+    override fun playMedia(media: UiMedia) {
+
+    }
+
+    override fun stopPlayback() {
+
     }
 }
