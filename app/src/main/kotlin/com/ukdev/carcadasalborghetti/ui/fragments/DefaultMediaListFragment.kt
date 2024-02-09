@@ -18,7 +18,7 @@ import com.ukdev.carcadasalborghetti.core.extensions.args
 import com.ukdev.carcadasalborghetti.core.extensions.observeFlow
 import com.ukdev.carcadasalborghetti.core.extensions.orFalse
 import com.ukdev.carcadasalborghetti.core.extensions.putArguments
-import com.ukdev.carcadasalborghetti.databinding.LayoutListBinding
+import com.ukdev.carcadasalborghetti.databinding.FragmentMediaListBinding
 import com.ukdev.carcadasalborghetti.ui.VideoActivity
 import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
 import com.ukdev.carcadasalborghetti.ui.adapter.QueryListener
@@ -39,8 +39,8 @@ private const val TAG_OPERATIONS_DIALOGUE = "operations-dialogue"
 @AndroidEntryPoint
 class DefaultMediaListFragment : MediaListFragment() {
 
-    private var _binding: LayoutListBinding? = null
-    private val binding: LayoutListBinding
+    private var _binding: FragmentMediaListBinding? = null
+    private val binding: FragmentMediaListBinding
         get() = _binding!!
 
     @Inject
@@ -66,7 +66,7 @@ class DefaultMediaListFragment : MediaListFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = LayoutListBinding.inflate(inflater, container, false)
+        _binding = FragmentMediaListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
