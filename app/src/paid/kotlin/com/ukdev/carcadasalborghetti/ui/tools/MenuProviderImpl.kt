@@ -4,7 +4,7 @@ import android.content.Context
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.core.tools.DialogueHelper
 import com.ukdev.carcadasalborghetti.core.tools.ToastHelper
-import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceV2
+import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MenuProviderImpl @Inject constructor(
-    private val localDataSource: MediaLocalDataSourceV2,
+    private val localDataSource: MediaLocalDataSource,
     private val toastHelper: ToastHelper,
     dialogueHelper: DialogueHelper
 ) : MenuProvider(dialogueHelper) {

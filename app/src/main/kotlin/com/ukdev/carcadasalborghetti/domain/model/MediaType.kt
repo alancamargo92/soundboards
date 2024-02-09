@@ -1,6 +1,6 @@
 package com.ukdev.carcadasalborghetti.domain.model
 
-enum class MediaTypeV2 {
+enum class MediaType {
 
     AUDIO,
     VIDEO

@@ -1,7 +1,7 @@
 package com.ukdev.carcadasalborghetti.domain.model
 
-data class MediaV2(
+data class Media(
     val id: String,
     val title: String,
-    val type: MediaTypeV2
+    val type: MediaType
 )

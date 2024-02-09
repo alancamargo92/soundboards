@@ -2,25 +2,25 @@ package com.ukdev.carcadasalborghetti.data.local
 
 import android.content.Context
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
-import com.ukdev.carcadasalborghetti.domain.model.MediaV2
+import com.ukdev.carcadasalborghetti.domain.model.MediaType
+import com.ukdev.carcadasalborghetti.domain.model.Media
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import java.io.File
 import javax.inject.Inject
 
-class MediaLocalDataSourceV2Impl @Inject constructor(
+class MediaLocalDataSourceImpl @Inject constructor(
     @ApplicationContext private val context: Context
-) : MediaLocalDataSourceV2 {
+) : MediaLocalDataSource {
 
-    override suspend fun getMediaList(mediaType: MediaTypeV2): List<MediaV2> {
+    override suspend fun getMediaList(mediaType: MediaType): List<Media> {
         val ids = getIds()
         val titles = getTitles()
         val idsAndTitles = ids.zip(titles) { id, title -> id to title }
 
         return idsAndTitles.map { (id, title) ->
-            MediaV2(
+            Media(
                 id = id,
                 title = title,
                 type = mediaType
@@ -28,17 +28,17 @@ class MediaLocalDataSourceV2Impl @Inject constructor(
         }
     }
 
-    override fun getFavourites(): Flow<List<MediaV2>> = flowOf()
+    override fun getFavourites(): Flow<List<Media>> = flowOf()
 
-    override suspend fun saveToFavourites(media: MediaV2) = Unit
+    override suspend fun saveToFavourites(media: Media) = Unit
 
-    override suspend fun removeFromFavourites(media: MediaV2) = Unit
+    override suspend fun removeFromFavourites(media: Media) = Unit
 
-    override suspend fun isSavedToFavourites(media: MediaV2): Boolean = false
+    override suspend fun isSavedToFavourites(media: Media): Boolean = false
 
     override fun clearCache() = Unit
 
-    override fun createFile(media: MediaV2): File {
+    override fun createFile(media: Media): File {
         error("Free version already uses local files")
     }
 

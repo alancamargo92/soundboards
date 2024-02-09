@@ -2,8 +2,8 @@ package com.ukdev.carcadasalborghetti.data.di
 
 import android.content.Context
 import androidx.room.Room
-import com.ukdev.carcadasalborghetti.data.db.DatabaseProviderV2
-import com.ukdev.carcadasalborghetti.data.db.FavouritesDaoV2
+import com.ukdev.carcadasalborghetti.data.db.DatabaseProvider
+import com.ukdev.carcadasalborghetti.data.db.FavouritesDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,19 +17,19 @@ object PaidDatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabaseProviderV2(
+    fun provideDatabaseProvider(
         @ApplicationContext context: Context
-    ): DatabaseProviderV2 {
+    ): DatabaseProvider {
         return Room.databaseBuilder(
             context,
-            DatabaseProviderV2::class.java,
+            DatabaseProvider::class.java,
             "favourites-database"
         ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
     @Singleton
-    fun provideFavouritesDaoV2(provider: DatabaseProviderV2): FavouritesDaoV2 {
+    fun provideFavouritesDao(provider: DatabaseProvider): FavouritesDao {
         return provider.getFavouritesDao()
     }
 }

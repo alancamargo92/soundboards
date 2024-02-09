@@ -6,10 +6,10 @@ import com.ukdev.carcadasalborghetti.data.model.DbMedia
 
 @Database(
     entities = [DbMedia::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
-abstract class DatabaseProviderV2 : RoomDatabase() {
+abstract class DatabaseProvider : RoomDatabase() {
 
-    abstract fun getFavouritesDao(): FavouritesDaoV2
+    abstract fun getFavouritesDao(): FavouritesDao
 }

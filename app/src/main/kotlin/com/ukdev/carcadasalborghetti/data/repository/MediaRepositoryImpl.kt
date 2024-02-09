@@ -1,21 +1,21 @@
 package com.ukdev.carcadasalborghetti.data.repository
 
-import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceV2
-import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSourceV2
+import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
+import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSource
 import com.ukdev.carcadasalborghetti.core.tools.Logger
-import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
-import com.ukdev.carcadasalborghetti.domain.model.MediaV2
-import com.ukdev.carcadasalborghetti.domain.repository.MediaRepositoryV2
+import com.ukdev.carcadasalborghetti.domain.model.MediaType
+import com.ukdev.carcadasalborghetti.domain.model.Media
+import com.ukdev.carcadasalborghetti.domain.repository.MediaRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class MediaRepositoryV2Impl @Inject constructor(
-    private val remoteDataSource: MediaRemoteDataSourceV2,
-    private val localDataSource: MediaLocalDataSourceV2,
+class MediaRepositoryImpl @Inject constructor(
+    private val remoteDataSource: MediaRemoteDataSource,
+    private val localDataSource: MediaLocalDataSource,
     private val logger: Logger
-) : MediaRepositoryV2 {
+) : MediaRepository {
 
-    override suspend fun getMediaList(mediaType: MediaTypeV2): List<MediaV2> {
+    override suspend fun getMediaList(mediaType: MediaType): List<Media> {
         return runCatching {
             logger.debug("Fetching from remote...")
             remoteDataSource.getMediaList(mediaType)
@@ -26,23 +26,23 @@ class MediaRepositoryV2Impl @Inject constructor(
         }
     }
 
-    override fun getFavourites(): Flow<List<MediaV2>> {
+    override fun getFavourites(): Flow<List<Media>> {
         return localDataSource.getFavourites()
     }
 
-    override suspend fun saveToFavourites(media: MediaV2) {
+    override suspend fun saveToFavourites(media: Media) {
         localDataSource.saveToFavourites(media)
     }
 
-    override suspend fun removeFromFavourites(media: MediaV2) {
+    override suspend fun removeFromFavourites(media: Media) {
         localDataSource.removeFromFavourites(media)
     }
 
-    override suspend fun isSavedToFavourites(media: MediaV2): Boolean {
+    override suspend fun isSavedToFavourites(media: Media): Boolean {
         return localDataSource.isSavedToFavourites(media)
     }
 
-    override suspend fun downloadMedia(media: MediaV2): MediaV2 {
+    override suspend fun downloadMedia(media: Media): Media {
         return runCatching {
             val destinationFile = localDataSource.createFile(media)
             val downloadedFile = remoteDataSource.download(media, destinationFile)

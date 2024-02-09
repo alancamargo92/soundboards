@@ -1,8 +1,8 @@
 package com.ukdev.carcadasalborghetti.data.remote
 
 import com.google.firebase.storage.StorageReference
-import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
-import com.ukdev.carcadasalborghetti.domain.model.MediaV2
+import com.ukdev.carcadasalborghetti.domain.model.MediaType
+import com.ukdev.carcadasalborghetti.domain.model.Media
 import kotlinx.coroutines.tasks.await
 import java.io.File
 import javax.inject.Inject
@@ -11,24 +11,24 @@ private const val EXTENSION_MP3 = "mp3"
 private const val DIR_AUDIO = "audios"
 private const val DIR_VIDEO = "videos"
 
-class MediaRemoteDataSourceV2Impl @Inject constructor(
+class MediaRemoteDataSourceImpl @Inject constructor(
     private val storageReference: StorageReference
-) : MediaRemoteDataSourceV2 {
+) : MediaRemoteDataSource {
 
-    override suspend fun getMediaList(mediaType: MediaTypeV2): List<MediaV2> {
+    override suspend fun getMediaList(mediaType: MediaType): List<Media> {
         val dir = when (mediaType) {
-            MediaTypeV2.AUDIO -> DIR_AUDIO
-            MediaTypeV2.VIDEO -> DIR_VIDEO
+            MediaType.AUDIO -> DIR_AUDIO
+            MediaType.VIDEO -> DIR_VIDEO
         }
 
         return storageReference.child(dir).listAll().await().items.map {
             val type = if (it.name.endsWith(EXTENSION_MP3)) {
-                MediaTypeV2.AUDIO
+                MediaType.AUDIO
             } else {
-                MediaTypeV2.VIDEO
+                MediaType.VIDEO
             }
 
-            MediaV2(
+            Media(
                 id = it.path,
                 title = it.name,
                 type = type
@@ -36,10 +36,10 @@ class MediaRemoteDataSourceV2Impl @Inject constructor(
         }
     }
 
-    override suspend fun download(media: MediaV2, destinationFile: File): File {
+    override suspend fun download(media: Media, destinationFile: File): File {
         val dir = when (media.type) {
-            MediaTypeV2.AUDIO -> DIR_AUDIO
-            MediaTypeV2.VIDEO -> DIR_VIDEO
+            MediaType.AUDIO -> DIR_AUDIO
+            MediaType.VIDEO -> DIR_VIDEO
         }
 
         val fileToDownload = storageReference.child(dir).child(media.title)

@@ -1,8 +1,8 @@
 package com.ukdev.carcadasalborghetti.ui.mapping
 
 import androidx.core.net.toUri
-import com.ukdev.carcadasalborghetti.domain.model.MediaTypeV2
-import com.ukdev.carcadasalborghetti.domain.model.MediaV2
+import com.ukdev.carcadasalborghetti.domain.model.Media
+import com.ukdev.carcadasalborghetti.domain.model.MediaType
 import com.ukdev.carcadasalborghetti.domain.model.Operation
 import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 import com.ukdev.carcadasalborghetti.ui.model.UiMediaType
@@ -14,13 +14,13 @@ fun Operation.toUi() = when (this) {
     Operation.SHARE -> UiOperation.SHARE
 }
 
-fun MediaV2.toUi() = UiMedia(
+fun Media.toUi() = UiMedia(
     uri = id.toUri(),
     title = title.replace("(.mp3|.mp4)".toRegex(), ""),
     type = type.toUi()
 )
 
-private fun MediaTypeV2.toUi() = when (this) {
-    MediaTypeV2.AUDIO -> UiMediaType.AUDIO
-    MediaTypeV2.VIDEO -> UiMediaType.VIDEO
+private fun MediaType.toUi() = when (this) {
+    MediaType.AUDIO -> UiMediaType.AUDIO
+    MediaType.VIDEO -> UiMediaType.VIDEO
 }

@@ -1,7 +1,7 @@
 package com.ukdev.carcadasalborghetti.domain.di
 
-import com.ukdev.carcadasalborghetti.data.repository.MediaRepositoryV2Impl
-import com.ukdev.carcadasalborghetti.domain.repository.MediaRepositoryV2
+import com.ukdev.carcadasalborghetti.data.repository.MediaRepositoryImpl
+import com.ukdev.carcadasalborghetti.domain.repository.MediaRepository
 import com.ukdev.carcadasalborghetti.domain.usecase.DownloadMediaUseCase
 import com.ukdev.carcadasalborghetti.domain.usecase.DownloadMediaUseCaseImpl
 import com.ukdev.carcadasalborghetti.domain.usecase.GetFavouritesUseCase
@@ -44,7 +44,7 @@ abstract class DomainModule {
 
     @Binds
     @FragmentScoped
-    abstract fun bindMediaRepository(impl: MediaRepositoryV2Impl): MediaRepositoryV2
+    abstract fun bindMediaRepository(impl: MediaRepositoryImpl): MediaRepository
 
     @Binds
     @FragmentScoped

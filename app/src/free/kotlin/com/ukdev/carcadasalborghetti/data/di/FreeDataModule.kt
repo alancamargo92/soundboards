@@ -1,9 +1,9 @@
 package com.ukdev.carcadasalborghetti.data.di
 
-import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceV2
-import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceV2Impl
-import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSourceV2
-import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSourceV2Impl
+import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
+import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSourceImpl
+import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSource
+import com.ukdev.carcadasalborghetti.data.remote.MediaRemoteDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,13 +16,13 @@ abstract class FreeDataModule {
 
     @Binds
     @FragmentScoped
-    abstract fun bindMediaRemoteDataSourceV2(
-        impl: MediaRemoteDataSourceV2Impl
-    ): MediaRemoteDataSourceV2
+    abstract fun bindMediaRemoteDataSource(
+        impl: MediaRemoteDataSourceImpl
+    ): MediaRemoteDataSource
 
     @Binds
     @FragmentScoped
-    abstract fun bindMediaLocalDataSourceV2(
-        impl: MediaLocalDataSourceV2Impl
-    ): MediaLocalDataSourceV2
+    abstract fun bindMediaLocalDataSource(
+        impl: MediaLocalDataSourceImpl
+    ): MediaLocalDataSource
 }

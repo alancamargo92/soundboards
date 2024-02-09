@@ -8,15 +8,15 @@ import com.ukdev.carcadasalborghetti.data.model.DbMedia
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface FavouritesDaoV2 {
+interface FavouritesDao {
 
     @Insert(entity = DbMedia::class)
     suspend fun insert(media: DbMedia)
 
-    @Query("SELECT COUNT() FROM DbMedia WHERE id = :mediaId")
+    @Query("SELECT COUNT() FROM Media WHERE id = :mediaId")
     suspend fun count(mediaId: String): Int
 
-    @Query("SELECT * FROM DbMedia ORDER BY title")
+    @Query("SELECT * FROM Media ORDER BY title")
     fun getFavourites(): Flow<List<DbMedia>>
 
     @Delete(entity = DbMedia::class)
