@@ -10,7 +10,6 @@ import com.ukdev.carcadasalborghetti.core.tools.DialogueHelper
 import com.ukdev.carcadasalborghetti.core.tools.PreferencesHelper
 import com.ukdev.carcadasalborghetti.databinding.ActivityBaseBinding
 import com.ukdev.carcadasalborghetti.ui.adapter.PagerAdapter
-import com.ukdev.carcadasalborghetti.ui.fragments.DefaultMediaListFragment
 import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragment
 import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragmentMapProvider
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
@@ -18,7 +17,7 @@ import javax.inject.Inject
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    abstract val baseBinding: ActivityBaseBinding
+    protected abstract val baseBinding: ActivityBaseBinding
 
     @Inject
     lateinit var menuProvider: MenuProvider
@@ -39,8 +38,9 @@ abstract class BaseActivity : AppCompatActivity() {
         setSupportActionBar(baseBinding.toolbar)
         configureViewPager()
 
-        if (preferencesHelper.shouldShowTip())
+        if (preferencesHelper.shouldShowTip()) {
             showTip()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -63,19 +63,21 @@ abstract class BaseActivity : AppCompatActivity() {
         with(baseBinding.viewPager) {
             adapter = pagerAdapter
             addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(baseBinding.tabLayout))
-            baseBinding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab) {
-                    baseBinding.viewPager.currentItem = tab.position
-                    val currentFragment = pagerAdapter.getItem(tab.position)
-                    (currentFragment as? DefaultMediaListFragment)?.let {
-                        this@BaseActivity.currentFragment = it
+            baseBinding.tabLayout.addOnTabSelectedListener(
+                object : TabLayout.OnTabSelectedListener {
+                    override fun onTabSelected(tab: TabLayout.Tab) {
+                        baseBinding.viewPager.currentItem = tab.position
+                        val fragment = pagerAdapter.getItem(tab.position)
+                        if (fragment is MediaListFragment) {
+                            currentFragment = fragment
+                        }
                     }
+
+                    override fun onTabUnselected(tab: TabLayout.Tab) {}
+
+                    override fun onTabReselected(tab: TabLayout.Tab) {}
                 }
-
-                override fun onTabUnselected(tab: TabLayout.Tab) {}
-
-                override fun onTabReselected(tab: TabLayout.Tab) {}
-            })
+            )
         }
     }
 
