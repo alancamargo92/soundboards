@@ -11,28 +11,28 @@ plugins {
 
 android {
     namespace = "com.ukdev.carcadasalborghetti"
-    compileSdk = 34
+    compileSdk = Config.Build.TARGET_SDK
 
     defaultConfig {
         applicationId = "com.ukdev.carcadasalborghetti"
-        minSdk = 23
-        targetSdk = 34
+        minSdk = Config.Build.MIN_SDK
+        targetSdk = Config.Build.TARGET_SDK
         multiDexEnabled = true
     }
 
     signingConfigs {
-        create("free") {
-            keyAlias = properties["carcadas_key_alias"] as String
-            keyPassword = properties["carcadas_key_password"] as String
-            storeFile = file(path = properties["carcadas_free_store_file"] as String)
-            storePassword = properties["carcadas_store_password"] as String
+        create(Config.Build.FLAVOUR_NAME_FREE) {
+            keyAlias = properties[Config.SigningConfigProperties.KEY_ALIAS] as String
+            keyPassword = properties[Config.SigningConfigProperties.KEY_PASSWORD] as String
+            storeFile = file(path = properties[Config.SigningConfigProperties.STORE_FILE_FREE] as String)
+            storePassword = properties[Config.SigningConfigProperties.STORE_PASSWORD] as String
         }
 
-        create("paid") {
-            keyAlias = properties["carcadas_key_alias"] as String
-            keyPassword = properties["carcadas_key_password"] as String
-            storeFile = file(path = properties["carcadas_paid_store_file"] as String)
-            storePassword = properties["carcadas_store_password"] as String
+        create(Config.Build.FLAVOUR_NAME_PAID) {
+            keyAlias = properties[Config.SigningConfigProperties.KEY_ALIAS] as String
+            keyPassword = properties[Config.SigningConfigProperties.KEY_PASSWORD] as String
+            storeFile = file(path = properties[Config.SigningConfigProperties.STORE_FILE_PAID] as String)
+            storePassword = properties[Config.SigningConfigProperties.STORE_PASSWORD] as String
         }
     }
 
@@ -48,32 +48,32 @@ android {
         }
     }
 
-    flavorDimensions += "version"
+    flavorDimensions += Config.Build.FLAVOUR_DIMENSION
 
     productFlavors {
-        create("free") {
+        create(Config.Build.FLAVOUR_NAME_FREE) {
             versionCode = 58
             versionName = "2023.3.0"
-            dimension = "version"
-            signingConfig = signingConfigs.getByName("free")
+            dimension = Config.Build.FLAVOUR_DIMENSION
+            signingConfig = signingConfigs.getByName(Config.Build.FLAVOUR_NAME_FREE)
         }
 
-        create("paid") {
+        create(Config.Build.FLAVOUR_NAME_PAID) {
             versionCode = 59
             versionName = "2023.3.0"
-            dimension = "version"
+            dimension = Config.Build.FLAVOUR_DIMENSION
             applicationIdSuffix = ".paid"
-            signingConfig = signingConfigs.getByName("paid")
+            signingConfig = signingConfigs.getByName(Config.Build.FLAVOUR_NAME_PAID)
         }
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = Config.Build.javaVersion
+        targetCompatibility = Config.Build.javaVersion
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+        jvmTarget = Config.Build.javaVersionString
     }
 
     buildFeatures {
