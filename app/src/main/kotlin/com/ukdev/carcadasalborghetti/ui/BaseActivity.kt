@@ -45,7 +45,9 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val context: Context = this
-        menuProvider.getMenuItemsAndActions()[item.itemId]?.invoke(context)
+        menuProvider.getMenuItemsAndActions().find { (itemId, _) ->
+            itemId == item.itemId
+        }?.action?.invoke(context)
         return true
     }
 

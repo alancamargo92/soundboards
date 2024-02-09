@@ -8,12 +8,12 @@ import com.ukdev.carcadasalborghetti.core.tools.DialogueHelper
 
 abstract class MenuProvider(private val dialogueHelper: DialogueHelper) {
 
-    protected val defaultItemsAndActions = mutableMapOf(
-            R.id.item_about to ::showAppInfo,
-            R.id.item_privacy to ::showPrivacyPolicy
+    protected val defaultItemsAndActions = mutableListOf(
+        MenuItemActionPair(R.id.item_about, ::showAppInfo),
+        MenuItemActionPair(R.id.item_privacy, ::showPrivacyPolicy)
     )
 
-    abstract fun getMenuItemsAndActions(): Map<Int, (Context) -> Unit>
+    abstract fun getMenuItemsAndActions(): List<MenuItemActionPair>
 
     private fun showAppInfo(context: Context) {
         val appName = context.getAppName()

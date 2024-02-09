@@ -13,14 +13,14 @@ class MenuProviderImpl @Inject constructor(
     dialogueHelper: DialogueHelper
 ) : MenuProvider(dialogueHelper) {
 
-    override fun getMenuItemsAndActions(): Map<Int, (Context) -> Unit> {
+    override fun getMenuItemsAndActions(): List<MenuItemActionPair> {
         return defaultItemsAndActions.apply {
-            put(R.id.item_clear_cache, ::clearCache)
+            val action: (Context) -> Unit = {
+                cacheManager.clearCache()
+                toastHelper.showToast(R.string.cache_cleared)
+            }
+            val pair = MenuItemActionPair(R.id.item_clear_cache, action)
+            add(pair)
         }
-    }
-
-    private fun clearCache(context: Context) {
-        cacheManager.clearCache()
-        toastHelper.showToast(R.string.cache_cleared)
     }
 }

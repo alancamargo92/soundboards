@@ -2,8 +2,8 @@ package com.ukdev.carcadasalborghetti.data.local
 
 import android.content.Context
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.domain.model.MediaType
 import com.ukdev.carcadasalborghetti.domain.model.Media
+import com.ukdev.carcadasalborghetti.domain.model.MediaType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -35,8 +35,6 @@ class MediaLocalDataSourceImpl @Inject constructor(
     override suspend fun removeFromFavourites(media: Media) = Unit
 
     override suspend fun isSavedToFavourites(media: Media): Boolean = false
-
-    override fun clearCache() = Unit
 
     override fun createFile(media: Media): File {
         error("Free version already uses local files")
