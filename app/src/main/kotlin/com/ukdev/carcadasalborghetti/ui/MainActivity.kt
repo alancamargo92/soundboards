@@ -8,16 +8,16 @@ import com.google.android.material.tabs.TabLayout
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.core.tools.DialogueHelper
 import com.ukdev.carcadasalborghetti.core.tools.PreferencesHelper
-import com.ukdev.carcadasalborghetti.databinding.ActivityBaseBinding
+import com.ukdev.carcadasalborghetti.databinding.ActivityMainBinding
 import com.ukdev.carcadasalborghetti.ui.adapter.PagerAdapter
 import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragment
 import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragmentMapProvider
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
 import javax.inject.Inject
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class MainActivity : AppCompatActivity() {
 
-    protected abstract val baseBinding: ActivityBaseBinding
+    protected abstract val baseBinding: ActivityMainBinding
 
     @Inject
     lateinit var menuProvider: MenuProvider
