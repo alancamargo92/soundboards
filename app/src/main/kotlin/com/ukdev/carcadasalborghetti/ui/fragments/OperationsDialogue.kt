@@ -80,6 +80,7 @@ class OperationsDialogue : DialogFragment() {
     ) : Parcelable
 
     companion object {
+
         fun newInstance(
             operations: List<UiOperation>,
             media: UiMedia,

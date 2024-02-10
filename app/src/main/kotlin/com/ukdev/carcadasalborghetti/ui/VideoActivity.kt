@@ -49,7 +49,10 @@ class VideoActivity : AppCompatActivity() {
     private fun startPlayback() {
         with(binding.videoView) {
             setVideoURI(args.media.uri)
-            setMediaController(MediaController(context).also { it.setAnchorView(this) })
+            val controller = MediaController(context).also {
+                it.setAnchorView(this)
+            }
+            setMediaController(controller)
             start()
         }
     }
