@@ -5,11 +5,17 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 
 class PagerAdapter(
-    fragmentManager: FragmentManager,
-    private val labelsAndFragments: Map<Int, Fragment>
-) : FragmentStatePagerAdapter(fragmentManager, labelsAndFragments.size) {
+    fragmentManager: FragmentManager
+) : FragmentStatePagerAdapter(fragmentManager) {
 
-    override fun getItem(position: Int): Fragment = labelsAndFragments.values.toList()[position]
+    private var fragmentMap: Map<Int, Fragment> = emptyMap()
 
-    override fun getCount() = labelsAndFragments.size
+    fun submitFragmentMap(fragmentMap: Map<Int, Fragment>) {
+        this.fragmentMap = fragmentMap
+        notifyDataSetChanged()
+    }
+
+    override fun getItem(position: Int): Fragment = fragmentMap.values.toList()[position]
+
+    override fun getCount() = fragmentMap.size
 }

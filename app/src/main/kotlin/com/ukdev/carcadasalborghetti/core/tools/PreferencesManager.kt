@@ -1,6 +1,8 @@
 package com.ukdev.carcadasalborghetti.core.tools
 
-interface PreferencesHelper {
+interface PreferencesManager {
+
     fun shouldShowTip(): Boolean
+
     fun disableTip()
 }

@@ -7,9 +7,9 @@ import javax.inject.Inject
 private const val FILE_NAME = "preferences"
 private const val KEY_SHOW_TIP = "show_tip"
 
-class PreferencesHelperImpl @Inject constructor(
+class PreferencesManagerImpl @Inject constructor(
     @ApplicationContext context: Context
-) : PreferencesHelper {
+) : PreferencesManager {
 
     private val preferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
 
