@@ -6,10 +6,10 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.FreeMainActivity">
+    tools:context=".ui.FreeHomeActivity">
 
     <include android:id="@+id/base"
-        layout="@layout/activity_main"
+        layout="@layout/activity_home"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/margin_huge"

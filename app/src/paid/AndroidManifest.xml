@@ -4,7 +4,7 @@
     <application android:name=".PaidApplication"
         tools:ignore="GoogleAppIndexingWarning,MissingApplicationIcon">
 
-        <activity android:name=".ui.PaidMainActivity"
+        <activity android:name=".ui.PaidHomeActivity"
             android:screenOrientation="portrait"
             android:exported="true"
             tools:ignore="LockedOrientationActivity">

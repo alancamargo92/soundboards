@@ -1,19 +1,19 @@
 package com.ukdev.carcadasalborghetti.ui
 
 import android.os.Bundle
-import com.ukdev.carcadasalborghetti.databinding.ActivityMainBinding
+import com.ukdev.carcadasalborghetti.databinding.ActivityHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PaidMainActivity : MainActivity() {
+class PaidHomeActivity : HomeActivity() {
 
-    private var _binding: ActivityMainBinding? = null
+    private var _binding: ActivityHomeBinding? = null
 
-    override val baseBinding: ActivityMainBinding
+    override val baseBinding: ActivityHomeBinding
         get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        _binding = ActivityMainBinding.inflate(layoutInflater)
+        _binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(baseBinding.root)
         super.onCreate(savedInstanceState)
     }

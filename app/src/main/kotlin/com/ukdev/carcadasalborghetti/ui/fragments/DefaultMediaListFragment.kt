@@ -26,10 +26,10 @@ import com.ukdev.carcadasalborghetti.ui.model.MediaListFragmentType
 import com.ukdev.carcadasalborghetti.ui.model.UiError
 import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 import com.ukdev.carcadasalborghetti.ui.model.UiOperation
-import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaListUiAction
-import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaListUiState
-import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaListViewModel
-import com.ukdev.carcadasalborghetti.ui.viewmodel.MediaListViewModelAssistedFactory
+import com.ukdev.carcadasalborghetti.ui.viewmodel.medialist.MediaListUiAction
+import com.ukdev.carcadasalborghetti.ui.viewmodel.medialist.MediaListUiState
+import com.ukdev.carcadasalborghetti.ui.viewmodel.medialist.MediaListViewModel
+import com.ukdev.carcadasalborghetti.ui.viewmodel.medialist.MediaListViewModelAssistedFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject

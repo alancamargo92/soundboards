@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.ui.viewmodel
+package com.ukdev.carcadasalborghetti.ui.viewmodel.medialist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

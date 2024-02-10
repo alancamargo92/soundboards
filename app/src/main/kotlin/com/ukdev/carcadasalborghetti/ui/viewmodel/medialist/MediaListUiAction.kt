@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.ui.viewmodel
+package com.ukdev.carcadasalborghetti.ui.viewmodel.medialist
 
 import androidx.annotation.StringRes
 import com.ukdev.carcadasalborghetti.ui.model.UiMedia

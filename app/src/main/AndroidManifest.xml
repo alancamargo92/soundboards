@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".ui.PaidMainActivity"
+        <activity android:name=".ui.HomeActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
 
