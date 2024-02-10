@@ -21,14 +21,14 @@ android {
     }
 
     signingConfigs {
-        create(Config.Build.FLAVOUR_NAME_FREE) {
+        create(Config.Free.FLAVOUR_NAME) {
             keyAlias = properties[Config.SigningConfigProperties.KEY_ALIAS] as String
             keyPassword = properties[Config.SigningConfigProperties.KEY_PASSWORD] as String
             storeFile = file(path = properties[Config.SigningConfigProperties.STORE_FILE_FREE] as String)
             storePassword = properties[Config.SigningConfigProperties.STORE_PASSWORD] as String
         }
 
-        create(Config.Build.FLAVOUR_NAME_PAID) {
+        create(Config.Paid.FLAVOUR_NAME) {
             keyAlias = properties[Config.SigningConfigProperties.KEY_ALIAS] as String
             keyPassword = properties[Config.SigningConfigProperties.KEY_PASSWORD] as String
             storeFile = file(path = properties[Config.SigningConfigProperties.STORE_FILE_PAID] as String)
@@ -51,19 +51,19 @@ android {
     flavorDimensions += Config.Build.FLAVOUR_DIMENSION
 
     productFlavors {
-        create(Config.Build.FLAVOUR_NAME_FREE) {
-            versionCode = 58
-            versionName = "2023.3.0"
+        create(Config.Free.FLAVOUR_NAME) {
+            versionCode = Config.Free.VERSION_CODE
+            versionName = Config.Build.VERSION_NAME
             dimension = Config.Build.FLAVOUR_DIMENSION
-            signingConfig = signingConfigs.getByName(Config.Build.FLAVOUR_NAME_FREE)
+            signingConfig = signingConfigs.getByName(Config.Free.FLAVOUR_NAME)
         }
 
-        create(Config.Build.FLAVOUR_NAME_PAID) {
-            versionCode = 59
-            versionName = "2023.3.0"
+        create(Config.Paid.FLAVOUR_NAME) {
+            versionCode = Config.Paid.VERSION_CODE
+            versionName = Config.Build.VERSION_NAME
             dimension = Config.Build.FLAVOUR_DIMENSION
             applicationIdSuffix = ".paid"
-            signingConfig = signingConfigs.getByName(Config.Build.FLAVOUR_NAME_PAID)
+            signingConfig = signingConfigs.getByName(Config.Paid.FLAVOUR_NAME)
         }
     }
 
