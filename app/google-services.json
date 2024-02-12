@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "430553112764",
+    "firebase_url": "https://carcadas-alborghetti.firebaseio.com",
+    "project_id": "carcadas-alborghetti",
+    "storage_bucket": "carcadas-alborghetti.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430553112764:android:3ed75445e68088481e70b9",
+        "android_client_info": {
+          "package_name": "com.alancamargo.jacquin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430553112764-h4qmcjubqlucnk6sm0j7ejai1rlv81t9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOELCzgJKhRS_Y88ypLIhQxJ9OnbPj5G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "430553112764-h4qmcjubqlucnk6sm0j7ejai1rlv81t9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430553112764:android:69fb6ea1ac7bea8a1e70b9",
+        "android_client_info": {
+          "package_name": "com.alancamargo.jacquin.paid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430553112764-h4qmcjubqlucnk6sm0j7ejai1rlv81t9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOELCzgJKhRS_Y88ypLIhQxJ9OnbPj5G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "430553112764-h4qmcjubqlucnk6sm0j7ejai1rlv81t9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430553112764:android:647bc35c61158cd4",
+        "android_client_info": {
+          "package_name": "com.ukdev.carcadasalborghetti"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430553112764-h4qmcjubqlucnk6sm0j7ejai1rlv81t9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOELCzgJKhRS_Y88ypLIhQxJ9OnbPj5G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "430553112764-h4qmcjubqlucnk6sm0j7ejai1rlv81t9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:430553112764:android:dc254fa6b11e69b6",
+        "android_client_info": {
+          "package_name": "com.ukdev.carcadasalborghetti.paid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "430553112764-h4qmcjubqlucnk6sm0j7ejai1rlv81t9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOELCzgJKhRS_Y88ypLIhQxJ9OnbPj5G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "430553112764-h4qmcjubqlucnk6sm0j7ejai1rlv81t9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

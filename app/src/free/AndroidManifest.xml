@@ -1,13 +1,23 @@
 <manifest xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application android:name="com.ukdev.carcadasalborghetti.FreeApplication"
+    <application android:name=".FreeApplication"
         tools:ignore="GoogleAppIndexingWarning,MissingApplicationIcon"
         tools:targetApi="n">
 
+        <activity android:name=".ui.FreeHomeActivity"
+            android:screenOrientation="portrait"
+            android:exported="true"
+            tools:ignore="LockedOrientationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
         <provider
             android:authorities="com.ukdev.carcadasalborghetti.provider"
-            android:name="com.ukdev.carcadasalborghetti.framework.tools.FreeFileProvider"
+            android:name=".data.tools.FreeFileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

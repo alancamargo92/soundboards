@@ -1,6 +1,6 @@
 # Model classes
 -keep class com.ukdev.carcadasalborghetti.framework.remote.api.** { *; }
--keep class com.ukdev.carcadasalborghetti.domain.entities.** { *; }
+-keep class com.ukdev.carcadasalborghetti.domain.model.** { *; }
 
 # Retrofit
 -dontwarn retrofit.**

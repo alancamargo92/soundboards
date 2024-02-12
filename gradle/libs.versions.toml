@@ -1,0 +1,53 @@
+[versions]
+androidActivity = "1.8.2"
+androidAppcompat = "1.6.1"
+androidCore = "1.12.0"
+androidFragment = "1.6.2"
+androidGradlePlugin = "8.2.2"
+androidMaterial = "1.11.0"
+androidSwipeRefreshLayout = "1.1.0"
+coroutinesTest = "1.7.3"
+firebaseBom = "32.7.2"
+firebaseCrashlyticsPlugin = "2.9.9"
+googleAds = "22.6.0"
+googleServices = "4.4.1"
+hilt = "2.48"
+junit = "4.13.2"
+kotlinPlugin = "1.8.10"
+kspPlugin = "1.8.10-1.0.9"
+mockk = "1.13.9"
+room = "2.5.2"
+truth = "1.3.0"
+turbine = "1.0.0"
+
+[libraries]
+android-activity = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidActivity" }
+android-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidAppcompat" }
+android-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidCore" }
+android-fragment = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidFragment" }
+android-material = { group = "com.google.android.material", name = "material", version.ref = "androidMaterial" }
+android-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "androidSwipeRefreshLayout" }
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage-ktx" }
+google-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "googleAds" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlinPlugin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPlugin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlinPlugin" }
+kotlin-parcelise = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlinPlugin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "kspPlugin" }

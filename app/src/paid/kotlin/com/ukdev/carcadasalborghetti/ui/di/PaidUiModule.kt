@@ -1,44 +1,18 @@
 package com.ukdev.carcadasalborghetti.ui.di
 
-import com.ukdev.carcadasalborghetti.di.LayerModule
-import com.ukdev.carcadasalborghetti.ui.media.*
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProviderImpl
-import org.koin.android.ext.koin.androidContext
-import org.koin.dsl.module
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.scopes.ActivityScoped
 
-class PaidUiModule : LayerModule() {
+@Module
+@InstallIn(ActivityComponent::class)
+abstract class PaidUiModule  {
 
-    override val module = module {
-        factory {
-            AudioHandler(
-                mediaHelper = get(),
-                crashReportManager = get(),
-                remoteDataSource = get(),
-                ioHelper = get(),
-                paidFileHelper = get()
-            )
-        }
-        factory {
-            FavouritesHandler(
-                mediaHelper = get(),
-                crashReportManager = get(),
-                remoteDataSource = get(),
-                ioHelper = get(),
-                paidFileHelper = get()
-            )
-        }
-        factory {
-            VideoHandler(
-                mediaHelper = get(),
-                crashReportManager = get(),
-                remoteDataSource = get(),
-                ioHelper = get(),
-                paidFileHelper = get()
-            )
-        }
-        factory<VideoHelper> { VideoHelperImpl(context = androidContext()) }
-        factory<MenuProvider> { MenuProviderImpl(localDataSource = get()) }
-    }
-
+    @Binds
+    @ActivityScoped
+    abstract fun bindMenuProvider(impl: MenuProviderImpl): MenuProvider
 }

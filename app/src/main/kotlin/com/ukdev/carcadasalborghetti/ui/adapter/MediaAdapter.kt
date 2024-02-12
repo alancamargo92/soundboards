@@ -1,64 +1,34 @@
 package com.ukdev.carcadasalborghetti.ui.adapter
 
-import androidx.recyclerview.widget.RecyclerView
-import com.ukdev.carcadasalborghetti.domain.entities.Media
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
+import com.ukdev.carcadasalborghetti.databinding.ItemMediaBinding
+import com.ukdev.carcadasalborghetti.ui.adapter.diffcallback.MediaDiffCallback
 import com.ukdev.carcadasalborghetti.ui.adapter.viewholder.MediaViewHolder
-import com.ukdev.carcadasalborghetti.ui.listeners.RecyclerViewInteractionListener
-import java.util.*
+import com.ukdev.carcadasalborghetti.ui.model.UiMedia
+import java.util.Locale
 
-abstract class MediaAdapter : RecyclerView.Adapter<MediaViewHolder>() {
+class MediaAdapter(
+    private val onItemClicked: (UiMedia) -> Unit,
+    private val onItemLongClicked: (UiMedia) -> Unit
+) : ListAdapter<UiMedia, MediaViewHolder>(MediaDiffCallback()) {
 
-    protected var data: List<Media>? = null
-
-    private lateinit var holder: MediaViewHolder
-
-    private var listener: RecyclerViewInteractionListener? = null
-
-    fun submitData(data: List<Media>) {
-        this.data = data
-        notifyDataSetChanged()
-    }
-
-    fun setListener(listener: RecyclerViewInteractionListener) {
-        this.listener = listener
-    }
-
-    fun filter(media: List<Media>, searchTerm: String?) {
+    fun filter(mediaList: List<UiMedia>, searchTerm: String?) {
         searchTerm?.lowercase(Locale.getDefault())?.let { query ->
-            data = media.filter { it.title.lowercase().contains(query) }
-            notifyDataSetChanged()
+            val filteredList = mediaList.filter { it.title.lowercase().contains(query) }
+            submitList(filteredList)
         }
     }
 
-    fun notifyItemClicked() {
-        holder.notifyItemClicked()
-    }
-
-    fun notifyItemReady() {
-        holder.notifyItemReady()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemMediaBinding.inflate(inflater, parent, false)
+        return MediaViewHolder(onItemClicked, onItemLongClicked, binding)
     }
 
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
-        data?.get(position)?.let { media ->
-            with(holder) {
-                bindTo(media)
-
-                itemView.setOnClickListener {
-                    this@MediaAdapter.holder = holder
-                    notifyItemClicked()
-                    listener?.onItemClick(media)
-                }
-
-                itemView.setOnLongClickListener {
-                    this@MediaAdapter.holder = holder
-                    notifyItemClicked()
-                    listener?.onItemLongClick(media)
-                    true
-                }
-            }
-        }
+        val media = getItem(position)
+        holder.bindTo(media)
     }
-
-    override fun getItemCount() = data?.size ?: 0
-
 }

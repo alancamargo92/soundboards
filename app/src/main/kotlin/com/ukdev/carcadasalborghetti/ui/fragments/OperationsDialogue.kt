@@ -2,32 +2,44 @@ package com.ukdev.carcadasalborghetti.ui.fragments
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
+import com.ukdev.carcadasalborghetti.core.extensions.args
+import com.ukdev.carcadasalborghetti.core.extensions.putArguments
 import com.ukdev.carcadasalborghetti.databinding.DialogueOperationsBinding
-import com.ukdev.carcadasalborghetti.domain.entities.Operation
 import com.ukdev.carcadasalborghetti.ui.adapter.OperationAdapter
+import com.ukdev.carcadasalborghetti.ui.model.MediaListFragmentType
+import com.ukdev.carcadasalborghetti.ui.model.UiMedia
+import com.ukdev.carcadasalborghetti.ui.model.UiOperation
+import com.ukdev.carcadasalborghetti.ui.viewmodel.medialist.MediaListViewModel
+import com.ukdev.carcadasalborghetti.ui.viewmodel.medialist.MediaListViewModelAssistedFactory
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.parcelize.Parcelize
+import javax.inject.Inject
 
-class OperationsDialogue : DialogFragment(), OperationAdapter.ItemClickListener {
+@AndroidEntryPoint
+class OperationsDialogue : DialogFragment() {
 
     private var _binding: DialogueOperationsBinding? = null
     private val binding: DialogueOperationsBinding
         get() = _binding!!
 
-    @Suppress("UNCHECKED_CAST")
-    private val operations by lazy {
-        arguments?.getParcelableArray(KEY_OPERATIONS)
-            ?.toList() as? List<Operation>
-            ?: listOf(Operation.SHARE)
+    @Inject
+    lateinit var assistedFactory: MediaListViewModelAssistedFactory
+
+    private val args by args<Args>()
+    private val activityViewModel by activityViewModels<MediaListViewModel> {
+        MediaListViewModel.Factory(assistedFactory, args.parentFragmentType)
     }
 
-    private val adapter = OperationAdapter(listener = this)
-    private var listener: Listener? = null
-
-    fun setOnOperationSelectedListener(listener: Listener) {
-        this.listener = listener
+    private val adapter by lazy {
+        OperationAdapter { operation ->
+            onOperationSelected(operation, args.media)
+        }
     }
 
     override fun onCreateView(
@@ -42,39 +54,40 @@ class OperationsDialogue : DialogFragment(), OperationAdapter.ItemClickListener 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerView.adapter = adapter
-        adapter.submitData(operations)
+        adapter.submitList(args.operations)
     }
 
     override fun onDismiss(dialogue: DialogInterface) {
         val parent = requireParentFragment()
 
-        if (parent is DialogInterface.OnDismissListener)
+        if (parent is DialogInterface.OnDismissListener) {
             parent.onDismiss(dialogue)
+        }
 
         super.onDismiss(dialogue)
     }
 
-    override fun onItemClick(operation: Operation) {
-        listener?.onOperationSelected(operation)
+    private fun onOperationSelected(operation: UiOperation, media: UiMedia) {
+        activityViewModel.onOperationSelected(operation, media)
         dismiss()
     }
 
+    @Parcelize
+    data class Args(
+        val operations: List<UiOperation>,
+        val media: UiMedia,
+        val parentFragmentType: MediaListFragmentType
+    ) : Parcelable
+
     companion object {
-        private const val KEY_OPERATIONS = "operations"
 
-        fun newInstance(operations: List<Operation>): OperationsDialogue {
-            val args = Bundle().apply {
-                putParcelableArray(KEY_OPERATIONS, operations.toTypedArray())
-            }
-
-            return OperationsDialogue().apply {
-                arguments = args
-            }
+        fun newInstance(
+            operations: List<UiOperation>,
+            media: UiMedia,
+            parentFragmentType: MediaListFragmentType
+        ): OperationsDialogue {
+            val args = Args(operations, media, parentFragmentType)
+            return OperationsDialogue().putArguments(args)
         }
     }
-
-    interface Listener {
-        fun onOperationSelected(operation: Operation)
-    }
-
 }

@@ -1,29 +1,27 @@
 package com.ukdev.carcadasalborghetti.ui.tools
 
-import android.app.Activity
-import android.widget.Toast
+import android.content.Context
 import com.ukdev.carcadasalborghetti.R
-import com.ukdev.carcadasalborghetti.data.local.MediaLocalDataSource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.ukdev.carcadasalborghetti.core.tools.DialogueHelper
+import com.ukdev.carcadasalborghetti.core.tools.ToastHelper
+import com.ukdev.carcadasalborghetti.domain.cache.CacheManager
+import com.ukdev.carcadasalborghetti.ui.model.MenuItemActionPair
+import javax.inject.Inject
 
-class MenuProviderImpl(private val localDataSource: MediaLocalDataSource) : MenuProvider() {
+class MenuProviderImpl @Inject constructor(
+    private val cacheManager: CacheManager,
+    private val toastHelper: ToastHelper,
+    dialogueHelper: DialogueHelper
+) : MenuProvider(dialogueHelper) {
 
-    override fun getMenuItemsAndActions(): Map<Int, (activity: Activity) -> Unit> {
+    override fun getMenuItemsAndActions(): List<MenuItemActionPair> {
         return defaultItemsAndActions.apply {
-            put(R.id.item_clear_cache, ::clearCache)
-        }
-    }
-
-    private fun clearCache(activity: Activity) {
-        CoroutineScope(Dispatchers.Main).launch {
-            withContext(Dispatchers.IO) {
-                localDataSource.clearCache()
+            val action: (Context) -> Unit = {
+                cacheManager.clearCache()
+                toastHelper.showToast(R.string.cache_cleared)
             }
-            Toast.makeText(activity, R.string.cache_cleared, Toast.LENGTH_SHORT).show()
+            val pair = MenuItemActionPair(R.id.item_clear_cache, action)
+            add(pair)
         }
     }
-
 }
