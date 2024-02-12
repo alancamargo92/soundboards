@@ -5,16 +5,16 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.core.extensions.observeFlow
 import com.ukdev.carcadasalborghetti.core.tools.DialogueHelper
 import com.ukdev.carcadasalborghetti.databinding.ActivityHomeBinding
 import com.ukdev.carcadasalborghetti.ui.adapter.PagerAdapter
-import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragment
+import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragmentMapProvider
+import com.ukdev.carcadasalborghetti.ui.model.MediaListTab
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
 import com.ukdev.carcadasalborghetti.ui.viewmodel.home.HomeUiAction
-import com.ukdev.carcadasalborghetti.ui.viewmodel.home.HomeUiState
 import com.ukdev.carcadasalborghetti.ui.viewmodel.home.HomeViewModel
 import javax.inject.Inject
 
@@ -22,10 +22,17 @@ abstract class HomeActivity : AppCompatActivity() {
 
     protected abstract val baseBinding: ActivityHomeBinding
 
-    private val pagerAdapter by lazy { PagerAdapter(supportFragmentManager) }
-    private val viewModel by viewModels<HomeViewModel>()
+    @Inject
+    lateinit var fragmentMapProvider: MediaListFragmentMapProvider
 
-    private var currentFragment: MediaListFragment? = null
+    private val pagerAdapter by lazy {
+        PagerAdapter(
+            fragmentMapProvider.provideFragmentMap(),
+            supportFragmentManager,
+            lifecycle
+        )
+    }
+    private val viewModel by viewModels<HomeViewModel>()
 
     @Inject
     lateinit var menuProvider: MenuProvider
@@ -36,7 +43,7 @@ abstract class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setUpUi()
-        observeViewModelFlows()
+        observeFlow(viewModel.action, ::onAction)
         viewModel.start()
     }
 
@@ -53,41 +60,13 @@ abstract class HomeActivity : AppCompatActivity() {
         setUpViewPager()
     }
 
-    private fun observeViewModelFlows() {
-        observeFlow(viewModel.state, ::onStateChanged)
-        observeFlow(viewModel.action, ::onAction)
-    }
-
-    private fun setUpViewPager() {
-        supportFragmentManager.addFragmentOnAttachListener { _, fragment ->
-            if (fragment is MediaListFragment) {
-                currentFragment = fragment
-            }
-        }
-
-        with(baseBinding.viewPager) {
-            adapter = pagerAdapter
-            addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(baseBinding.tabLayout))
-            baseBinding.tabLayout.addOnTabSelectedListener(
-                object : TabLayout.OnTabSelectedListener {
-                    override fun onTabSelected(tab: TabLayout.Tab) {
-                        baseBinding.viewPager.currentItem = tab.position
-                        val fragment = pagerAdapter.getItem(tab.position)
-                        if (fragment is MediaListFragment) {
-                            currentFragment = fragment
-                        }
-                    }
-
-                    override fun onTabUnselected(tab: TabLayout.Tab) {}
-
-                    override fun onTabReselected(tab: TabLayout.Tab) {}
-                }
-            )
-        }
-    }
-
-    private fun onStateChanged(state: HomeUiState) {
-        state.fragmentMap?.let(pagerAdapter::submitFragmentMap)
+    private fun setUpViewPager() = with(baseBinding) {
+        viewPager.adapter = pagerAdapter
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            val tabInfo = MediaListTab.forPosition(position)
+            tab.setIcon(tabInfo.iconRes)
+            tab.setText(tabInfo.textRes)
+        }.attach()
     }
 
     private fun onAction(action: HomeUiAction) = when (action) {

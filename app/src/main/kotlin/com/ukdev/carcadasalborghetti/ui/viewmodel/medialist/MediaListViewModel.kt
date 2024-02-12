@@ -54,7 +54,16 @@ class MediaListViewModel @AssistedInject constructor(
     val state = _state.asStateFlow()
     val action = _action.asSharedFlow()
 
+    fun onDestroy() {
+        logger.debug("onDestroy - $fragmentType - $this")
+    }
+
+    fun onDestroyView() {
+        logger.debug("onDestroyView - $fragmentType - $this")
+    }
+
     fun getMediaList(isRefreshing: Boolean) {
+        logger.debug("onCreateView - $fragmentType - $this")
         viewModelScope.launch(dispatcher) {
             val flow = when (fragmentType) {
                 MediaListFragmentType.AUDIO -> getMediaListUseCase(MediaType.AUDIO)

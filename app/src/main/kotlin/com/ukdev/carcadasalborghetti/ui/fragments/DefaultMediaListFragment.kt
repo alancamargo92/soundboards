@@ -83,6 +83,16 @@ class DefaultMediaListFragment : MediaListFragment() {
         super.onStop()
     }
 
+    override fun onDestroy() {
+        viewModel.onDestroy()
+        super.onDestroy()
+    }
+
+    override fun onDestroyView() {
+        viewModel.onDestroyView()
+        super.onDestroyView()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_main, menu)
         searchView = (menu.findItem(R.id.item_search)?.actionView as SearchView).apply {

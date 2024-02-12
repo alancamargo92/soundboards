@@ -2,20 +2,16 @@ package com.ukdev.carcadasalborghetti.ui.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.lifecycle.Lifecycle
+import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class PagerAdapter(
-    fragmentManager: FragmentManager
-) : FragmentStatePagerAdapter(fragmentManager) {
+    private val fragmentMap: Map<Int, Fragment>,
+    fragmentManager: FragmentManager,
+    lifecycle: Lifecycle
+) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    private var fragmentMap: Map<Int, Fragment> = emptyMap()
+    override fun createFragment(position: Int): Fragment = fragmentMap.values.toList()[position]
 
-    fun submitFragmentMap(fragmentMap: Map<Int, Fragment>) {
-        this.fragmentMap = fragmentMap
-        notifyDataSetChanged()
-    }
-
-    override fun getItem(position: Int): Fragment = fragmentMap.values.toList()[position]
-
-    override fun getCount() = fragmentMap.size
+    override fun getItemCount(): Int = fragmentMap.size
 }
