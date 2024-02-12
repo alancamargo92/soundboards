@@ -31,6 +31,6 @@ object Config {
     object Paid {
 
         const val FLAVOUR_NAME = "paid"
-        const val VERSION_CODE = 60
+        const val VERSION_CODE = 61
     }
 }
