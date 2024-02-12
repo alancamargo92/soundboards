@@ -25,7 +25,10 @@ data class MediaListUiState(
 
     fun onMediaFinishedPlaying() = copy(showStopButton = false)
 
-    fun onMediaListReceived(mediaList: List<UiMedia>) = copy(mediaList = mediaList)
+    fun onMediaListReceived(mediaList: List<UiMedia>) = copy(
+        mediaList = mediaList,
+        error = null
+    )
 
     fun onError(error: UiError): MediaListUiState {
         val isTryAgainButtonVisible = error != UiError.NO_FAVOURITES

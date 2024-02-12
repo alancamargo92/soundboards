@@ -55,13 +55,13 @@ class MediaListViewModel @AssistedInject constructor(
     val action = _action.asSharedFlow()
 
     fun getMediaList(isRefreshing: Boolean) {
-        val flow = when (fragmentType) {
-            MediaListFragmentType.AUDIO -> getMediaListUseCase(MediaType.AUDIO)
-            MediaListFragmentType.VIDEO -> getMediaListUseCase(MediaType.VIDEO)
-            MediaListFragmentType.FAVOURITES -> getFavouritesUseCase()
-        }
-
         viewModelScope.launch(dispatcher) {
+            val flow = when (fragmentType) {
+                MediaListFragmentType.AUDIO -> getMediaListUseCase(MediaType.AUDIO)
+                MediaListFragmentType.VIDEO -> getMediaListUseCase(MediaType.VIDEO)
+                MediaListFragmentType.FAVOURITES -> getFavouritesUseCase()
+            }
+
             flow.onStart {
                 _state.update {
                     if (isRefreshing) {
@@ -82,10 +82,6 @@ class MediaListViewModel @AssistedInject constructor(
 
                 _state.update { it.onError(error) }
             }.collect { mediaList ->
-                if (fragmentType == MediaListFragmentType.FAVOURITES) {
-                    _state.update { it.onFinishedLoading() }
-                }
-
                 if (mediaList.isEmpty()) {
                     val error = if (fragmentType == MediaListFragmentType.FAVOURITES) {
                         UiError.NO_FAVOURITES
@@ -97,6 +93,10 @@ class MediaListViewModel @AssistedInject constructor(
                 } else {
                     val uiMediaList = mediaList.map { it.toUi() }
                     _state.update { it.onMediaListReceived(uiMediaList) }
+                }
+
+                if (fragmentType == MediaListFragmentType.FAVOURITES) {
+                    _state.update { it.onFinishedLoading() }
                 }
             }
         }
