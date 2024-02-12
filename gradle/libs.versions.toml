@@ -6,6 +6,7 @@ androidFragment = "1.6.2"
 androidGradlePlugin = "8.2.2"
 androidMaterial = "1.11.0"
 androidSwipeRefreshLayout = "1.1.0"
+coroutinesTest = "1.7.3"
 firebaseBom = "32.7.2"
 firebaseCrashlyticsPlugin = "2.9.9"
 googleAds = "22.6.0"
@@ -26,6 +27,7 @@ android-core = { group = "androidx.core", name = "core-ktx", version.ref = "andr
 android-fragment = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidFragment" }
 android-material = { group = "com.google.android.material", name = "material", version.ref = "androidMaterial" }
 android-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "androidSwipeRefreshLayout" }
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage-ktx" }

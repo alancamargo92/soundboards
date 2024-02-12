@@ -1,6 +1,7 @@
 package com.ukdev.carcadasalborghetti.core.tools
 
 import android.content.Context
+import androidx.core.content.edit
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -18,6 +19,6 @@ class PreferencesManagerImpl @Inject constructor(
     }
 
     override fun disableTip() {
-        preferences.edit().putBoolean(KEY_SHOW_TIP, false).apply()
+        preferences.edit { putBoolean(KEY_SHOW_TIP, false) }
     }
 }

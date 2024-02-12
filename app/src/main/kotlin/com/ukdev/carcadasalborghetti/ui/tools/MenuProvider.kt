@@ -5,6 +5,7 @@ import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.core.extensions.getAppName
 import com.ukdev.carcadasalborghetti.core.extensions.getAppVersion
 import com.ukdev.carcadasalborghetti.core.tools.DialogueHelper
+import com.ukdev.carcadasalborghetti.ui.model.MenuItemActionPair
 
 abstract class MenuProvider(private val dialogueHelper: DialogueHelper) {
 

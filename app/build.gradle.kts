@@ -79,6 +79,11 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    @Suppress("UnstableApiUsage")
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -101,6 +106,7 @@ dependencies {
 
     "paidImplementation"(libs.room.ktx)
 
+    testImplementation(libs.coroutines.test)
     testImplementation(libs.junit)
     testImplementation(libs.mockk.android)
     testImplementation(libs.truth)

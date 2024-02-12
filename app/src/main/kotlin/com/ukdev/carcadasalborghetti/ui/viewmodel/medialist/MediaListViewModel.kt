@@ -54,16 +54,7 @@ class MediaListViewModel @AssistedInject constructor(
     val state = _state.asStateFlow()
     val action = _action.asSharedFlow()
 
-    fun onDestroy() {
-        logger.debug("onDestroy - $fragmentType - $this")
-    }
-
-    fun onDestroyView() {
-        logger.debug("onDestroyView - $fragmentType - $this")
-    }
-
     fun getMediaList(isRefreshing: Boolean) {
-        logger.debug("onCreateView - $fragmentType - $this")
         viewModelScope.launch(dispatcher) {
             val flow = when (fragmentType) {
                 MediaListFragmentType.AUDIO -> getMediaListUseCase(MediaType.AUDIO)
@@ -79,8 +70,6 @@ class MediaListViewModel @AssistedInject constructor(
                         it.onLoading()
                     }
                 }
-            }.onCompletion {
-                _state.update { it.onFinishedLoading() }
             }.catch { exception ->
                 logger.error(exception)
                 val error = if (exception is IOException) {
@@ -90,6 +79,8 @@ class MediaListViewModel @AssistedInject constructor(
                 }
 
                 _state.update { it.onError(error) }
+            }.onCompletion {
+                _state.update { it.onFinishedLoading() }
             }.collect { mediaList ->
                 if (mediaList.isEmpty()) {
                     val error = if (fragmentType == MediaListFragmentType.FAVOURITES) {
@@ -112,16 +103,18 @@ class MediaListViewModel @AssistedInject constructor(
     }
 
     fun onItemClicked(media: UiMedia) {
-        downloadMedia(media) { downloadedMedia ->
-            val action = when (downloadedMedia.type) {
-                UiMediaType.AUDIO -> {
-                    _state.update { it.onMediaPlaying() }
-                    MediaListUiAction.PlayAudio(downloadedMedia)
+        viewModelScope.launch(dispatcher) {
+            downloadMedia(media) { downloadedMedia ->
+                val action = when (downloadedMedia.type) {
+                    UiMediaType.AUDIO -> {
+                        _state.update { it.onMediaPlaying() }
+                        MediaListUiAction.PlayAudio(downloadedMedia)
+                    }
+                    UiMediaType.VIDEO -> MediaListUiAction.PlayVideo(downloadedMedia)
                 }
-                UiMediaType.VIDEO -> MediaListUiAction.PlayVideo(downloadedMedia)
-            }
 
-            sendAction(action)
+                _action.emit(action)
+            }
         }
     }
 
@@ -150,58 +143,56 @@ class MediaListViewModel @AssistedInject constructor(
     }
 
     fun onOperationSelected(operation: UiOperation, media: UiMedia) {
-        when (operation) {
-            UiOperation.ADD_TO_FAVOURITES -> saveToFavourites(media)
-            UiOperation.REMOVE_FROM_FAVOURITES -> removeFromFavourites(media)
-            UiOperation.SHARE -> shareMedia(media)
+        viewModelScope.launch(dispatcher) {
+            when (operation) {
+                UiOperation.ADD_TO_FAVOURITES -> saveToFavourites(media)
+                UiOperation.REMOVE_FROM_FAVOURITES -> removeFromFavourites(media)
+                UiOperation.SHARE -> shareMedia(media)
+            }
         }
     }
 
-    private fun saveToFavourites(media: UiMedia) {
-        viewModelScope.launch(dispatcher) {
-            val domainMedia = media.toDomain()
-            saveToFavouritesUseCase(domainMedia).catch {
-                logger.error(it)
-            }.collect()
-        }
+    private suspend fun saveToFavourites(media: UiMedia) {
+        val domainMedia = media.toDomain()
+        saveToFavouritesUseCase(domainMedia).catch {
+            logger.error(it)
+        }.collect()
     }
 
-    private fun removeFromFavourites(media: UiMedia) {
-        viewModelScope.launch(dispatcher) {
-            val domainMedia = media.toDomain()
-            removeFromFavouritesUseCase(domainMedia).catch {
-                logger.error(it)
-            }.collect()
-        }
+    private suspend fun removeFromFavourites(media: UiMedia) {
+        val domainMedia = media.toDomain()
+        removeFromFavouritesUseCase(domainMedia).catch {
+            logger.error(it)
+        }.collect()
     }
 
     private fun shareMedia(media: UiMedia) {
-        downloadMedia(media) { downloadedMedia ->
-            val chooserType = when (downloadedMedia.type) {
-                UiMediaType.AUDIO -> "audio/*"
-                UiMediaType.VIDEO -> "video/*"
-            }
+        viewModelScope.launch(dispatcher) {
+            downloadMedia(media) { downloadedMedia ->
+                val chooserType = when (downloadedMedia.type) {
+                    UiMediaType.AUDIO -> "audio/*"
+                    UiMediaType.VIDEO -> "video/*"
+                }
 
-            val action = MediaListUiAction.ShareMedia(
-                chooserTitleRes = R.string.chooser_title_share,
-                chooserSubjectRes = R.string.chooser_subject_share,
-                chooserType = chooserType,
-                media = downloadedMedia
-            )
-            sendAction(action)
+                val action = MediaListUiAction.ShareMedia(
+                    chooserTitleRes = R.string.chooser_title_share,
+                    chooserSubjectRes = R.string.chooser_subject_share,
+                    chooserType = chooserType,
+                    media = downloadedMedia
+                )
+                _action.emit(action)
+            }
         }
     }
 
-    private fun downloadMedia(media: UiMedia, onSuccess: (UiMedia) -> Unit) {
-        viewModelScope.launch(dispatcher) {
-            val rawMedia = media.toDomain()
-            downloadMediaUseCase(rawMedia).catch { exception ->
-                logger.error(exception)
-                _state.update { it.onError(UiError.UNKNOWN) }
-            }.collect { downloadedMedia ->
-                val uiMedia = downloadedMedia.toUi()
-                onSuccess(uiMedia)
-            }
+    private suspend fun downloadMedia(media: UiMedia, onSuccess: suspend (UiMedia) -> Unit) {
+        val rawMedia = media.toDomain()
+        downloadMediaUseCase(rawMedia).catch { exception ->
+            logger.error(exception)
+            _state.update { it.onError(UiError.UNKNOWN) }
+        }.collect { downloadedMedia ->
+            val uiMedia = downloadedMedia.toUi()
+            onSuccess(uiMedia)
         }
     }
 

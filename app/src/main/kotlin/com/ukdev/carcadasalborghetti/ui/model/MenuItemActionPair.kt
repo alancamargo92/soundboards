@@ -1,4 +1,4 @@
-package com.ukdev.carcadasalborghetti.ui.tools
+package com.ukdev.carcadasalborghetti.ui.model
 
 import android.content.Context
 import androidx.annotation.IdRes
