@@ -82,6 +82,10 @@ class MediaListViewModel @AssistedInject constructor(
 
                 _state.update { it.onError(error) }
             }.collect { mediaList ->
+                if (fragmentType == MediaListFragmentType.FAVOURITES) {
+                    _state.update { it.onFinishedLoading() }
+                }
+
                 if (mediaList.isEmpty()) {
                     val error = if (fragmentType == MediaListFragmentType.FAVOURITES) {
                         UiError.NO_FAVOURITES
