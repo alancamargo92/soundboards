@@ -1,7 +1,7 @@
 package com.ukdev.carcadasalborghetti.domain.repository
 
-import com.ukdev.carcadasalborghetti.domain.model.MediaType
 import com.ukdev.carcadasalborghetti.domain.model.Media
+import com.ukdev.carcadasalborghetti.domain.model.MediaType
 import kotlinx.coroutines.flow.Flow
 
 interface MediaRepository {
@@ -16,5 +16,5 @@ interface MediaRepository {
 
     suspend fun isSavedToFavourites(media: Media): Boolean
 
-    suspend fun downloadMedia(media: Media): Media
+    suspend fun prepareMedia(media: Media): Media
 }
