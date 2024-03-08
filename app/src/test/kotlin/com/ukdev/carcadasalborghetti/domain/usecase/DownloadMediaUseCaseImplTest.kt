@@ -19,7 +19,7 @@ class DownloadMediaUseCaseImplTest {
         // GIVEN
         val media = stubMedia()
         val expected = stubMedia()
-        coEvery { mockRepository.downloadMedia(media) } returns expected
+        coEvery { mockRepository.prepareMedia(media) } returns expected
 
         // WHEN
         val flow = useCase(media)

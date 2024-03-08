@@ -16,6 +16,7 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import java.io.File
 
 class MediaRepositoryImplTest {
 
@@ -149,7 +150,7 @@ class MediaRepositoryImplTest {
     }
 
     @Test
-    fun `downloadMedia should set media id to downloaded media uri`() = runTest {
+    fun `prepareMedia should set media id to downloaded media uri`() = runTest {
         // GIVEN
         val destinationFile = stubFile()
         val downloadedFile = stubFile()
@@ -162,7 +163,7 @@ class MediaRepositoryImplTest {
         every { mockLocalDataSource.getFileUri(downloadedFile) } returns uri
 
         // WHEN
-        val actual = repository.downloadMedia(media)
+        val actual = repository.prepareMedia(media)
 
         // THEN
         val expected = media.copy(id = uri)
@@ -170,15 +171,22 @@ class MediaRepositoryImplTest {
     }
 
     @Test
-    fun `downloadMedia should return raw media`() = runTest {
+    fun `prepareMedia should return locally prepared media`() = runTest {
         // GIVEN
-        val expected = stubMedia()
-        every { mockLocalDataSource.createFile(expected) } throws IllegalStateException()
+        val media = stubMedia()
+        val file = mockk<File>()
+        every { mockLocalDataSource.createFile(media) } returns file
+        coEvery {
+            mockRemoteDataSource.download(media, destinationFile = any())
+        } throws IllegalStateException()
+        val uri = "uri"
+        every { mockLocalDataSource.getFileUri(file) } returns uri
 
         // WHEN
-        val actual = repository.downloadMedia(expected)
+        val actual = repository.prepareMedia(media)
 
         // THEN
+        val expected = media.copy(id = uri)
         assertThat(actual).isEqualTo(expected)
     }
 }

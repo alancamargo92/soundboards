@@ -11,7 +11,7 @@ class DownloadMediaUseCaseImpl @Inject constructor(
 ) : DownloadMediaUseCase {
 
     override fun invoke(rawMedia: Media): Flow<Media> = flow {
-        val downloadedMedia = repository.downloadMedia(rawMedia)
+        val downloadedMedia = repository.prepareMedia(rawMedia)
         emit(downloadedMedia)
     }
 }

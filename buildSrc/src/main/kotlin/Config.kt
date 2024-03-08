@@ -7,7 +7,7 @@ object Config {
         const val MIN_SDK = 23
         const val TARGET_SDK = 34
         const val FLAVOUR_DIMENSION = "version"
-        const val VERSION_NAME = "2024.1.0"
+        const val VERSION_NAME = "2024.1.1"
 
         val javaVersion = JavaVersion.VERSION_17
         val javaVersionString = javaVersion.majorVersion
@@ -25,12 +25,12 @@ object Config {
     object Free {
 
         const val FLAVOUR_NAME = "free"
-        const val VERSION_CODE = 59
+        const val VERSION_CODE = 60
     }
 
     object Paid {
 
         const val FLAVOUR_NAME = "paid"
-        const val VERSION_CODE = 61
+        const val VERSION_CODE = 62
     }
 }

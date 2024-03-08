@@ -180,7 +180,7 @@ class MediaListViewModel @AssistedInject constructor(
                     chooserType = chooserType,
                     media = downloadedMedia
                 )
-                _action.emit(action)
+                sendAction(action)
             }
         }
     }

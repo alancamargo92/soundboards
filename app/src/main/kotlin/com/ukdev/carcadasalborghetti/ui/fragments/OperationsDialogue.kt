@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
 import com.ukdev.carcadasalborghetti.core.extensions.args
 import com.ukdev.carcadasalborghetti.core.extensions.putArguments
 import com.ukdev.carcadasalborghetti.databinding.DialogueOperationsBinding
@@ -15,7 +14,6 @@ import com.ukdev.carcadasalborghetti.ui.adapter.OperationAdapter
 import com.ukdev.carcadasalborghetti.ui.model.MediaListFragmentType
 import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 import com.ukdev.carcadasalborghetti.ui.model.UiOperation
-import com.ukdev.carcadasalborghetti.ui.viewmodel.medialist.MediaListViewModel
 import com.ukdev.carcadasalborghetti.ui.viewmodel.medialist.MediaListViewModelAssistedFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.parcelize.Parcelize
@@ -32,13 +30,11 @@ class OperationsDialogue : DialogFragment() {
     lateinit var assistedFactory: MediaListViewModelAssistedFactory
 
     private val args by args<Args>()
-    private val activityViewModel by activityViewModels<MediaListViewModel> {
-        MediaListViewModel.Factory(assistedFactory, args.parentFragmentType)
-    }
 
     private val adapter by lazy {
         OperationAdapter { operation ->
-            onOperationSelected(operation, args.media)
+            args.onOperationSelected(operation)
+            dismiss()
         }
     }
 
@@ -67,16 +63,12 @@ class OperationsDialogue : DialogFragment() {
         super.onDismiss(dialogue)
     }
 
-    private fun onOperationSelected(operation: UiOperation, media: UiMedia) {
-        activityViewModel.onOperationSelected(operation, media)
-        dismiss()
-    }
-
     @Parcelize
     data class Args(
         val operations: List<UiOperation>,
         val media: UiMedia,
-        val parentFragmentType: MediaListFragmentType
+        val parentFragmentType: MediaListFragmentType,
+        val onOperationSelected: (UiOperation) -> Unit
     ) : Parcelable
 
     companion object {
@@ -84,9 +76,10 @@ class OperationsDialogue : DialogFragment() {
         fun newInstance(
             operations: List<UiOperation>,
             media: UiMedia,
-            parentFragmentType: MediaListFragmentType
+            parentFragmentType: MediaListFragmentType,
+            onOperationSelected: (UiOperation) -> Unit
         ): OperationsDialogue {
-            val args = Args(operations, media, parentFragmentType)
+            val args = Args(operations, media, parentFragmentType, onOperationSelected)
             return OperationsDialogue().putArguments(args)
         }
     }
