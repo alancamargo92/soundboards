@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.android.compose.compiler)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.google.services)
     alias(libs.plugins.hilt)
@@ -78,6 +79,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
     @Suppress("UnstableApiUsage")
@@ -91,6 +93,9 @@ dependencies {
 
     implementation(libs.android.activity)
     implementation(libs.android.appcompat)
+    implementation(libs.android.compose.activity)
+    implementation(platform(libs.android.compose.bom))
+    implementation(libs.android.compose.material3)
     implementation(libs.android.core)
     implementation(libs.android.fragment)
     implementation(libs.android.swiperefreshlayout)
@@ -101,6 +106,8 @@ dependencies {
 
     kapt(libs.hilt.compiler)
     ksp(libs.room.compiler)
+
+    debugImplementation(libs.android.compose.preview)
 
     "freeImplementation"(libs.google.ads)
 

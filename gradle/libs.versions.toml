@@ -1,6 +1,7 @@
 [versions]
 androidActivity = "1.9.2"
 androidAppcompat = "1.7.0"
+androidCompose = "2024.09.00"
 androidCore = "1.13.1"
 androidFragment = "1.8.3"
 androidGradlePlugin = "8.5.2"
@@ -23,6 +24,10 @@ turbine = "1.0.0"
 [libraries]
 android-activity = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidActivity" }
 android-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidAppcompat" }
+android-compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidActivity" }
+android-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidCompose" }
+android-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+android-compose-preview = { group = "androidx.compose.ui", name = "ui-tooling" }
 android-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidCore" }
 android-fragment = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidFragment" }
 android-material = { group = "com.google.android.material", name = "material", version.ref = "androidMaterial" }
@@ -43,6 +48,7 @@ turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlinPlugin" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
