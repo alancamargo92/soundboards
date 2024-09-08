@@ -3,6 +3,7 @@ package com.ukdev.carcadasalborghetti.ui.view
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,7 +41,8 @@ import com.ukdev.carcadasalborghetti.R
 @Composable
 fun HomeScreen(
     fragmentManager: FragmentManager? = null,
-    fragmentBlock: FragmentTransaction.() -> Unit = {}
+    fragmentBlock: FragmentTransaction.() -> Unit = {},
+    adView: (@Composable () -> Unit)? = null
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -86,12 +88,18 @@ fun HomeScreen(
             }
         }
     ) { innerPadding ->
-        fragmentManager?.let {
-            FragmentContainer(
-                modifier = Modifier.padding(innerPadding),
-                fragmentManager = it
-            ) {
-                fragmentBlock()
+        Column(modifier = Modifier.padding(innerPadding)) {
+            fragmentManager?.let {
+                FragmentContainer(fragmentManager = it) {
+                    fragmentBlock()
+                }
+            }
+
+            adView?.let {
+                Spacer(
+                    modifier = Modifier.height(dimensionResource(id = R.dimen.margin_huge))
+                )
+                it.invoke()
             }
         }
     }
@@ -129,7 +137,6 @@ private fun MediaTab(
 
 @Composable
 private fun FragmentContainer(
-    modifier: Modifier,
     fragmentManager: FragmentManager,
     fragmentBlock: FragmentTransaction.() -> Unit
 ) {
@@ -137,7 +144,7 @@ private fun FragmentContainer(
     var isInitialised by rememberSaveable { mutableStateOf(false) }
 
     AndroidView(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         factory = { context ->
             FragmentContainerView(context).apply {
                 id = containerId
