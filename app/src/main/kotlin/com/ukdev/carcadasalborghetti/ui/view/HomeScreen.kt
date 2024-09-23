@@ -40,9 +40,9 @@ import com.ukdev.carcadasalborghetti.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    fragmentManager: FragmentManager? = null,
-    fragmentBlock: FragmentTransaction.() -> Unit = {},
-    adView: (@Composable () -> Unit)? = null
+    fragmentManager: FragmentManager?,
+    fragmentBlock: FragmentTransaction.() -> Unit,
+    adView: (@Composable () -> Unit)?
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -164,5 +164,9 @@ private fun FragmentContainer(
 @Composable
 @Preview
 private fun PreviewHomeScreen() {
-    HomeScreen()
+    HomeScreen(
+        fragmentManager = null,
+        fragmentBlock = {},
+        adView = null
+    )
 }
