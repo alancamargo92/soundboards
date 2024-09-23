@@ -17,4 +17,9 @@
     <dimen name="padding_default">16dp</dimen>
     <dimen name="padding_small">8dp</dimen>
     <!-- endregion -->
+
+    <!-- region Misc -->
+    <dimen name="width_card_stroke">1dp</dimen>
+    <dimen name="radius_card">8dp</dimen>
+    <!-- endregion -->
 </resources>

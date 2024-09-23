@@ -2,6 +2,8 @@ package com.ukdev.carcadasalborghetti.ui.view
 
 import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,7 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -24,6 +28,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.ui.model.UiMedia
@@ -55,7 +60,10 @@ fun MediaListScreen(
         }
     ) { innerPadding ->
         LazyVerticalGrid(
-            modifier = Modifier.padding(innerPadding).fillMaxSize(),
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .background(color = colorResource(R.color.white)),
             contentPadding = PaddingValues(dimensionResource(R.dimen.padding_default)),
             columns = GridCells.Fixed(count = 3),
             horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_default)),
@@ -68,13 +76,23 @@ fun MediaListScreen(
                     modifier = Modifier.combinedClickable(
                         onClick = { onItemClicked(media) },
                         onLongClick = { onItemLongClicked(media) }
+                    ).border(
+                        width = dimensionResource(R.dimen.width_card_stroke),
+                        color = colorResource(R.color.black),
+                        shape = RoundedCornerShape(size = dimensionResource(R.dimen.radius_card))
+                    ),
+                    colors = CardColors(
+                        containerColor = colorResource(R.color.white),
+                        contentColor = colorResource(R.color.black),
+                        disabledContainerColor = colorResource(R.color.white),
+                        disabledContentColor = colorResource(R.color.black)
                     )
                 ) {
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(dimensionResource(R.dimen.height_card_view)),
-                        verticalArrangement = Arrangement.SpaceEvenly,
+                            .height(dimensionResource(R.dimen.height_card_view))
+                            .padding(dimensionResource(R.dimen.padding_default)),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
@@ -82,9 +100,12 @@ fun MediaListScreen(
                                 R.string.title_format,
                                 index + 1,
                                 media.title
-                            )
+                            ),
+                            maxLines = 3,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Icon(
+                            modifier = Modifier.weight(1f),
                             painter = painterResource(media.type.iconRes),
                             contentDescription = null
                         )
@@ -102,22 +123,22 @@ private fun PreviewMediaListScreen() {
         items = listOf(
             UiMedia(
                 uri = Uri.EMPTY,
-                title = "Audio 1",
+                title = "O que tem de tubarão passando fome",
                 type = UiMediaType.AUDIO
             ),
             UiMedia(
                 uri = Uri.EMPTY,
-                title = "Audio 2",
+                title = "Traficante bom é traficante morto",
                 type = UiMediaType.AUDIO
             ),
             UiMedia(
                 uri = Uri.EMPTY,
-                title = "Audio 3",
+                title = "Praias do Paranã",
                 type = UiMediaType.AUDIO
             ),
             UiMedia(
                 uri = Uri.EMPTY,
-                title = "Audio 4",
+                title = "Ah Luciana vai pro inferno",
                 type = UiMediaType.AUDIO
             )
         ),
