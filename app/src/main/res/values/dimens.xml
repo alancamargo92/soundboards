@@ -21,5 +21,6 @@
     <!-- region Misc -->
     <dimen name="width_card_stroke">1dp</dimen>
     <dimen name="radius_card">8dp</dimen>
+    <dimen name="radius_button">8dp</dimen>
     <!-- endregion -->
 </resources>

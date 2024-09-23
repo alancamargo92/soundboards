@@ -11,21 +11,20 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.isVisible
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.viewModels
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.core.extensions.args
 import com.ukdev.carcadasalborghetti.core.extensions.observeFlow
 import com.ukdev.carcadasalborghetti.core.extensions.orFalse
 import com.ukdev.carcadasalborghetti.core.extensions.putArguments
-import com.ukdev.carcadasalborghetti.databinding.FragmentMediaListBinding
 import com.ukdev.carcadasalborghetti.ui.VideoActivity
-import com.ukdev.carcadasalborghetti.ui.adapter.MediaAdapter
-import com.ukdev.carcadasalborghetti.ui.adapter.QueryListener
 import com.ukdev.carcadasalborghetti.ui.model.MediaListFragmentType
 import com.ukdev.carcadasalborghetti.ui.model.UiError
 import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 import com.ukdev.carcadasalborghetti.ui.model.UiOperation
+import com.ukdev.carcadasalborghetti.ui.view.MediaListScreen
 import com.ukdev.carcadasalborghetti.ui.viewmodel.medialist.MediaListUiAction
 import com.ukdev.carcadasalborghetti.ui.viewmodel.medialist.MediaListUiState
 import com.ukdev.carcadasalborghetti.ui.viewmodel.medialist.MediaListViewModel
@@ -39,10 +38,6 @@ private const val TAG_OPERATIONS_DIALOGUE = "operations-dialogue"
 @AndroidEntryPoint
 class DefaultMediaListFragment : MediaListFragment() {
 
-    private var _binding: FragmentMediaListBinding? = null
-    private val binding: FragmentMediaListBinding
-        get() = _binding!!
-
     @Inject
     lateinit var assistedFactory: MediaListViewModelAssistedFactory
 
@@ -51,12 +46,10 @@ class DefaultMediaListFragment : MediaListFragment() {
         MediaListViewModel.Factory(assistedFactory, args.fragmentType)
     }
 
-    private val adapter by lazy {
-        MediaAdapter(
-            onItemClicked = viewModel::onItemClicked,
-            onItemLongClicked = viewModel::onItemLongClicked
-        )
-    }
+    private val itemsState = mutableStateOf(emptyList<UiMedia>())
+    private val showStopButtonState = mutableStateOf(false)
+    private val showProgressBarState = mutableStateOf(false)
+    private val errorState = mutableStateOf<UiError?>(null)
 
     private var searchView: SearchView? = null
     private var mediaPlayer: MediaPlayer? = null
@@ -66,19 +59,32 @@ class DefaultMediaListFragment : MediaListFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMediaListBinding.inflate(inflater, container, false)
-        return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                MediaListScreen(
+                    items = itemsState.value,
+                    onItemClicked = viewModel::onItemClicked,
+                    onItemLongClicked = viewModel::onItemLongClicked,
+                    showStopButton = showStopButtonState.value,
+                    onFabClicked = viewModel::onStopButtonClicked,
+                    showProgressBar = showProgressBarState.value,
+                    error = errorState.value,
+                    onTryAgainClicked = { viewModel.getMediaList(isRefreshing = false) }
+                )
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpUi()
+        //setUpUi()
+        setHasOptionsMenu(true)
         observeViewModelFlows()
         viewModel.getMediaList(isRefreshing = false)
     }
 
     override fun onStop() {
-        binding.btStop.isVisible = false
+        showStopButtonState.value = false
         stopAudioPlayback()
         super.onStop()
     }
@@ -91,45 +97,32 @@ class DefaultMediaListFragment : MediaListFragment() {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    private fun setUpUi() = with(binding) {
+    /*private fun setUpUi() = with(binding) {
         swipeRefreshLayout.setOnRefreshListener {
             viewModel.getMediaList(isRefreshing = true)
         }
 
-        btStop.setOnClickListener { viewModel.onStopButtonClicked() }
-
-        btTryAgain.setOnClickListener {
-            viewModel.getMediaList(isRefreshing = false)
-        }
-
         swipeRefreshLayout.setColorSchemeResources(R.color.red, R.color.black)
-        recyclerView.adapter = adapter
         setHasOptionsMenu(true)
-    }
+    }*/
 
     private fun observeViewModelFlows() {
         observeFlow(viewModel.state, ::onStateChanged)
         observeFlow(viewModel.action, ::onAction)
     }
 
-    private fun onStateChanged(state: MediaListUiState) = with(binding) {
-        progressBar.isVisible = state.isLoading
-        swipeRefreshLayout.isRefreshing = state.isRefreshing
-        groupError.isVisible = state.error != null
-        btTryAgain.isVisible = state.error != null && state.error != UiError.NO_FAVOURITES
-        recyclerView.isVisible = state.mediaList != null
-        btStop.isVisible = state.showStopButton
+    private fun onStateChanged(state: MediaListUiState) {
+        itemsState.value = state.mediaList.orEmpty()
+        showStopButtonState.value = state.showStopButton
+        showProgressBarState.value = state.isLoading
+        errorState.value = state.error
+        /*swipeRefreshLayout.isRefreshing = state.isRefreshing
 
         state.mediaList?.let {
             val listener = QueryListener(adapter, it)
             searchView?.setOnQueryTextListener(listener)
             adapter.submitList(it)
-        }
-
-        state.error?.let {
-            imgError.setImageResource(it.iconRes)
-            txtError.setText(it.textRes)
-        }
+        }*/
     }
 
     private fun onAction(action: MediaListUiAction) {

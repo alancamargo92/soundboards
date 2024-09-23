@@ -6,8 +6,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,8 +17,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -28,9 +33,11 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.ukdev.carcadasalborghetti.R
+import com.ukdev.carcadasalborghetti.ui.model.UiError
 import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 import com.ukdev.carcadasalborghetti.ui.model.UiMediaType
 
@@ -40,12 +47,15 @@ fun MediaListScreen(
     items: List<UiMedia>,
     onItemClicked: (UiMedia) -> Unit,
     onItemLongClicked: (UiMedia) -> Unit,
-    isPlayingAudio: Boolean,
-    onFabClicked: () -> Unit
+    showStopButton: Boolean,
+    onFabClicked: () -> Unit,
+    showProgressBar: Boolean,
+    error: UiError?,
+    onTryAgainClicked: () -> Unit
 ) {
     Scaffold(
         floatingActionButton = {
-            if (isPlayingAudio) {
+            if (showStopButton) {
                 FloatingActionButton(
                     onClick = onFabClicked,
                     containerColor = colorResource(R.color.red)
@@ -59,56 +69,104 @@ fun MediaListScreen(
             }
         }
     ) { innerPadding ->
-        LazyVerticalGrid(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .background(color = colorResource(R.color.white)),
-            contentPadding = PaddingValues(dimensionResource(R.dimen.padding_default)),
-            columns = GridCells.Fixed(count = 3),
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_default)),
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_default))
-        ) {
-            items(items.size) { index ->
-                val media = items[index]
-
-                Card(
-                    modifier = Modifier.combinedClickable(
-                        onClick = { onItemClicked(media) },
-                        onLongClick = { onItemLongClicked(media) }
-                    ).border(
-                        width = dimensionResource(R.dimen.width_card_stroke),
-                        color = colorResource(R.color.black),
-                        shape = RoundedCornerShape(size = dimensionResource(R.dimen.radius_card))
-                    ),
-                    colors = CardColors(
-                        containerColor = colorResource(R.color.white),
-                        contentColor = colorResource(R.color.black),
-                        disabledContainerColor = colorResource(R.color.white),
-                        disabledContentColor = colorResource(R.color.black)
+        when {
+            showProgressBar -> {
+                Box(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                        color = colorResource(R.color.red)
                     )
+                }
+            }
+
+            error != null -> {
+                Column(
+                    modifier = Modifier.padding(innerPadding).fillMaxSize(),
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Column(
+                    Icon(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        painter = painterResource(error.iconRes),
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.margin_default)))
+                    Text(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(dimensionResource(R.dimen.height_card_view))
-                            .padding(dimensionResource(R.dimen.padding_default)),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .padding(dimensionResource(R.dimen.padding_default))
+                            .align(Alignment.CenterHorizontally),
+                        textAlign = TextAlign.Center,
+                        text = stringResource(error.textRes)
+                    )
+                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.margin_large)))
+                    Button(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        colors = ButtonColors(
+                            containerColor = colorResource(R.color.red),
+                            contentColor = colorResource(R.color.white),
+                            disabledContainerColor = colorResource(R.color.red),
+                            disabledContentColor = colorResource(R.color.white)
+                        ),
+                        shape = RoundedCornerShape(size = dimensionResource(R.dimen.radius_button)),
+                        onClick = onTryAgainClicked
                     ) {
-                        Text(
-                            text = stringResource(
-                                R.string.title_format,
-                                index + 1,
-                                media.title
+                        Text(text = stringResource(R.string.try_again))
+                    }
+                }
+            }
+
+            else -> {
+                LazyVerticalGrid(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .fillMaxSize()
+                        .background(color = colorResource(R.color.white)),
+                    contentPadding = PaddingValues(dimensionResource(R.dimen.padding_default)),
+                    columns = GridCells.Fixed(count = 3),
+                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_default)),
+                    verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_default))
+                ) {
+                    items(items.size) { index ->
+                        val media = items[index]
+
+                        Card(
+                            modifier = Modifier.combinedClickable(
+                                onClick = { onItemClicked(media) },
+                                onLongClick = { onItemLongClicked(media) }
+                            ).border(
+                                width = dimensionResource(R.dimen.width_card_stroke),
+                                color = colorResource(R.color.black),
+                                shape = RoundedCornerShape(size = dimensionResource(R.dimen.radius_card))
                             ),
-                            maxLines = 3,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        Icon(
-                            modifier = Modifier.weight(1f),
-                            painter = painterResource(media.type.iconRes),
-                            contentDescription = null
-                        )
+                            colors = CardColors(
+                                containerColor = colorResource(R.color.white),
+                                contentColor = colorResource(R.color.black),
+                                disabledContainerColor = colorResource(R.color.white),
+                                disabledContentColor = colorResource(R.color.black)
+                            )
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(dimensionResource(R.dimen.height_card_view))
+                                    .padding(dimensionResource(R.dimen.padding_default)),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = stringResource(
+                                        R.string.title_format,
+                                        index + 1,
+                                        media.title
+                                    ),
+                                    maxLines = 3,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Icon(
+                                    modifier = Modifier.weight(1f),
+                                    painter = painterResource(media.type.iconRes),
+                                    contentDescription = null
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -144,7 +202,10 @@ private fun PreviewMediaListScreen() {
         ),
         onItemClicked = {},
         onItemLongClicked = {},
-        isPlayingAudio = true,
-        onFabClicked = {}
+        showStopButton = true,
+        onFabClicked = {},
+        showProgressBar = false,
+        error = null,
+        onTryAgainClicked = {}
     )
 }
