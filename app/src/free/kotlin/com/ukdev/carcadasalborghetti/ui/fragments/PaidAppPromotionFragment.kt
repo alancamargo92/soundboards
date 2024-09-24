@@ -46,6 +46,7 @@ class PaidAppPromotionFragment : MediaListFragment() {
             object : MenuProvider {
                 override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                     menuInflater.inflate(R.menu.menu_main, menu)
+                    menu.findItem(R.id.item_search)?.isVisible = false
                 }
 
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
