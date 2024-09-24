@@ -23,7 +23,7 @@ import com.ukdev.carcadasalborghetti.core.extensions.args
 import com.ukdev.carcadasalborghetti.core.extensions.observeFlow
 import com.ukdev.carcadasalborghetti.core.extensions.orFalse
 import com.ukdev.carcadasalborghetti.core.extensions.putArguments
-import com.ukdev.carcadasalborghetti.ui.VideoActivity
+import com.ukdev.carcadasalborghetti.navigation.VideoActivityNavigation
 import com.ukdev.carcadasalborghetti.ui.model.MediaListFragmentType
 import com.ukdev.carcadasalborghetti.ui.model.UiError
 import com.ukdev.carcadasalborghetti.ui.model.UiMedia
@@ -44,6 +44,9 @@ class DefaultMediaListFragment : MediaListFragment() {
 
     @Inject
     lateinit var assistedFactory: MediaListViewModelAssistedFactory
+
+    @Inject
+    lateinit var videoActivityNavigation: VideoActivityNavigation
 
     private val args by args<Args>()
     private val viewModel by viewModels<MediaListViewModel> {
@@ -168,8 +171,7 @@ class DefaultMediaListFragment : MediaListFragment() {
     }
 
     private fun playVideo(media: UiMedia) {
-        val intent = VideoActivity.getIntent(context = requireContext(), media = media)
-        startActivity(intent)
+        videoActivityNavigation.startActivity(requireContext(), media)
     }
 
     private fun stopAudioPlayback() {

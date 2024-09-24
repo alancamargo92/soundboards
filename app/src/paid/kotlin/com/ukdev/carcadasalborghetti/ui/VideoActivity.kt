@@ -62,8 +62,7 @@ class VideoActivity : AppCompatActivity() {
 
     companion object {
 
-        fun getIntent(context: Context, media: UiMedia): Intent {
-            val args = Args(media)
+        fun getIntent(context: Context, args: Args): Intent {
             return Intent(context, VideoActivity::class.java)
                 .putArguments(args)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
