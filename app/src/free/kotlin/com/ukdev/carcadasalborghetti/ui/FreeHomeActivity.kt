@@ -42,8 +42,7 @@ class FreeHomeActivity : HomeActivity() {
                 fragments = fragmentListProvider.provideFragmentList(),
                 adView = {
                     AndroidView(
-                        modifier = Modifier.wrapContentSize().align(Alignment.CenterHorizontally)
-                        ,
+                        modifier = Modifier.wrapContentSize().align(Alignment.CenterHorizontally),
                         factory = ::AdView,
                         update = { adView ->
                             adView.setAdSize(AdSize.BANNER)
