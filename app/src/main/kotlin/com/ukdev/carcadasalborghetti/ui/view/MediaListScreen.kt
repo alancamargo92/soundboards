@@ -101,19 +101,24 @@ fun MediaListScreen(
                         textAlign = TextAlign.Center,
                         text = stringResource(error.textRes)
                     )
-                    Spacer(modifier = Modifier.height(dimensionResource(R.dimen.margin_large)))
-                    Button(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
-                        colors = ButtonColors(
-                            containerColor = colorResource(R.color.red),
-                            contentColor = colorResource(R.color.white),
-                            disabledContainerColor = colorResource(R.color.red),
-                            disabledContentColor = colorResource(R.color.white)
-                        ),
-                        shape = RoundedCornerShape(size = dimensionResource(R.dimen.radius_button)),
-                        onClick = onTryAgainClicked
-                    ) {
-                        Text(text = stringResource(R.string.try_again))
+
+                    if (error != UiError.NO_FAVOURITES) {
+                        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.margin_large)))
+                        Button(
+                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            colors = ButtonColors(
+                                containerColor = colorResource(R.color.red),
+                                contentColor = colorResource(R.color.white),
+                                disabledContainerColor = colorResource(R.color.red),
+                                disabledContentColor = colorResource(R.color.white)
+                            ),
+                            shape = RoundedCornerShape(
+                                size = dimensionResource(R.dimen.radius_button)
+                            ),
+                            onClick = onTryAgainClicked
+                        ) {
+                            Text(text = stringResource(R.string.try_again))
+                        }
                     }
                 }
             }
