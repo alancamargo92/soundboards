@@ -8,12 +8,16 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.core.extensions.args
 import com.ukdev.carcadasalborghetti.core.extensions.observeFlow
@@ -50,6 +54,7 @@ class DefaultMediaListFragment : MediaListFragment() {
     private val showStopButtonState = mutableStateOf(false)
     private val showProgressBarState = mutableStateOf(false)
     private val errorState = mutableStateOf<UiError?>(null)
+    private val isRefreshingState = mutableStateOf(false)
 
     private var searchView: SearchView? = null
     private var mediaPlayer: MediaPlayer? = null
@@ -69,7 +74,9 @@ class DefaultMediaListFragment : MediaListFragment() {
                     onFabClicked = viewModel::onStopButtonClicked,
                     showProgressBar = showProgressBarState.value,
                     error = errorState.value,
-                    onTryAgainClicked = { viewModel.getMediaList(isRefreshing = false) }
+                    onTryAgainClicked = { viewModel.getMediaList(isRefreshing = false) },
+                    onRefresh = { viewModel.getMediaList(isRefreshing = true) },
+                    isRefreshing = isRefreshingState.value
                 )
             }
         }
@@ -77,10 +84,41 @@ class DefaultMediaListFragment : MediaListFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //setUpUi()
-        setHasOptionsMenu(true)
+        setUpMenu()
         observeViewModelFlows()
         viewModel.getMediaList(isRefreshing = false)
+    }
+
+    private fun setUpMenu() {
+        val menuHost = requireActivity() as MenuHost
+        menuHost.addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.menu_main, menu)
+                    searchView = (menu.findItem(R.id.item_search)?.actionView as SearchView).apply {
+                        queryHint = getString(R.string.search)
+                        setOnQueryTextListener(
+                            object : SearchView.OnQueryTextListener {
+                                override fun onQueryTextChange(newText: String?): Boolean {
+                                    viewModel.searchMedia(newText)
+                                    return false
+                                }
+
+                                override fun onQueryTextSubmit(query: String?): Boolean {
+                                    return true
+                                }
+                            }
+                        )
+                    }
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return false
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED
+        )
     }
 
     override fun onStop() {
@@ -88,23 +126,6 @@ class DefaultMediaListFragment : MediaListFragment() {
         stopAudioPlayback()
         super.onStop()
     }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
-        searchView = (menu.findItem(R.id.item_search)?.actionView as SearchView).apply {
-            queryHint = getString(R.string.search)
-        }
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    /*private fun setUpUi() = with(binding) {
-        swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getMediaList(isRefreshing = true)
-        }
-
-        swipeRefreshLayout.setColorSchemeResources(R.color.red, R.color.black)
-        setHasOptionsMenu(true)
-    }*/
 
     private fun observeViewModelFlows() {
         observeFlow(viewModel.state, ::onStateChanged)
@@ -116,13 +137,7 @@ class DefaultMediaListFragment : MediaListFragment() {
         showStopButtonState.value = state.showStopButton
         showProgressBarState.value = state.isLoading
         errorState.value = state.error
-        /*swipeRefreshLayout.isRefreshing = state.isRefreshing
-
-        state.mediaList?.let {
-            val listener = QueryListener(adapter, it)
-            searchView?.setOnQueryTextListener(listener)
-            adapter.submitList(it)
-        }*/
+        isRefreshingState.value = state.isRefreshing
     }
 
     private fun onAction(action: MediaListUiAction) {

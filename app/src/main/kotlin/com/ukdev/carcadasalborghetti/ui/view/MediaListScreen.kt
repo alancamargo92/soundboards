@@ -22,10 +22,12 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +44,7 @@ import com.ukdev.carcadasalborghetti.ui.model.UiMedia
 import com.ukdev.carcadasalborghetti.ui.model.UiMediaType
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 fun MediaListScreen(
     items: List<UiMedia>,
     onItemClicked: (UiMedia) -> Unit,
@@ -51,7 +53,9 @@ fun MediaListScreen(
     onFabClicked: () -> Unit,
     showProgressBar: Boolean,
     error: UiError?,
-    onTryAgainClicked: () -> Unit
+    onTryAgainClicked: () -> Unit,
+    onRefresh: () -> Unit,
+    isRefreshing: Boolean
 ) {
     Scaffold(
         floatingActionButton = {
@@ -114,57 +118,65 @@ fun MediaListScreen(
                 }
             }
 
-            else -> {
-                LazyVerticalGrid(
+            items.isNotEmpty() -> {
+                PullToRefreshBox(
                     modifier = Modifier
                         .padding(innerPadding)
-                        .fillMaxSize()
-                        .background(color = colorResource(R.color.white)),
-                    contentPadding = PaddingValues(dimensionResource(R.dimen.padding_default)),
-                    columns = GridCells.Fixed(count = 3),
-                    horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_default)),
-                    verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_default))
+                        .fillMaxSize(),
+                    isRefreshing = isRefreshing,
+                    onRefresh = onRefresh
                 ) {
-                    items(items.size) { index ->
-                        val media = items[index]
+                    LazyVerticalGrid(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize()
+                            .background(color = colorResource(R.color.white)),
+                        contentPadding = PaddingValues(dimensionResource(R.dimen.padding_default)),
+                        columns = GridCells.Fixed(count = 3),
+                        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_default)),
+                        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.margin_default))
+                    ) {
+                        items(items.size) { index ->
+                            val media = items[index]
 
-                        Card(
-                            modifier = Modifier.combinedClickable(
-                                onClick = { onItemClicked(media) },
-                                onLongClick = { onItemLongClicked(media) }
-                            ).border(
-                                width = dimensionResource(R.dimen.width_card_stroke),
-                                color = colorResource(R.color.black),
-                                shape = RoundedCornerShape(size = dimensionResource(R.dimen.radius_card))
-                            ),
-                            colors = CardColors(
-                                containerColor = colorResource(R.color.white),
-                                contentColor = colorResource(R.color.black),
-                                disabledContainerColor = colorResource(R.color.white),
-                                disabledContentColor = colorResource(R.color.black)
-                            )
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(dimensionResource(R.dimen.height_card_view))
-                                    .padding(dimensionResource(R.dimen.padding_default)),
-                                horizontalAlignment = Alignment.CenterHorizontally
+                            Card(
+                                modifier = Modifier.combinedClickable(
+                                    onClick = { onItemClicked(media) },
+                                    onLongClick = { onItemLongClicked(media) }
+                                ).border(
+                                    width = dimensionResource(R.dimen.width_card_stroke),
+                                    color = colorResource(R.color.black),
+                                    shape = RoundedCornerShape(size = dimensionResource(R.dimen.radius_card))
+                                ),
+                                colors = CardColors(
+                                    containerColor = colorResource(R.color.white),
+                                    contentColor = colorResource(R.color.black),
+                                    disabledContainerColor = colorResource(R.color.white),
+                                    disabledContentColor = colorResource(R.color.black)
+                                )
                             ) {
-                                Text(
-                                    text = stringResource(
-                                        R.string.title_format,
-                                        index + 1,
-                                        media.title
-                                    ),
-                                    maxLines = 3,
-                                    overflow = TextOverflow.Ellipsis
-                                )
-                                Icon(
-                                    modifier = Modifier.weight(1f),
-                                    painter = painterResource(media.type.iconRes),
-                                    contentDescription = null
-                                )
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(dimensionResource(R.dimen.height_card_view))
+                                        .padding(dimensionResource(R.dimen.padding_default)),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Text(
+                                        text = stringResource(
+                                            R.string.title_format,
+                                            index + 1,
+                                            media.title
+                                        ),
+                                        maxLines = 3,
+                                        overflow = TextOverflow.Ellipsis
+                                    )
+                                    Icon(
+                                        modifier = Modifier.weight(1f),
+                                        painter = painterResource(media.type.iconRes),
+                                        contentDescription = null
+                                    )
+                                }
                             }
                         }
                     }
@@ -206,6 +218,8 @@ private fun PreviewMediaListScreen() {
         onFabClicked = {},
         showProgressBar = false,
         error = null,
-        onTryAgainClicked = {}
+        onTryAgainClicked = {},
+        onRefresh = {},
+        isRefreshing = false
     )
 }

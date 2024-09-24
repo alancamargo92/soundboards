@@ -459,6 +459,8 @@ class MediaListViewModelTest {
         }
     }
 
+    // TODO: write tests for searchMedia
+
     private fun createViewModel(fragmentType: MediaListFragmentType) = MediaListViewModel(
         fragmentType,
         mockGetMediaListUseCase,

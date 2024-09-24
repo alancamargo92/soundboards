@@ -24,6 +24,7 @@ import com.ukdev.carcadasalborghetti.ui.model.UiOperation
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -54,6 +55,8 @@ class MediaListViewModel @AssistedInject constructor(
     val state = _state.asStateFlow()
     val action = _action.asSharedFlow()
 
+    private var unfilteredMediaList = emptyList<UiMedia>()
+
     fun getMediaList(isRefreshing: Boolean) {
         viewModelScope.launch(dispatcher) {
             val flow = when (fragmentType) {
@@ -80,6 +83,7 @@ class MediaListViewModel @AssistedInject constructor(
 
                 _state.update { it.onError(error) }
             }.onCompletion {
+                delay(timeMillis = 50)
                 _state.update { it.onFinishedLoading() }
             }.collect { mediaList ->
                 if (mediaList.isEmpty()) {
@@ -92,6 +96,7 @@ class MediaListViewModel @AssistedInject constructor(
                     _state.update { it.onError(error) }
                 } else {
                     val uiMediaList = mediaList.map { it.toUi() }
+                    unfilteredMediaList = uiMediaList
                     _state.update { it.onMediaListReceived(uiMediaList) }
                 }
 
@@ -150,6 +155,18 @@ class MediaListViewModel @AssistedInject constructor(
                 UiOperation.SHARE -> shareMedia(media)
             }
         }
+    }
+
+    fun searchMedia(query: String?) {
+        val mediaList = if (query.isNullOrBlank()) {
+            unfilteredMediaList
+        } else {
+            unfilteredMediaList.filter {
+                it.title.contains(query, ignoreCase = true)
+            }
+        }
+
+        _state.update { it.onMediaListReceived(mediaList) }
     }
 
     private suspend fun saveToFavourites(media: UiMedia) {
