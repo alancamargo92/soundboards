@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class AdLoaderImpl @Inject constructor() : AdLoader {
 
-    override fun loadBannerAds(target: View, adId: Int) {
+    override fun loadBannerAds(target: View) {
         (target as? AdView)?.let { adView ->
             val adRequest = AdRequest.Builder().build()
             adView.loadAd(adRequest)

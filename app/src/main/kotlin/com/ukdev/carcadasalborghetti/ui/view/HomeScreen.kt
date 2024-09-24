@@ -1,9 +1,9 @@
 package com.ukdev.carcadasalborghetti.ui.view
 
-import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,30 +19,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.commit
 import com.ukdev.carcadasalborghetti.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     fragmentManager: FragmentManager?,
-    fragmentBlock: FragmentTransaction.() -> Unit,
-    adView: (@Composable () -> Unit)?
+    fragments: List<Fragment>,
+    adView: (@Composable ColumnScope.() -> Unit)?
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -90,16 +82,14 @@ fun HomeScreen(
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             fragmentManager?.let {
-                FragmentContainer(fragmentManager = it) {
-                    fragmentBlock()
-                }
+                FragmentPager(it, fragments)
             }
 
             adView?.let {
                 Spacer(
                     modifier = Modifier.height(dimensionResource(id = R.dimen.margin_huge))
                 )
-                it.invoke()
+                it.invoke(this)
             }
         }
     }
@@ -136,37 +126,11 @@ private fun MediaTab(
 }
 
 @Composable
-private fun FragmentContainer(
-    fragmentManager: FragmentManager,
-    fragmentBlock: FragmentTransaction.() -> Unit
-) {
-    val containerId by rememberSaveable { mutableIntStateOf(View.generateViewId()) }
-    var isInitialised by rememberSaveable { mutableStateOf(false) }
-
-    AndroidView(
-        modifier = Modifier.fillMaxSize(),
-        factory = { context ->
-            FragmentContainerView(context).apply {
-                id = containerId
-            }
-        },
-        update = { view ->
-            if (isInitialised) {
-                fragmentManager.onContainerAvailable(view)
-                isInitialised = true
-            } else {
-                fragmentManager.commit { fragmentBlock() }
-            }
-        }
-    )
-}
-
-@Composable
 @Preview
 private fun PreviewHomeScreen() {
     HomeScreen(
         fragmentManager = null,
-        fragmentBlock = {},
+        fragments = emptyList(),
         adView = null
     )
 }

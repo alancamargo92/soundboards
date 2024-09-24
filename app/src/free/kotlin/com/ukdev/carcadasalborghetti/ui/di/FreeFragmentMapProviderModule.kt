@@ -1,7 +1,7 @@
 package com.ukdev.carcadasalborghetti.ui.di
 
-import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragmentMapProvider
-import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragmentMapProviderImpl
+import com.ukdev.carcadasalborghetti.ui.fragments.FragmentListProvider
+import com.ukdev.carcadasalborghetti.ui.fragments.FragmentListProviderImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,6 +15,6 @@ abstract class FreeFragmentMapProviderModule {
     @Binds
     @ActivityScoped
     abstract fun bindFreeMediaListFragmentMapProvider(
-        impl: MediaListFragmentMapProviderImpl
-    ): MediaListFragmentMapProvider
+        impl: FragmentListProviderImpl
+    ): FragmentListProvider
 }

@@ -5,14 +5,11 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.tabs.TabLayoutMediator
 import com.ukdev.carcadasalborghetti.R
 import com.ukdev.carcadasalborghetti.core.extensions.observeFlow
 import com.ukdev.carcadasalborghetti.core.tools.DialogueHelper
 import com.ukdev.carcadasalborghetti.databinding.ActivityHomeBinding
-import com.ukdev.carcadasalborghetti.ui.adapter.PagerAdapter
-import com.ukdev.carcadasalborghetti.ui.fragments.MediaListFragmentMapProvider
-import com.ukdev.carcadasalborghetti.ui.model.MediaListTab
+import com.ukdev.carcadasalborghetti.ui.fragments.FragmentListProvider
 import com.ukdev.carcadasalborghetti.ui.tools.MenuProvider
 import com.ukdev.carcadasalborghetti.ui.viewmodel.home.HomeUiAction
 import com.ukdev.carcadasalborghetti.ui.viewmodel.home.HomeViewModel
@@ -23,15 +20,15 @@ abstract class HomeActivity : AppCompatActivity() {
     protected abstract val baseBinding: ActivityHomeBinding
 
     @Inject
-    lateinit var fragmentMapProvider: MediaListFragmentMapProvider
+    lateinit var fragmentListProvider: FragmentListProvider
 
-    private val pagerAdapter by lazy {
+    /*private val pagerAdapter by lazy {
         PagerAdapter(
-            fragmentMapProvider.provideFragmentMap(),
+            fragmentListProvider.provideFragmentList(),
             supportFragmentManager,
             lifecycle
         )
-    }
+    }*/
     private val viewModel by viewModels<HomeViewModel>()
 
     @Inject
@@ -42,7 +39,7 @@ abstract class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setUpUi()
+        //setUpUi()
         observeFlow(viewModel.action, ::onAction)
         viewModel.start()
     }
@@ -55,19 +52,19 @@ abstract class HomeActivity : AppCompatActivity() {
         return true
     }
 
-    private fun setUpUi() {
+    /*private fun setUpUi() {
         setSupportActionBar(baseBinding.toolbar)
         setUpViewPager()
-    }
+    }*/
 
-    private fun setUpViewPager() = with(baseBinding) {
+    /*private fun setUpViewPager() = with(baseBinding) {
         viewPager.adapter = pagerAdapter
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             val tabInfo = MediaListTab.forPosition(position)
             tab.setIcon(tabInfo.iconRes)
             tab.setText(tabInfo.textRes)
         }.attach()
-    }
+    }*/
 
     private fun onAction(action: HomeUiAction) = when (action) {
         HomeUiAction.ShowTip -> showTip()
