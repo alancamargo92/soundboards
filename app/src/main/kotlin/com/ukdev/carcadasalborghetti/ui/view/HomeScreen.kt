@@ -107,16 +107,16 @@ private fun MediaTab(
         unselectedContentColor = colorResource(id = R.color.white),
         onClick = {  }
     ) {
-        Text(text = stringResource(id = textRes))
+        Icon(
+            painter = painterResource(id = iconRes),
+            contentDescription = null
+        )
         Spacer(
             modifier = Modifier.height(
                 dimensionResource(id = R.dimen.margin_default)
             )
         )
-        Icon(
-            painter = painterResource(id = iconRes),
-            contentDescription = null
-        )
+        Text(text = stringResource(id = textRes))
         Spacer(
             modifier = Modifier.height(
                 dimensionResource(id = R.dimen.margin_default)
