@@ -3,6 +3,7 @@ package com.ukdev.carcadasalborghetti.ui.viewmodel.home
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.ukdev.carcadasalborghetti.core.tools.PreferencesManager
+import com.ukdev.carcadasalborghetti.ui.model.MediaListTab
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -47,5 +48,19 @@ class HomeViewModelTest {
 
         // THEN
         verify { mockPreferencesManager.disableTip() }
+    }
+
+    @Test
+    fun `getTabs should return correct tabs`() {
+        // WHEN
+        val actual = viewModel.getTabs()
+
+        // THEN
+        val expected = listOf(
+            MediaListTab.AUDIOS,
+            MediaListTab.VIDEOS,
+            MediaListTab.FAVOURITES
+        )
+        assertThat(actual).isEqualTo(expected)
     }
 }

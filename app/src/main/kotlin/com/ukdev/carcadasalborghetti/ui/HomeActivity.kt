@@ -29,7 +29,7 @@ abstract class HomeActivity : AppCompatActivity() {
             lifecycle
         )
     }*/
-    private val viewModel by viewModels<HomeViewModel>()
+    protected val viewModel by viewModels<HomeViewModel>()
 
     @Inject
     lateinit var menuProvider: MenuProvider

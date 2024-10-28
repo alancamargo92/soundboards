@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ukdev.carcadasalborghetti.core.tools.PreferencesManager
 import com.ukdev.carcadasalborghetti.di.IoDispatcher
+import com.ukdev.carcadasalborghetti.ui.model.MediaListTab
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -31,6 +32,12 @@ class HomeViewModel @Inject constructor(
     fun onDoNotShowTipAgainClicked() {
         preferencesManager.disableTip()
     }
+
+    fun getTabs(): List<MediaListTab> = listOf(
+        MediaListTab.AUDIOS,
+        MediaListTab.VIDEOS,
+        MediaListTab.FAVOURITES
+    )
 
     private fun sendAction(action: HomeUiAction) {
         viewModelScope.launch(dispatcher) {

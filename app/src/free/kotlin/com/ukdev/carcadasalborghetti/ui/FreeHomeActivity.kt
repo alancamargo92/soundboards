@@ -3,6 +3,7 @@ package com.ukdev.carcadasalborghetti.ui
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
@@ -37,7 +38,11 @@ class FreeHomeActivity : HomeActivity() {
 
     private fun setUpUi() {
         setContent {
+            val tabs = viewModel.getTabs()
+            val pagerState = rememberPagerState { tabs.size }
             HomeScreen(
+                tabs = tabs,
+                pagerState = pagerState,
                 fragmentManager = supportFragmentManager,
                 fragments = fragmentListProvider.provideFragmentList(),
                 adView = {
