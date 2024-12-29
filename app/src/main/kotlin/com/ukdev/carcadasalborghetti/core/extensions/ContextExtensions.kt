@@ -5,4 +5,7 @@ import com.ukdev.carcadasalborghetti.R
 
 fun Context.getAppName(): String = getString(R.string.app_name)
 
-fun Context.getAppVersion(): String = packageManager.getPackageInfo(packageName, 0).versionName
+fun Context.getAppVersion(): String = packageManager.getPackageInfo(
+    packageName,
+    0
+).versionName.orEmpty()

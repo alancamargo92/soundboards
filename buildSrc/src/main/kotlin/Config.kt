@@ -5,7 +5,7 @@ object Config {
     object Build {
 
         const val MIN_SDK = 23
-        const val TARGET_SDK = 34
+        const val TARGET_SDK = 35
         const val FLAVOUR_DIMENSION = "version"
         const val VERSION_NAME = "2024.1.1"
 

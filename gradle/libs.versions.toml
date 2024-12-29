@@ -1,7 +1,7 @@
 [versions]
 androidActivity = "1.9.3"
 androidAppcompat = "1.7.0"
-androidCompose = "2024.11.00"
+androidCompose = "2024.12.01"
 androidCore = "1.15.0"
 androidFragment = "1.8.5"
 androidGradlePlugin = "8.7.3"
